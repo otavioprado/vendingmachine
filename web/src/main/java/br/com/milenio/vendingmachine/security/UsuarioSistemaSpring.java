@@ -1,0 +1,23 @@
+package br.com.milenio.vendingmachine.security;
+
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+
+import br.com.milenio.vendingmachine.domain.model.Usuario;
+
+public class UsuarioSistemaSpring extends User {
+
+	private static final long serialVersionUID = -3307764726064768034L;
+	private Usuario usuario;
+
+	public UsuarioSistemaSpring(Usuario usuario, Collection<? extends GrantedAuthority> authorities) {
+		super(usuario.getLogin(), usuario.getSenhaAplicacao(), authorities);
+		this.usuario = usuario;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+}
