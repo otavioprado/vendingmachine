@@ -19,13 +19,13 @@ import javax.servlet.http.HttpServletResponse;
 @Named
 @RequestScoped
 public class LoginMB {
-	
+
 	@Inject
 	private FacesContext ctx;
-	
+
 	@Inject
 	private HttpServletRequest request;
-	
+
 	@Inject
 	private HttpServletResponse response;
 
@@ -38,18 +38,22 @@ public class LoginMB {
 	public void efetivarLogin() throws ServletException, IOException {
 
 		logger.debug("Warn test 1994");
-		
+
 		logger.info("Info test 1994");
-		
+
 		logger.warn("Warn test 1994");
-		
+
 		logger.error("Info test 1994");
-		
+
 		logger.fatal("Warn test 1994");
-		
+
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/j_spring_security_check");
 		dispatcher.forward(request, response);
 		ctx.responseComplete();
+	}
+
+	public String cadastrarUsuario() {
+		return null;
 	}
 
 	public String getUsuario() {
