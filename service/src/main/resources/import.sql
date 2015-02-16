@@ -1,5 +1,5 @@
 -- You can use this file to load seed data into the database using SQL statements
-INSERT INTO USUARIO_SISTEMA(ID_USUARIO_SISTEMA, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL) VALUES (2, 'otavio', 'gudiao', NOW(), 'fulano@gmail.com');
+INSERT INTO USUARIO_SISTEMA(ID_USUARIO_SISTEMA, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME) VALUES (2, 'otavio', 'gudiao', NOW(), 'fulano@gmail.com', 'Otávio Felipe do Prado');
 
 INSERT INTO PAPEL(ID, NOME) VALUES (1, 'ROLE_ADMINISTRATOR');
 INSERT INTO PAPEL(ID, NOME) VALUES (2, 'ROLE_USER');

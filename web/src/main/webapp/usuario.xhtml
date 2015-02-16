@@ -1,9 +1,13 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;"> 
+]>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui"
-    template="layoutLogado.xhtml">
+    template="layoutLogado.xhtml"
+    xmlns:jsf="http://xmlns.jcp.org/jsf">
 
 
 	<ui:define name="tituloConteudo">Título usuário</ui:define>
@@ -11,6 +15,50 @@
 	<ui:define name="subtituloConteudo">Subtítulo usuário</ui:define>
 
 	<ui:define name="conteudo">
+		<h:form prependId="false">
+			<p:panel id="basic" header="Cadastrar novo usuário" footer="Detalhes do usuário" style="margin-bottom:20px">
+				<p:messages/>
+				<div class="row">
+					<div class="col-lg-6">
+						<div class="form-group">
+							<label for="nome">Nome</label>
+							<input id="nome" name="nome" type="text" class="form-control" placeholder="Nome" jsf:value="#{loginMB.usuario}" jsf:required="true" />
+						</div>
+						
+						<div class="form-group">
+							<label for="email">E-mail</label>
+							<input id="email" name="email" type="text" class="form-control" placeholder="Endereço de E-mail" jsf:value="#{loginMB.usuario}" jsf:required="true" />
+						</div>
+					</div>
+					<div class="col-lg-6">	
+						<div class="form-group">
+							<label for="login">Login</label>
+							<input id="login" name="login" type="text" class="form-control" placeholder="Login" jsf:value="#{loginMB.usuario}" jsf:required="true" />
+						</div>
+						
+						<div class="form-group">
+							<label for="senha">Senha</label>
+							<input id="senha" name="senha" type="password" class="form-control" placeholder="Senha" jsf:value="#{loginMB.usuario}" jsf:required="true" />
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-3">
+							<h:commandLink id="btn-signup" class="btn btn-primary" action="#{loginMB.cadastrarUsuario}" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-hand-right"></i>&nbsp;Cadastrar&nbsp;
+							</h:commandLink>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-3">
+							<h:commandLink id="btn-cancel" class="btn btn-danger" action="#{loginMB.cadastrarUsuario}" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+							</h:commandLink>
+						</div>
+					</div>
+				</div>
+			</p:panel>
+		</h:form>
+	
 		<p:dataTable var="user" value="#{loginMB.usuariosSistemas}">
 			<p:column headerText="Nome">
 				<h:outputText value="#{user.nome}" />

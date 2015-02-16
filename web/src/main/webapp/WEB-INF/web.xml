@@ -21,7 +21,7 @@
 	<!-- Tema do Primefaces -->
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
-		<param-value>bootstrap</param-value>
+		<param-value>delta</param-value>
 	</context-param>
 
 	<!-- Configurações SPRING SECURITY -->

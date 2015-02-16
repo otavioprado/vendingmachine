@@ -4,12 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.logging.log4j.Logger;
-
-import br.com.milenio.vendingmachine.domain.model.Usuario;
-
 import javax.enterprise.context.RequestScoped;
-import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -17,6 +12,10 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.logging.log4j.Logger;
+
+import br.com.milenio.vendingmachine.domain.model.Usuario;
 
 // Solução: http://stackoverflow.com/questions/25644007/request-io-undertow-servlet-spec-httpservletrequestimpl-was-not-original-or-a-wr
 

@@ -35,8 +35,8 @@
 										<p class="text-center small"><a href="#">Alterar foto</a></p>
 									</div>
 									<div class="col-md-7">
-										<span>Otávio Prado</span>
-										<p class="text-muted small">otavio_lipe@hotmail.com</p>
+										<span>#{seguranca.nomeUsuarioLogado}</span>
+										<p class="text-muted small">#{seguranca.emailUsuarioLogado}</p>
 										<div class="divider"></div>
 										<a href="#" class="btn btn-primary" style="width:100%;">Ver Perfil</a>
 									</div>
@@ -49,7 +49,7 @@
 											<a href="#" class="btn btn-default" style="width:100%;">&nbsp;Alterar senha&nbsp;</a>
 										</div>
 										<div class="col-md-6">
-											<a href="https://www.google.com.br" class="btn btn-default pull-right" style="width:100%;">
+											<a href="#{request.contextPath}/j_spring_security_logout" class="btn btn-default pull-right" style="width:100%;">
 												<i class="glyphicon glyphicon-off"></i>&nbsp;Sair&nbsp;
 											</a>
 										</div>

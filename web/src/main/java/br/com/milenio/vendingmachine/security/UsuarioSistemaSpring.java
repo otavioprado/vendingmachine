@@ -8,8 +8,7 @@ import org.springframework.security.core.userdetails.User;
 import br.com.milenio.vendingmachine.domain.model.Usuario;
 
 public class UsuarioSistemaSpring extends User {
-
-	private static final long serialVersionUID = -3307764726064768034L;
+	private static final long serialVersionUID = 1L;
 	private Usuario usuario;
 
 	public UsuarioSistemaSpring(Usuario usuario, Collection<? extends GrantedAuthority> authorities) {

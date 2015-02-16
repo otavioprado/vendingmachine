@@ -28,7 +28,7 @@
 						<div class="panel-title">Seja bem-vindo. Por favor, efetue login.</div>
 						<div
 							style="float: right; font-size: 80%; position: relative; top: -10px">
-							<a href="#">Esqueceu sua senha?</a>
+							<a href="#">Esqueci minha senha</a>
 						</div>
 					</div>
 
@@ -96,34 +96,37 @@
 							</div>
 
 							<div class="form-group">
-								<label for="email" class="col-md-3 control-label">E-mail</label>
-								<div class="col-md-9">
+								<label for="email" class="col-md-2 control-label">E-mail</label>
+								<div class="col-md-10">
 									<input type="text" class="form-control" name="email" placeholder="Endereço de e-mail"/>
 								</div>
 							</div>
 
 							<div class="form-group">
-								<label for="firstname" class="col-md-3 control-label">Primeiro nome</label>
-								<div class="col-md-9">
-									<input type="text" class="form-control" name="firstname" placeholder="Primeiro nome"/>
+								<label for="firstname" class="col-md-2 control-label">Nome</label>
+								<div class="col-md-10">
+									<input type="text" class="form-control" name="firstname" placeholder="Nome" />
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="lastname" class="col-md-3 control-label">Sobrenome</label>
-								<div class="col-md-9">
+								<label for="lastname" class="col-md-2 control-label">Sobrenome</label>
+								<div class="col-md-10">
 									<input type="text" class="form-control" name="lastname" placeholder="Sobrenome"/>
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="password" class="col-md-3 control-label">Senha</label>
-								<div class="col-md-9">
+								<label for="password" class="col-md-2 control-label">Senha</label>
+								<div class="col-md-5">
 									<input type="password" class="form-control" name="passwd" placeholder="Senha"/>
+								</div>
+								<div class="col-md-5">
+									<input type="password" class="form-control" name="confirm_passwd" placeholder="Confirmar senha"/>
 								</div>
 							</div>
 
 							<div class="form-group">
 								<!-- Button -->
-								<div class="col-md-offset-3 col-md-9">
+								<div class="col-md-offset-2 col-md-10">
 									<h:commandLink id="btn-signup" class="btn btn-info" action="#{loginMB.cadastrarUsuario}">
 										<i class="glyphicon glyphicon-hand-right"></i>&nbsp;Cadastrar&nbsp;
 									</h:commandLink>
