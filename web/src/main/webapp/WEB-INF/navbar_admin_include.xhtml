@@ -1,0 +1,66 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;"> 
+]>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+				<span class="sr-only">Toggle navigation</span>
+	        	<span class="icon-bar"></span>
+	        	<span class="icon-bar"></span>
+	      		<span class="icon-bar"></span>
+	      	</button>
+	   	</div>
+	   	<div id="navbar" class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="#"><span class="glyphicon glyphicon-home"></span>Dashboard</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<span class="glyphicon glyphicon-user"></span>
+						Account<b class="caret"></b>
+	                </a>
+	                <ul class="dropdown-menu">
+						<li>
+							<div class="navbar-content">
+								<div class="row">
+									<div class="col-md-5">
+										<img src="http://placehold.it/120x120" alt="Alternate Text" class="img-responsive" />
+										<p class="text-center small"><a href="#">Alterar foto</a></p>
+									</div>
+									<div class="col-md-7">
+										<span>Otávio Prado</span>
+										<p class="text-muted small">otavio_lipe@hotmail.com</p>
+										<div class="divider"></div>
+										<a href="#" class="btn btn-primary" style="width:100%;">Ver Perfil</a>
+									</div>
+								</div>
+							</div>
+							<div class="navbar-footer">
+								<div class="navbar-footer-content">
+									<div class="row">
+										<div class="col-md-6">
+											<a href="#" class="btn btn-default" style="width:100%;">&nbsp;Alterar senha&nbsp;</a>
+										</div>
+										<div class="col-md-6">
+											<a href="https://www.google.com.br" class="btn btn-default pull-right" style="width:100%;">
+												<i class="glyphicon glyphicon-off"></i>&nbsp;Sair&nbsp;
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav>
+</ui:composition>

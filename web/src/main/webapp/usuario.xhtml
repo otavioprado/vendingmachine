@@ -1,0 +1,29 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    template="layoutLogado.xhtml">
+
+
+	<ui:define name="tituloConteudo">Título usuário</ui:define>
+	
+	<ui:define name="subtituloConteudo">Subtítulo usuário</ui:define>
+
+	<ui:define name="conteudo">
+		<p:dataTable var="user" value="#{loginMB.usuariosSistemas}">
+			<p:column headerText="Nome">
+				<h:outputText value="#{user.nome}" />
+			</p:column>
+		
+			<p:column headerText="Senha">
+				<h:outputText value="#{user.senhaAplicacao}" />
+			</p:column>
+		
+			<p:column headerText="E-mail">
+				<h:outputText value="#{user.email}" />
+			</p:column>
+		</p:dataTable>
+	</ui:define>
+
+</ui:composition>

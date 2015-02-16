@@ -17,14 +17,19 @@
 	<http pattern="/resources/**" security="none" />
 	<http pattern="/login.xhtml" security="none" />
 	<http pattern="/layoutPadrao.xhtml" security="none" />
+	<http pattern="/layoutLogado.xhtml" security="none" />
 	<http pattern="/javax.faces.resource/**" security="none" />
 
 	<http auto-config="true">
 		<intercept-url pattern="/**" access="ROLE_ADMINISTRATOR" />
 		
-		<form-login login-page="/login.xhtml" default-target-url="/layoutPadrao.xhtml" always-use-default-target="true"
+		<form-login login-page="/login.xhtml" default-target-url="/layoutLogado.xhtml" always-use-default-target="true"
 			 authentication-failure-url="/login.xhtml?error_login=1"/>
-		<logout logout-url="/j_spring_security_logout" invalidate-session="true"/>
+			 
+		<form-login login-page="/layoutPadrao.xhtml" default-target-url="/login.xhtml" always-use-default-target="true"
+			 authentication-failure-url="/login.xhtml?error_login=2"/>
+			 
+		<logout logout-url="/j_spring_security_logout" invalidate-session="true" delete-cookies="JSESSIONID"/>
 	</http>
 
 	<authentication-manager>

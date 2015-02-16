@@ -1,8 +1,12 @@
 package br.com.milenio.vendingmachine.login;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.logging.log4j.Logger;
+
+import br.com.milenio.vendingmachine.domain.model.Usuario;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
@@ -31,6 +35,23 @@ public class LoginMB {
 
 	@Inject
 	private Logger logger;
+	
+	private List<Usuario> usuariosSistemas = new ArrayList<Usuario>();
+
+	public List<Usuario> getUsuariosSistemas() {
+		Usuario user = new Usuario();
+		user.setNome("Otávio Prado");
+		user.setSenhaAplicacao("123");
+		user.setEmail("otavio_lipe@hotmail.com");
+		
+		usuariosSistemas.add(user);
+		
+		return usuariosSistemas;
+	}
+
+	public void setUsuariosSistemas(List<Usuario> usuariosSistemas) {
+		this.usuariosSistemas = usuariosSistemas;
+	}
 
 	private String usuario;
 	private String senha;
