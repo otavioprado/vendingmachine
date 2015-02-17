@@ -23,7 +23,7 @@
 	<http auto-config="true">
 		<intercept-url pattern="/**" access="ROLE_ADMINISTRATOR" />
 		
-		<form-login login-page="/login.xhtml" default-target-url="/layoutLogado.xhtml" always-use-default-target="true"
+		<form-login login-page="/login.xhtml" default-target-url="/admin/layoutLogado.xhtml" always-use-default-target="true"
 			 authentication-failure-url="/login.xhtml?error_login=1"/>
 			 
 		<form-login login-page="/layoutPadrao.xhtml" default-target-url="/login.xhtml" always-use-default-target="true"
