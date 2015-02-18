@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.Logger;
 
 import br.com.milenio.vendingmachine.domain.model.Usuario;
-
+//TESTE Lucas
 // Solução: http://stackoverflow.com/questions/25644007/request-io-undertow-servlet-spec-httpservletrequestimpl-was-not-original-or-a-wr
 
 @Named
