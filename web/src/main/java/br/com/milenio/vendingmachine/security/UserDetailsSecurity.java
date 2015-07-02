@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,48 +14,48 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import br.com.milenio.vendingmachine.domain.model.Papel;
-import br.com.milenio.vendingmachine.domain.model.Usuario;
-import br.com.milenio.vendingmachine.repository.UsuarioRepository;
+import br.com.milenio.vendingmachine.domain.model.Perfil;
+import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
+import br.com.milenio.vendingmachine.repository.UsuarioSistemaRepository;
 
 // Solução: http://stackoverflow.com/questions/16613626/ejb-injection-in-a-custom-userdetailsservice-implementing-spring-security-user
 // Aê, Aleluia!! 05-02-2015
 
 // Problema 2: http://www.dextra.com.br/jpahibernate-problemas-com-lazy/
 
-@EJB(name = "usuarioRepository", beanInterface = UsuarioRepository.class)
+@EJB(name = "usuarioSistemaRepository", beanInterface = UsuarioSistemaRepository.class)
 public class UserDetailsSecurity implements UserDetailsService {
 	
-	private static final String JNDI_USUARIO_REPOSITORY_BEAN_NAME = "global/vendingmachine-ear/vendingmachine-domain/UsuarioRepositoryBean";
+	private static final String JNDI_USUARIO_SISTEMA_REPOSITORY_NAME = "global/vendingmachine-ear/vendingmachine-domain/UsuarioSistemaRepository";
 	
 	@Override
 	public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
 		InitialContext initialContext = null;
-		UsuarioRepository usuarioRepository = null;
+		UsuarioSistemaRepository usuarioRepository = null;
 		
 		try {
 			initialContext = new InitialContext();
-			usuarioRepository = (UsuarioRepository) initialContext.lookup(JNDI_USUARIO_REPOSITORY_BEAN_NAME);
+			usuarioRepository = (UsuarioSistemaRepository) initialContext.lookup(JNDI_USUARIO_SISTEMA_REPOSITORY_NAME);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		
-		Usuario usuario = usuarioRepository.findUsuarioByLoginEquals(login);
+		UsuarioSistema usuario = usuarioRepository.findUsuarioByLoginEquals(login);
 		
 		User user = null;
 		
 		if(usuario != null) {
-			user = new UsuarioSistemaSpring(usuario, getGrupos(usuario));
+			user = new UsuarioSistemaSpring(usuario, buscarPermissoes(usuario));
 		}
 		
 		return user;
 	}
 
-	private Collection<? extends GrantedAuthority> getGrupos(Usuario usuario) {
+	private Collection<? extends GrantedAuthority> buscarPermissoes(UsuarioSistema usuario) {
 		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 		
-		for(Papel papel : usuario.getPapeis()) {
-			authorities.add(new SimpleGrantedAuthority(papel.getNome().toUpperCase()));
+		for(Perfil perfil : usuario.getPerfils()) {
+			authorities.add(new SimpleGrantedAuthority(perfil.getNome().toUpperCase()));
 		}
 		
 		return authorities;

@@ -20,10 +20,10 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "USUARIO_SISTEMA")
 @NamedQueries({ 
-	@NamedQuery(name = "findByIdUsuarioSistema", query = "SELECT b FROM Usuario b WHERE b.idUsuario = :idUsuarioSistema"),
-	@NamedQuery(name = "findUsuariosComEmail", query = "SELECT distinct e.idUsuario FROM Usuario e") 
+	@NamedQuery(name = "findByIdUsuarioSistema", query = "SELECT b FROM UsuarioSistema b WHERE b.idUsuario = :idUsuarioSistema"),
+	@NamedQuery(name = "findUsuariosComEmail", query = "SELECT distinct e.idUsuario FROM UsuarioSistema e") 
 	})
-public class Usuario implements Serializable {
+public class UsuarioSistema implements Serializable {
 
 	private static final long serialVersionUID = 4885294130406744926L;
 
@@ -35,6 +35,9 @@ public class Usuario implements Serializable {
 	@NotNull
 	@Column(name = "LOGIN", unique = true)
 	private String login;
+	
+	@Column(name = "SENHA_APLICACAO")
+	private String senhaAplicacao;
 
 	@NotNull(message="E-mail do usuário não pode ficar em branco.")
 	@Column(name = "EMAIL")
@@ -42,9 +45,6 @@ public class Usuario implements Serializable {
 	
 	@Column(name = "NOME")
 	private String nome;
-	
-	@Column(name = "SOBRENOME")
-	private String sobreNome;
 	
 	@NotNull
 	@Column(name = "DATA_CADASTRO")
@@ -59,9 +59,6 @@ public class Usuario implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataUltimoAcesso;
 	
-	@Column(name = "SENHA_APLICACAO")
-	private String senhaAplicacao;
-	
 	@Column(name = "DATA_ULT_TROCA_SENHA")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataUltimaTrocaSenha;
@@ -70,7 +67,7 @@ public class Usuario implements Serializable {
 	private Boolean indObrigaTrocaSenha;
 	
 	@OneToMany
-    private Set<Papel> papeis = new HashSet<Papel>();
+    private Set<Perfil> perfils = new HashSet<Perfil>();
 
 	@OneToMany
     private Set<Permissao> permissoes = new HashSet<Permissao>();
@@ -91,6 +88,14 @@ public class Usuario implements Serializable {
 		this.login = login;
 	}
 
+	public String getSenhaAplicacao() {
+		return senhaAplicacao;
+	}
+
+	public void setSenhaAplicacao(String senhaAplicacao) {
+		this.senhaAplicacao = senhaAplicacao;
+	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -105,14 +110,6 @@ public class Usuario implements Serializable {
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-	public String getSobreNome() {
-		return sobreNome;
-	}
-
-	public void setSobreNome(String sobreNome) {
-		this.sobreNome = sobreNome;
 	}
 
 	public Date getDataCadastro() {
@@ -139,14 +136,6 @@ public class Usuario implements Serializable {
 		this.dataUltimoAcesso = dataUltimoAcesso;
 	}
 
-	public String getSenhaAplicacao() {
-		return senhaAplicacao;
-	}
-
-	public void setSenhaAplicacao(String senhaAplicacao) {
-		this.senhaAplicacao = senhaAplicacao;
-	}
-
 	public Date getDataUltimaTrocaSenha() {
 		return dataUltimaTrocaSenha;
 	}
@@ -155,20 +144,20 @@ public class Usuario implements Serializable {
 		this.dataUltimaTrocaSenha = dataUltimaTrocaSenha;
 	}
 
-	public Boolean isIndObrigaTrocaSenha() {
+	public Boolean getIndObrigaTrocaSenha() {
 		return indObrigaTrocaSenha;
 	}
 
 	public void setIndObrigaTrocaSenha(Boolean indObrigaTrocaSenha) {
 		this.indObrigaTrocaSenha = indObrigaTrocaSenha;
 	}
-	
-	public Set<Papel> getPapeis() {
-		return papeis;
+
+	public Set<Perfil> getPerfils() {
+		return perfils;
 	}
 
-	public void setPapeis(Set<Papel> papeis) {
-		this.papeis = papeis;
+	public void setPerfils(Set<Perfil> perfils) {
+		this.perfils = perfils;
 	}
 
 	public Set<Permissao> getPermissoes() {
@@ -177,5 +166,9 @@ public class Usuario implements Serializable {
 
 	public void setPermissoes(Set<Permissao> permissoes) {
 		this.permissoes = permissoes;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 }

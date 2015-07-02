@@ -8,7 +8,7 @@ import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import br.com.milenio.vendingmachine.domain.model.Usuario;
+import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 
 @Singleton
 @Startup
@@ -19,7 +19,7 @@ public class InitConexao {
 	
 	@PostConstruct
 	public void init() {
-		Usuario us = new Usuario();
+		UsuarioSistema us = new UsuarioSistema();
 		
 		us.setLogin("admin");
 		us.setSenhaAplicacao("admin");

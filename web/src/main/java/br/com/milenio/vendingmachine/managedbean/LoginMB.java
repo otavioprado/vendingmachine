@@ -1,8 +1,10 @@
-package br.com.milenio.vendingmachine.login;
+package br.com.milenio.vendingmachine.managedbean;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
@@ -15,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.Logger;
 
-import br.com.milenio.vendingmachine.domain.model.Usuario;
+import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 
 // Solução: http://stackoverflow.com/questions/25644007/request-io-undertow-servlet-spec-httpservletrequestimpl-was-not-original-or-a-wr
 
@@ -35,10 +37,21 @@ public class LoginMB {
 	@Inject
 	private Logger logger;
 	
-	private List<Usuario> usuariosSistemas = new ArrayList<Usuario>();
+	private Map<String,Object> perfil = new LinkedHashMap<String,Object>();
+	
+	public Map<String,Object> getPerfil() {
+		perfil.put("Administrador", "admin");
+		perfil.put("Gerente", "manager");
+		perfil.put("Gestor", "gestor");
+		perfil.put("Operador", "op");
+		
+		return perfil;
+	}
+	
+	private List<UsuarioSistema> usuariosSistemas = new ArrayList<UsuarioSistema>();
 
-	public List<Usuario> getUsuariosSistemas() {
-		Usuario user = new Usuario();
+	public List<UsuarioSistema> getUsuariosSistemas() {
+		UsuarioSistema user = new UsuarioSistema();
 		user.setNome("Otávio Prado");
 		user.setSenhaAplicacao("123");
 		user.setEmail("otavio_lipe@hotmail.com");
@@ -48,14 +61,14 @@ public class LoginMB {
 		return usuariosSistemas;
 	}
 
-	public void setUsuariosSistemas(List<Usuario> usuariosSistemas) {
+	public void setUsuariosSistemas(List<UsuarioSistema> usuariosSistemas) {
 		this.usuariosSistemas = usuariosSistemas;
 	}
 
 	private String usuario;
 	private String senha;
 
-	public void efetivarLogin() throws ServletException, IOException {
+	public void efetuarLogin() throws ServletException, IOException {
 
 		logger.debug("Warn test 1994");
 

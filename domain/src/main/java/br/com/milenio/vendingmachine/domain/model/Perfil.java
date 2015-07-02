@@ -9,14 +9,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "PAPEL")
-public class Papel implements Serializable {
+@Table(name = "PERFIL")
+public class Perfil implements Serializable {
+	
 	private static final long serialVersionUID = -2417211373479105720L;
 
 	@Id
@@ -24,15 +24,12 @@ public class Papel implements Serializable {
     @Column(name = "id")
     private Long id;
 	
-	@Column
+	@NotNull
+	@Column(name = "NOME")
 	private String nome;
 
 	@OneToMany
     private Set<Permissao> permissoes = new HashSet<Permissao>();
-	
-    @Version
-    @Column(name = "version")
-    private Integer version;
 
 	public Long getId() {
 		return id;
@@ -56,14 +53,6 @@ public class Papel implements Serializable {
 
 	public void setPermissoes(Set<Permissao> permissoes) {
 		this.permissoes = permissoes;
-	}
-
-	public Integer getVersion() {
-		return version;
-	}
-
-	public void setVersion(Integer version) {
-		this.version = version;
 	}
 
 	public static long getSerialversionuid() {

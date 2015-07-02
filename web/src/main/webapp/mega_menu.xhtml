@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html [
+    <!ENTITY nbsp "&amp;#160;"> 
+]>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:jsf="http://xmlns.jcp.org/jsf">
+<h:head>
+	<title>Login</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	
+	<!-- Bootstrap core CSS -->
+	<!-- http://www.solewing.org/blog/2014/02/bootstrap-glyphicons-and-javaserver-faces-2-x/ -->
+	<link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/css/bootstrap.min.css"/>
+	
+	<h:outputStylesheet name="css/screen.css" />
+</h:head>
+<h:body>
+	<div>
+		<h:form>
+			<p:inputText type="hidden"/>
+		</h:form>
+	</div>
+
+	<div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target="#nav1">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="brand" href="#"> Yamm Megamenu </a>
+            <div class="nav-collapse collapse" id="nav1">
+              <ul class="nav">
+                <!-- Classic list -->
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"> List <b class="caret"></b> </a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <!-- Content container to add padding -->
+                      <div class="yamm-content">
+                        <ul class="span2 unstyled">
+                          <li><p><strong>Section Title</strong></p></li>
+                          <li>
+                            List Item
+                          </li>
+                          <li>
+                            List Item
+                          </li>
+                          <li>
+                            List Item
+                          </li>
+                          <li>
+                            List Item
+                          </li>
+                          <li>
+                            List Item
+                          </li>
+                          <li>
+                            List Item
+                          </li>
+                        </ul>
+                        <ul class="span2 unstyled">
+                          <li><p><strong>Links Title</strong></p></li>
+                          <li>
+                            <a href="#"> Link Item </a>
+                          </li>
+                          <li>
+                            <a href="#"> Link Item </a>
+                          </li>
+                          <li>
+                            <a href="#"> Link Item </a>
+                          </li>
+                          <li>
+                            <a href="#"> Link Item </a>
+                          </li>
+                          <li>
+                            <a href="#"> Link Item </a>
+                          </li>
+                          <li>
+                            <a href="#"> Link Item </a>
+                        </li></ul>
+                        <ul class="span2 unstyled">
+                          <li><p><strong>Section Title</strong></p></li>
+                          <li>
+                            List Item
+                          </li>
+                          <li>
+                            List Item
+                          </li>
+                          <li>
+                            List Item
+                          </li>
+                          <li>
+                            List Item
+                          </li>
+                          <li>
+                            List Item
+                          </li>
+                          <li>
+                            List Item
+                        </li></ul>
+                        <ul class="span2 unstyled">
+                          <li><p><strong>Section Title</strong></p></li>
+                          <li>
+                            List Item
+                          </li>
+                          <li>
+                            List Item
+                          </li>
+                          <li>
+                            <ul>
+                              <li>
+                                <a href="#"> Link Item </a>
+                              </li>
+                              <li>
+                                <a href="#"> Link Item </a>
+                              </li>
+                              <li>
+                                <a href="#"> Link Item </a>
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+                <!-- Accordion demo -->
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Accordion <b class="caret"></b> </a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <div class="yamm-content">
+                        <div class="row-fluid">
+                          <div id="accordion2" class="accordion  span6">
+                            <div class="accordion-group">
+                              <div class="accordion-heading">
+                                <a href="#collapseOne" data-parent="#accordion2" data-toggle="collapse" class="accordion-toggle collapsed"> Collapsible Group Item #1 </a>
+                              </div>
+                              <div class="accordion-body collapse" id="collapseOne" style="height: 0px;">
+                                <div class="accordion-inner">
+                                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                </div>
+                              </div>
+                            </div>
+                            <div class="accordion-group">
+                              <div class="accordion-heading">
+                                <a href="#collapseTwo" data-parent="#accordion2" data-toggle="collapse" class="accordion-toggle"> Collapsible Group Item #2 </a>
+                              </div>
+                              <div class="accordion-body collapse" id="collapseTwo">
+                                <div class="accordion-inner">
+                                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                </div>
+                              </div>
+                            </div>
+                            <div class="accordion-group">
+                              <div class="accordion-heading">
+                                <a href="#collapseThree" data-parent="#accordion2" data-toggle="collapse" class="accordion-toggle"> Collapsible Group Item #3 </a>
+                              </div>
+                              <div class="accordion-body collapse" id="collapseThree">
+                                <div class="accordion-inner">
+                                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div id="accordion3" class="accordion  span6">
+                            <div class="accordion-group">
+                              <div class="accordion-heading">
+                                <a href="#collapseOne1" data-parent="#accordion3" data-toggle="collapse" class="accordion-toggle collapsed"> Collapsible Group Item #1 </a>
+                              </div>
+                              <div class="accordion-body collapse" id="collapseOne1" style="height: 0px;">
+                                <div class="accordion-inner">
+                                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                </div>
+                              </div>
+                            </div>
+                            <div class="accordion-group">
+                              <div class="accordion-heading">
+                                <a href="#collapseTwo1" data-parent="#accordion3" data-toggle="collapse" class="accordion-toggle"> Collapsible Group Item #2 </a>
+                              </div>
+                              <div class="accordion-body collapse" id="collapseTwo1">
+                                <div class="accordion-inner">
+                                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                </div>
+                              </div>
+                            </div>
+                            <div class="accordion-group">
+                              <div class="accordion-heading">
+                                <a href="#collapseThree1" data-parent="#accordion3" data-toggle="collapse" class="accordion-toggle"> Collapsible Group Item #3 </a>
+                              </div>
+                              <div class="accordion-body collapse" id="collapseThree1">
+                                <div class="accordion-inner">
+                                  Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+                <!-- Classic dropdown -->
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Classic <b class="caret"></b> </a><!-- Classic Dropdown -->
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                    <li>
+                      <a tabindex="-1" href="#"> Action </a>
+                    </li>
+                    <li>
+                      <a tabindex="-1" href="#"> Another action </a>
+                    </li>
+                    <li>
+                      <a tabindex="-1" href="#"> Something else here </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                      <a tabindex="-1" href="#"> Separated link </a>
+                    </li>
+                  </ul>
+                </li>
+                <!-- Pictures -->
+                <li class="dropdown yamm-fullwidth">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Pictures <b class="caret"></b> </a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <div class="yamm-content">
+                        <!-- thumbnails needs a row-fluid to make span fluid -->
+                        <div class="row-fluid">
+                          <ul class="thumbnails">
+                            <li class="span2">
+                              <a class="thumbnail" href="#"> <img alt="150x90" data-src="holder.js/150x90" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAABaCAYAAABaK68tAAAEZElEQVR4Xu3YZ0sdXRiF4UdQNGLHhh0ril38/z9AsYENGyqKXeyKLawNIyeivhCziK+550uMc2YdWXPx7D2Td3Jy8hwcNPCHG8gD1h9ulLjUALCAYGkAWJZaCQUWBiwNAMtSK6HAwoClAWBZaiUUWBiwNAAsS62EAgsDlgaAZamVUGBhwNIAsCy1EgosDFgaAJalVkKBhQFLA8Cy1EoosDBgaQBYlloJBRYGLA0Ay1IrocDCgKUBYFlqJRRYGLA0ACxLrYQCCwOWBoBlqZVQYGHA0gCwLLUSCiwMWBoAlqVWQoGFAUsDwLLUSiiwMGBpAFiWWgkFFgYsDQDLUiuhwMKApQFgWWol9NvDurm5ienp6XSnR0dHo6ioKP28sLAQu7u7LwKKi4tfzm9ubsb6+no8Pj5GaWlp9PX1pX8/Op6fn9M1W1tb6bqysrIYGBiIHz9+pMt+J/P/zPPbwtKNPjw8jOXl5bi7u4tcODo3MTERDw8Pv2DTjTw7O4vZ2dkoLy+Ptra29LNQDQ8PR15e3rv3em9vLxYXF6Ompiaamppibm7u5brz8/PfygTWF2zg4uIipqamQoienp7SpMom1u3tbTqXn58f4+Pjv4DRZFlZWYmurq5obW1NAPX5kZGRBFVTSXg6OztjZmYmTafBwcHY2dkJ4dJ0q6+vT1Py8vIyXXd8fPxuZklJyRds7/N/0redWLqpAtLQ0BBLS0tRUFDwAuv09DRNEKEQvMLCwuju7o66urqYn5+Pg4OD6O3tTUD0OX2+v78/KioqEsjr6+u01On3mmodHR1pac2FlXvd/v7+u5nV1dWfv4tfMOHbwsq6ziZXLixNl9XV1WhsbEzwhEDLoqaLJlYurNfQsiVPKDVtxsbGElrt1wRY0yxbQu/v7xNQTayPMr+gi0//Sf8krNet5eJ5jSB38mi6CODk5GRa5lpaWtKk06HJp/1c9kAgbMI3NDSUfvfeFGRifdrw3wl4a2J9BEsb/ff2WJpQGxsbaZ+VLaHaX2mj//oQSG3a2WP9nftu/9a3YGU4mpub0xOcNuHZ6wi9nhCKysrKaG9vT+cESk+FV1dXaVOup8Pa2trY3t6OqqqqdE4TSU+F+n92ncDplUO2p3sr86MnTXs5xi/4J5dCLWfabB8dHaUnRr2K0NOcNuc6BGZtbS0te9l7LOHSkqmNuOAIpdBpKvX09Lxs/JWpQ8CUqQeD9zL/692Y8b7bo789LHuDfMGbDQALGJYGgGWplVBgYcDSALAstRIKLAxYGgCWpVZCgYUBSwPAstRKKLAwYGkAWJZaCQUWBiwNAMtSK6HAwoClAWBZaiUUWBiwNAAsS62EAgsDlgaAZamVUGBhwNIAsCy1EgosDFgaAJalVkKBhQFLA8Cy1EoosDBgaQBYlloJBRYGLA0Ay1IrocDCgKUBYFlqJRRYGLA0ACxLrYQCCwOWBoBlqZVQYGHA0gCwLLUSCiwMWBoAlqVWQoGFAUsDwLLUSuhPcplHMoTM8iYAAAAASUVORK5CYII=" style="width: 150px; height: 90px;"/> </a>
+                            </li>
+                            <li class="span2">
+                              <a class="thumbnail" href="#"> <img alt="150x90" data-src="holder.js/150x90" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAABaCAYAAABaK68tAAAEZElEQVR4Xu3YZ0sdXRiF4UdQNGLHhh0ril38/z9AsYENGyqKXeyKLawNIyeivhCziK+550uMc2YdWXPx7D2Td3Jy8hwcNPCHG8gD1h9ulLjUALCAYGkAWJZaCQUWBiwNAMtSK6HAwoClAWBZaiUUWBiwNAAsS62EAgsDlgaAZamVUGBhwNIAsCy1EgosDFgaAJalVkKBhQFLA8Cy1EoosDBgaQBYlloJBRYGLA0Ay1IrocDCgKUBYFlqJRRYGLA0ACxLrYQCCwOWBoBlqZVQYGHA0gCwLLUSCiwMWBoAlqVWQoGFAUsDwLLUSiiwMGBpAFiWWgkFFgYsDQDLUiuhwMKApQFgWWol9NvDurm5ienp6XSnR0dHo6ioKP28sLAQu7u7LwKKi4tfzm9ubsb6+no8Pj5GaWlp9PX1pX8/Op6fn9M1W1tb6bqysrIYGBiIHz9+pMt+J/P/zPPbwtKNPjw8jOXl5bi7u4tcODo3MTERDw8Pv2DTjTw7O4vZ2dkoLy+Ptra29LNQDQ8PR15e3rv3em9vLxYXF6Ompiaamppibm7u5brz8/PfygTWF2zg4uIipqamQoienp7SpMom1u3tbTqXn58f4+Pjv4DRZFlZWYmurq5obW1NAPX5kZGRBFVTSXg6OztjZmYmTafBwcHY2dkJ4dJ0q6+vT1Py8vIyXXd8fPxuZklJyRds7/N/0redWLqpAtLQ0BBLS0tRUFDwAuv09DRNEKEQvMLCwuju7o66urqYn5+Pg4OD6O3tTUD0OX2+v78/KioqEsjr6+u01On3mmodHR1pac2FlXvd/v7+u5nV1dWfv4tfMOHbwsq6ziZXLixNl9XV1WhsbEzwhEDLoqaLJlYurNfQsiVPKDVtxsbGElrt1wRY0yxbQu/v7xNQTayPMr+gi0//Sf8krNet5eJ5jSB38mi6CODk5GRa5lpaWtKk06HJp/1c9kAgbMI3NDSUfvfeFGRifdrw3wl4a2J9BEsb/ff2WJpQGxsbaZ+VLaHaX2mj//oQSG3a2WP9nftu/9a3YGU4mpub0xOcNuHZ6wi9nhCKysrKaG9vT+cESk+FV1dXaVOup8Pa2trY3t6OqqqqdE4TSU+F+n92ncDplUO2p3sr86MnTXs5xi/4J5dCLWfabB8dHaUnRr2K0NOcNuc6BGZtbS0te9l7LOHSkqmNuOAIpdBpKvX09Lxs/JWpQ8CUqQeD9zL/692Y8b7bo789LHuDfMGbDQALGJYGgGWplVBgYcDSALAstRIKLAxYGgCWpVZCgYUBSwPAstRKKLAwYGkAWJZaCQUWBiwNAMtSK6HAwoClAWBZaiUUWBiwNAAsS62EAgsDlgaAZamVUGBhwNIAsCy1EgosDFgaAJalVkKBhQFLA8Cy1EoosDBgaQBYlloJBRYGLA0Ay1IrocDCgKUBYFlqJRRYGLA0ACxLrYQCCwOWBoBlqZVQYGHA0gCwLLUSCiwMWBoAlqVWQoGFAUsDwLLUSuhPcplHMoTM8iYAAAAASUVORK5CYII=" style="width: 150px; height: 90px;"/> </a>
+                            </li>
+                            <li class="span2">
+                              <a class="thumbnail" href="#"> <img alt="150x90" data-src="holder.js/150x90" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAABaCAYAAABaK68tAAAEZElEQVR4Xu3YZ0sdXRiF4UdQNGLHhh0ril38/z9AsYENGyqKXeyKLawNIyeivhCziK+550uMc2YdWXPx7D2Td3Jy8hwcNPCHG8gD1h9ulLjUALCAYGkAWJZaCQUWBiwNAMtSK6HAwoClAWBZaiUUWBiwNAAsS62EAgsDlgaAZamVUGBhwNIAsCy1EgosDFgaAJalVkKBhQFLA8Cy1EoosDBgaQBYlloJBRYGLA0Ay1IrocDCgKUBYFlqJRRYGLA0ACxLrYQCCwOWBoBlqZVQYGHA0gCwLLUSCiwMWBoAlqVWQoGFAUsDwLLUSiiwMGBpAFiWWgkFFgYsDQDLUiuhwMKApQFgWWol9NvDurm5ienp6XSnR0dHo6ioKP28sLAQu7u7LwKKi4tfzm9ubsb6+no8Pj5GaWlp9PX1pX8/Op6fn9M1W1tb6bqysrIYGBiIHz9+pMt+J/P/zPPbwtKNPjw8jOXl5bi7u4tcODo3MTERDw8Pv2DTjTw7O4vZ2dkoLy+Ptra29LNQDQ8PR15e3rv3em9vLxYXF6Ompiaamppibm7u5brz8/PfygTWF2zg4uIipqamQoienp7SpMom1u3tbTqXn58f4+Pjv4DRZFlZWYmurq5obW1NAPX5kZGRBFVTSXg6OztjZmYmTafBwcHY2dkJ4dJ0q6+vT1Py8vIyXXd8fPxuZklJyRds7/N/0redWLqpAtLQ0BBLS0tRUFDwAuv09DRNEKEQvMLCwuju7o66urqYn5+Pg4OD6O3tTUD0OX2+v78/KioqEsjr6+u01On3mmodHR1pac2FlXvd/v7+u5nV1dWfv4tfMOHbwsq6ziZXLixNl9XV1WhsbEzwhEDLoqaLJlYurNfQsiVPKDVtxsbGElrt1wRY0yxbQu/v7xNQTayPMr+gi0//Sf8krNet5eJ5jSB38mi6CODk5GRa5lpaWtKk06HJp/1c9kAgbMI3NDSUfvfeFGRifdrw3wl4a2J9BEsb/ff2WJpQGxsbaZ+VLaHaX2mj//oQSG3a2WP9nftu/9a3YGU4mpub0xOcNuHZ6wi9nhCKysrKaG9vT+cESk+FV1dXaVOup8Pa2trY3t6OqqqqdE4TSU+F+n92ncDplUO2p3sr86MnTXs5xi/4J5dCLWfabB8dHaUnRr2K0NOcNuc6BGZtbS0te9l7LOHSkqmNuOAIpdBpKvX09Lxs/JWpQ8CUqQeD9zL/692Y8b7bo789LHuDfMGbDQALGJYGgGWplVBgYcDSALAstRIKLAxYGgCWpVZCgYUBSwPAstRKKLAwYGkAWJZaCQUWBiwNAMtSK6HAwoClAWBZaiUUWBiwNAAsS62EAgsDlgaAZamVUGBhwNIAsCy1EgosDFgaAJalVkKBhQFLA8Cy1EoosDBgaQBYlloJBRYGLA0Ay1IrocDCgKUBYFlqJRRYGLA0ACxLrYQCCwOWBoBlqZVQYGHA0gCwLLUSCiwMWBoAlqVWQoGFAUsDwLLUSuhPcplHMoTM8iYAAAAASUVORK5CYII=" style="width: 150px; height: 90px;"/> </a>
+                            </li>
+                            <li class="span2">
+                              <a class="thumbnail" href="#"> <img alt="150x90" data-src="holder.js/150x90" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAABaCAYAAABaK68tAAAEZElEQVR4Xu3YZ0sdXRiF4UdQNGLHhh0ril38/z9AsYENGyqKXeyKLawNIyeivhCziK+550uMc2YdWXPx7D2Td3Jy8hwcNPCHG8gD1h9ulLjUALCAYGkAWJZaCQUWBiwNAMtSK6HAwoClAWBZaiUUWBiwNAAsS62EAgsDlgaAZamVUGBhwNIAsCy1EgosDFgaAJalVkKBhQFLA8Cy1EoosDBgaQBYlloJBRYGLA0Ay1IrocDCgKUBYFlqJRRYGLA0ACxLrYQCCwOWBoBlqZVQYGHA0gCwLLUSCiwMWBoAlqVWQoGFAUsDwLLUSiiwMGBpAFiWWgkFFgYsDQDLUiuhwMKApQFgWWol9NvDurm5ienp6XSnR0dHo6ioKP28sLAQu7u7LwKKi4tfzm9ubsb6+no8Pj5GaWlp9PX1pX8/Op6fn9M1W1tb6bqysrIYGBiIHz9+pMt+J/P/zPPbwtKNPjw8jOXl5bi7u4tcODo3MTERDw8Pv2DTjTw7O4vZ2dkoLy+Ptra29LNQDQ8PR15e3rv3em9vLxYXF6Ompiaamppibm7u5brz8/PfygTWF2zg4uIipqamQoienp7SpMom1u3tbTqXn58f4+Pjv4DRZFlZWYmurq5obW1NAPX5kZGRBFVTSXg6OztjZmYmTafBwcHY2dkJ4dJ0q6+vT1Py8vIyXXd8fPxuZklJyRds7/N/0redWLqpAtLQ0BBLS0tRUFDwAuv09DRNEKEQvMLCwuju7o66urqYn5+Pg4OD6O3tTUD0OX2+v78/KioqEsjr6+u01On3mmodHR1pac2FlXvd/v7+u5nV1dWfv4tfMOHbwsq6ziZXLixNl9XV1WhsbEzwhEDLoqaLJlYurNfQsiVPKDVtxsbGElrt1wRY0yxbQu/v7xNQTayPMr+gi0//Sf8krNet5eJ5jSB38mi6CODk5GRa5lpaWtKk06HJp/1c9kAgbMI3NDSUfvfeFGRifdrw3wl4a2J9BEsb/ff2WJpQGxsbaZ+VLaHaX2mj//oQSG3a2WP9nftu/9a3YGU4mpub0xOcNuHZ6wi9nhCKysrKaG9vT+cESk+FV1dXaVOup8Pa2trY3t6OqqqqdE4TSU+F+n92ncDplUO2p3sr86MnTXs5xi/4J5dCLWfabB8dHaUnRr2K0NOcNuc6BGZtbS0te9l7LOHSkqmNuOAIpdBpKvX09Lxs/JWpQ8CUqQeD9zL/692Y8b7bo789LHuDfMGbDQALGJYGgGWplVBgYcDSALAstRIKLAxYGgCWpVZCgYUBSwPAstRKKLAwYGkAWJZaCQUWBiwNAMtSK6HAwoClAWBZaiUUWBiwNAAsS62EAgsDlgaAZamVUGBhwNIAsCy1EgosDFgaAJalVkKBhQFLA8Cy1EoosDBgaQBYlloJBRYGLA0Ay1IrocDCgKUBYFlqJRRYGLA0ACxLrYQCCwOWBoBlqZVQYGHA0gCwLLUSCiwMWBoAlqVWQoGFAUsDwLLUSuhPcplHMoTM8iYAAAAASUVORK5CYII=" style="width: 150px; height: 90px;"/> </a>
+                            </li>
+                            <li class="span2">
+                              <a class="thumbnail" href="#"> <img alt="150x90" data-src="holder.js/150x90" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAABaCAYAAABaK68tAAAEZElEQVR4Xu3YZ0sdXRiF4UdQNGLHhh0ril38/z9AsYENGyqKXeyKLawNIyeivhCziK+550uMc2YdWXPx7D2Td3Jy8hwcNPCHG8gD1h9ulLjUALCAYGkAWJZaCQUWBiwNAMtSK6HAwoClAWBZaiUUWBiwNAAsS62EAgsDlgaAZamVUGBhwNIAsCy1EgosDFgaAJalVkKBhQFLA8Cy1EoosDBgaQBYlloJBRYGLA0Ay1IrocDCgKUBYFlqJRRYGLA0ACxLrYQCCwOWBoBlqZVQYGHA0gCwLLUSCiwMWBoAlqVWQoGFAUsDwLLUSiiwMGBpAFiWWgkFFgYsDQDLUiuhwMKApQFgWWol9NvDurm5ienp6XSnR0dHo6ioKP28sLAQu7u7LwKKi4tfzm9ubsb6+no8Pj5GaWlp9PX1pX8/Op6fn9M1W1tb6bqysrIYGBiIHz9+pMt+J/P/zPPbwtKNPjw8jOXl5bi7u4tcODo3MTERDw8Pv2DTjTw7O4vZ2dkoLy+Ptra29LNQDQ8PR15e3rv3em9vLxYXF6Ompiaamppibm7u5brz8/PfygTWF2zg4uIipqamQoienp7SpMom1u3tbTqXn58f4+Pjv4DRZFlZWYmurq5obW1NAPX5kZGRBFVTSXg6OztjZmYmTafBwcHY2dkJ4dJ0q6+vT1Py8vIyXXd8fPxuZklJyRds7/N/0redWLqpAtLQ0BBLS0tRUFDwAuv09DRNEKEQvMLCwuju7o66urqYn5+Pg4OD6O3tTUD0OX2+v78/KioqEsjr6+u01On3mmodHR1pac2FlXvd/v7+u5nV1dWfv4tfMOHbwsq6ziZXLixNl9XV1WhsbEzwhEDLoqaLJlYurNfQsiVPKDVtxsbGElrt1wRY0yxbQu/v7xNQTayPMr+gi0//Sf8krNet5eJ5jSB38mi6CODk5GRa5lpaWtKk06HJp/1c9kAgbMI3NDSUfvfeFGRifdrw3wl4a2J9BEsb/ff2WJpQGxsbaZ+VLaHaX2mj//oQSG3a2WP9nftu/9a3YGU4mpub0xOcNuHZ6wi9nhCKysrKaG9vT+cESk+FV1dXaVOup8Pa2trY3t6OqqqqdE4TSU+F+n92ncDplUO2p3sr86MnTXs5xi/4J5dCLWfabB8dHaUnRr2K0NOcNuc6BGZtbS0te9l7LOHSkqmNuOAIpdBpKvX09Lxs/JWpQ8CUqQeD9zL/692Y8b7bo789LHuDfMGbDQALGJYGgGWplVBgYcDSALAstRIKLAxYGgCWpVZCgYUBSwPAstRKKLAwYGkAWJZaCQUWBiwNAMtSK6HAwoClAWBZaiUUWBiwNAAsS62EAgsDlgaAZamVUGBhwNIAsCy1EgosDFgaAJalVkKBhQFLA8Cy1EoosDBgaQBYlloJBRYGLA0Ay1IrocDCgKUBYFlqJRRYGLA0ACxLrYQCCwOWBoBlqZVQYGHA0gCwLLUSCiwMWBoAlqVWQoGFAUsDwLLUSuhPcplHMoTM8iYAAAAASUVORK5CYII=" style="width: 150px; height: 90px;"/> </a>
+                            </li>
+                            <li class="span2">
+                              <a class="thumbnail" href="#"> <img alt="150x90" data-src="holder.js/150x90" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAABaCAYAAABaK68tAAAEZElEQVR4Xu3YZ0sdXRiF4UdQNGLHhh0ril38/z9AsYENGyqKXeyKLawNIyeivhCziK+550uMc2YdWXPx7D2Td3Jy8hwcNPCHG8gD1h9ulLjUALCAYGkAWJZaCQUWBiwNAMtSK6HAwoClAWBZaiUUWBiwNAAsS62EAgsDlgaAZamVUGBhwNIAsCy1EgosDFgaAJalVkKBhQFLA8Cy1EoosDBgaQBYlloJBRYGLA0Ay1IrocDCgKUBYFlqJRRYGLA0ACxLrYQCCwOWBoBlqZVQYGHA0gCwLLUSCiwMWBoAlqVWQoGFAUsDwLLUSiiwMGBpAFiWWgkFFgYsDQDLUiuhwMKApQFgWWol9NvDurm5ienp6XSnR0dHo6ioKP28sLAQu7u7LwKKi4tfzm9ubsb6+no8Pj5GaWlp9PX1pX8/Op6fn9M1W1tb6bqysrIYGBiIHz9+pMt+J/P/zPPbwtKNPjw8jOXl5bi7u4tcODo3MTERDw8Pv2DTjTw7O4vZ2dkoLy+Ptra29LNQDQ8PR15e3rv3em9vLxYXF6Ompiaamppibm7u5brz8/PfygTWF2zg4uIipqamQoienp7SpMom1u3tbTqXn58f4+Pjv4DRZFlZWYmurq5obW1NAPX5kZGRBFVTSXg6OztjZmYmTafBwcHY2dkJ4dJ0q6+vT1Py8vIyXXd8fPxuZklJyRds7/N/0redWLqpAtLQ0BBLS0tRUFDwAuv09DRNEKEQvMLCwuju7o66urqYn5+Pg4OD6O3tTUD0OX2+v78/KioqEsjr6+u01On3mmodHR1pac2FlXvd/v7+u5nV1dWfv4tfMOHbwsq6ziZXLixNl9XV1WhsbEzwhEDLoqaLJlYurNfQsiVPKDVtxsbGElrt1wRY0yxbQu/v7xNQTayPMr+gi0//Sf8krNet5eJ5jSB38mi6CODk5GRa5lpaWtKk06HJp/1c9kAgbMI3NDSUfvfeFGRifdrw3wl4a2J9BEsb/ff2WJpQGxsbaZ+VLaHaX2mj//oQSG3a2WP9nftu/9a3YGU4mpub0xOcNuHZ6wi9nhCKysrKaG9vT+cESk+FV1dXaVOup8Pa2trY3t6OqqqqdE4TSU+F+n92ncDplUO2p3sr86MnTXs5xi/4J5dCLWfabB8dHaUnRr2K0NOcNuc6BGZtbS0te9l7LOHSkqmNuOAIpdBpKvX09Lxs/JWpQ8CUqQeD9zL/692Y8b7bo789LHuDfMGbDQALGJYGgGWplVBgYcDSALAstRIKLAxYGgCWpVZCgYUBSwPAstRKKLAwYGkAWJZaCQUWBiwNAMtSK6HAwoClAWBZaiUUWBiwNAAsS62EAgsDlgaAZamVUGBhwNIAsCy1EgosDFgaAJalVkKBhQFLA8Cy1EoosDBgaQBYlloJBRYGLA0Ay1IrocDCgKUBYFlqJRRYGLA0ACxLrYQCCwOWBoBlqZVQYGHA0gCwLLUSCiwMWBoAlqVWQoGFAUsDwLLUSuhPcplHMoTM8iYAAAAASUVORK5CYII=" style="width: 150px; height: 90px;"/> </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+
+              </ul>
+            </div><!--/.nav-collapse -->
+          </div>
+</h:body>
+</html>

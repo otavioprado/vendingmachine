@@ -5,18 +5,19 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-import br.com.milenio.vendingmachine.domain.model.Usuario;
+import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 
 public class UsuarioSistemaSpring extends User {
 	private static final long serialVersionUID = 1L;
-	private Usuario usuario;
+	private UsuarioSistema usuario;
 
-	public UsuarioSistemaSpring(Usuario usuario, Collection<? extends GrantedAuthority> authorities) {
+	public UsuarioSistemaSpring(UsuarioSistema usuario, Collection<? extends GrantedAuthority> authorities) {
+		// O spring security já tem o login e senha informado no login.xhtml (j_username e j_password)
 		super(usuario.getLogin(), usuario.getSenhaAplicacao(), authorities);
 		this.usuario = usuario;
 	}
 
-	public Usuario getUsuario() {
+	public UsuarioSistema getUsuario() {
 		return usuario;
 	}
 }

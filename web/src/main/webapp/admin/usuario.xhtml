@@ -9,36 +9,43 @@
     xmlns:jsf="http://xmlns.jcp.org/jsf"
     template="layoutLogado.xhtml">
 
-
-	<ui:define name="tituloConteudo">Título usuário</ui:define>
-	
-	<ui:define name="subtituloConteudo">Subtítulo usuário</ui:define>
-
 	<ui:define name="conteudo">
 		<h:form prependId="false">
 			<p:panel id="basic" header="Cadastrar novo usuário" footer="Detalhes do usuário" style="margin-bottom:20px">
-				<p:messages/>
+				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
 				<div class="row">
-					<div class="col-lg-6">
+					<div class="col-lg-6">	
+						<div class="form-group">
+							<label for="login">Login *</label>
+							<input id="login" name="login" type="text" class="form-control" placeholder="Login" jsf:value="#{usuarioMB.usuario.login}" jsf:required="true" />
+						</div>
+						
 						<div class="form-group">
 							<label for="nome">Nome *</label>
-							<input id="nome" name="nome" type="text" class="form-control" placeholder="Nome" jsf:value="#{loginMB.usuario}" jsf:required="true" />
+							<input id="nome" name="nome" type="text" class="form-control" placeholder="Nome" jsf:value="#{usuarioMB.usuario.nome}" jsf:required="true" />
+						</div>
+						
+						<div class="form-group">
+							<label for="email">Perfil *</label>
+							<h:selectOneMenu id="perfil" value="#{loginMB.usuario}" styleClass="form-control">
+				                <f:selectItem itemLabel="[Selecione]" itemValue="" noSelectionOption="true" />
+				                <f:selectItems value="#{loginMB.perfil}" />
+			            	</h:selectOneMenu>
+		            	</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="form-group">
+							<label for="senha">Senha *</label>
+							<input id="senha" name="senha" type="password" class="form-control" placeholder="Senha" 
+								jsf:value="#{usuarioMB.usuario.senhaAplicacao}" 
+								jsf:required="true">
+								<f:validateLength minimum="6" />
+							</input>
 						</div>
 						
 						<div class="form-group">
 							<label for="email">E-mail *</label>
-							<input id="email" name="email" type="text" class="form-control" placeholder="Endereço de E-mail" jsf:value="#{loginMB.usuario}" jsf:required="true" />
-						</div>
-					</div>
-					<div class="col-lg-6">	
-						<div class="form-group">
-							<label for="login">Login *</label>
-							<input id="login" name="login" type="text" class="form-control" placeholder="Login" jsf:value="#{loginMB.usuario}" jsf:required="true" />
-						</div>
-						
-						<div class="form-group">
-							<label for="senha">Senha *</label>
-							<input id="senha" name="senha" type="password" class="form-control" placeholder="Senha" jsf:value="#{loginMB.usuario}" jsf:required="true" />
+							<input id="email" name="email" type="text" class="form-control" placeholder="Endereço de E-mail" jsf:value="#{usuarioMB.usuario.email}" jsf:required="true" />
 						</div>
 					</div>
 					<div class="col-lg-12">
@@ -49,7 +56,7 @@
 					
 					<div class="col-md-3">
 						<div class="form-group">
-							<h:commandLink id="btn-signup" class="btn btn-primary" action="#{loginMB.cadastrarUsuario}" style="width: 100%; color:white;">
+							<h:commandLink id="btn-signup" class="btn btn-primary" action="#{usuarioMB.cadastrarUsuario}" style="width: 100%; color:white;">
 								<i class="glyphicon glyphicon-hand-right"></i>&nbsp;Cadastrar&nbsp;
 							</h:commandLink>
 						</div>
@@ -57,7 +64,7 @@
 					
 					<div class="col-md-3">
 						<div class="form-group">
-							<h:commandLink id="btn-cancel" class="btn btn-danger" action="#{loginMB.cadastrarUsuario}" style="width: 100%; color:white;">
+							<h:commandLink id="btn-cancel" class="btn btn-danger" action="#{usuarioMB.cadastrarUsuario}" style="width: 100%; color:white;">
 								<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
 							</h:commandLink>
 						</div>
