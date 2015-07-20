@@ -1,3 +1,12 @@
+/* Imagem de fundo da tela de login */
+/* Como estou usando <h:outputStylesheet> na página de login, preciso utilizar EL variable #{resource} in CSS to specify image resources.*/
+.geometryimg {
+  background-image: url(#{resource['img/triangle-gray_svg.png']});
+  background-attachment: fixed;
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
 /* Special class on .container surrounding .navbar, used for positioning it into place. */
 .navbar-wrapper {
 	position: absolute;

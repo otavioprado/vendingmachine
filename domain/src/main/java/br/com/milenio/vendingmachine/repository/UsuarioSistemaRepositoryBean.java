@@ -45,4 +45,25 @@ public class UsuarioSistemaRepositoryBean extends AbstractVendingMachineReposito
 		return usuario;
 	}
 	
+	@Override
+	public UsuarioSistema findUsuarioByLoginAndEmail(UsuarioSistema usuario) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT user FROM UsuarioSistema user WHERE ");
+		sb.append(" user.login = :login OR");
+		sb.append(" user.email = :email");
+
+		TypedQuery<UsuarioSistema> query = getEntityManager().createQuery(sb.toString(), UsuarioSistema.class);
+
+		query.setParameter("login", usuario.getLogin());
+		query.setParameter("email", usuario.getEmail());
+
+		List<UsuarioSistema> usuarioCadastrado = (List<UsuarioSistema>) query.getResultList();
+		
+		if(!usuarioCadastrado.isEmpty()) {
+			return usuarioCadastrado.get(0);
+		}
+		
+		return null;
+	}
+	
 }

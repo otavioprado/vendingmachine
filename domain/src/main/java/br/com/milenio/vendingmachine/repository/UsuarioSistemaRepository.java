@@ -11,5 +11,7 @@ import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 public interface UsuarioSistemaRepository extends Repository<UsuarioSistema, Long> {
 	UsuarioSistema findUsuarioByLoginEquals(String login);
 	
+	UsuarioSistema findUsuarioByLoginAndEmail(UsuarioSistema usuario);
+	
 	List<Long> findClientesComEmail();
 }
