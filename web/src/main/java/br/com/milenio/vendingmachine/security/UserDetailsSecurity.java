@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import br.com.milenio.vendingmachine.domain.model.Perfil;
+import br.com.milenio.vendingmachine.domain.model.Permissao;
 import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 import br.com.milenio.vendingmachine.repository.UsuarioSistemaRepository;
 
@@ -54,8 +55,9 @@ public class UserDetailsSecurity implements UserDetailsService {
 	private Collection<? extends GrantedAuthority> buscarPermissoes(UsuarioSistema usuario) {
 		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 		
-		for(Perfil perfil : usuario.getPerfils()) {
-			authorities.add(new SimpleGrantedAuthority(perfil.getNome().toUpperCase()));
+		Perfil perfil = usuario.getPerfil();
+		for(Permissao permissao : perfil.getPermissoes()) {
+			authorities.add(new SimpleGrantedAuthority(permissao.getNome().toUpperCase()));
 		}
 		
 		return authorities;

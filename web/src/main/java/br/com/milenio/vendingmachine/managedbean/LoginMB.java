@@ -38,15 +38,6 @@ public class LoginMB {
 	
 	private Map<String,Object> perfil = new LinkedHashMap<String,Object>();
 	
-	public Map<String,Object> getPerfil() {
-		perfil.put("Administrador", "admin");
-		perfil.put("Gerente", "manager");
-		perfil.put("Gestor", "gestor");
-		perfil.put("Operador", "op");
-		
-		return perfil;
-	}
-	
 	private List<UsuarioSistema> usuariosSistemas = new ArrayList<UsuarioSistema>();
 
 	public List<UsuarioSistema> getUsuariosSistemas() {
@@ -68,17 +59,6 @@ public class LoginMB {
 	private String senha;
 
 	public void efetuarLogin() throws ServletException, IOException {
-
-		logger.debug("Warn test 1994");
-
-		logger.info("Info test 1994");
-
-		logger.warn("Warn test 1994");
-
-		logger.error("Info test 1994");
-
-		logger.fatal("Warn test 1994");
-
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/j_spring_security_check");
 		dispatcher.forward(request, response);
 		ctx.responseComplete();

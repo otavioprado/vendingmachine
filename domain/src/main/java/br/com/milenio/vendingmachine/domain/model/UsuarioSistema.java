@@ -10,6 +10,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -21,17 +24,17 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "USUARIO_SISTEMA")
 @NamedQueries({ 
-	@NamedQuery(name = "findByIdUsuarioSistema", query = "SELECT b FROM UsuarioSistema b WHERE b.idUsuario = :idUsuarioSistema"),
-	@NamedQuery(name = "findUsuariosComEmail", query = "SELECT distinct e.idUsuario FROM UsuarioSistema e") 
+	@NamedQuery(name = "findByIdUsuarioSistema", query = "SELECT b FROM UsuarioSistema b WHERE b.id = :idUsuarioSistema"),
+	@NamedQuery(name = "findUsuariosComEmail", query = "SELECT distinct e.id FROM UsuarioSistema e") 
 	})
 public class UsuarioSistema implements Serializable {
 
 	private static final long serialVersionUID = 4885294130406744926L;
 
 	@Id
-	@Column(name = "ID_USUARIO_SISTEMA")
+	@Column(name = "ID")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long idUsuario;
+	private Long id;
 
 	@NotNull
 	@Column(name = "LOGIN", unique = true)
@@ -67,18 +70,16 @@ public class UsuarioSistema implements Serializable {
 	@Column(name = "IND_OBRIGA_TROCA_SENHA")
 	private Boolean indObrigaTrocaSenha;
 	
-	@OneToMany
-    private Set<Perfil> perfils = new HashSet<Perfil>();
+	@ManyToOne
+	@JoinTable(name="USUARIO_SISTEMA_PERFIL", joinColumns={@JoinColumn(name="USUARIO_SISTEMA_ID", referencedColumnName="id")}, inverseJoinColumns={@JoinColumn(name="PERFIL_ID", referencedColumnName="id")})
+    private Perfil perfil;
 
-	@OneToMany
-    private Set<Permissao> permissoes = new HashSet<Permissao>();
-
-	public Long getIdUsuario() {
-		return idUsuario;
+	public Long getId() {
+		return id;
 	}
 
-	public void setIdUsuario(Long idUsuario) {
-		this.idUsuario = idUsuario;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getLogin() {
@@ -152,21 +153,13 @@ public class UsuarioSistema implements Serializable {
 	public void setIndObrigaTrocaSenha(Boolean indObrigaTrocaSenha) {
 		this.indObrigaTrocaSenha = indObrigaTrocaSenha;
 	}
-
-	public Set<Perfil> getPerfils() {
-		return perfils;
+	
+	public Perfil getPerfil() {
+		return perfil;
 	}
 
-	public void setPerfils(Set<Perfil> perfils) {
-		this.perfils = perfils;
-	}
-
-	public Set<Permissao> getPermissoes() {
-		return permissoes;
-	}
-
-	public void setPermissoes(Set<Permissao> permissoes) {
-		this.permissoes = permissoes;
+	public void setPerfil(Perfil perfil) {
+		this.perfil = perfil;
 	}
 
 	public static long getSerialversionuid() {

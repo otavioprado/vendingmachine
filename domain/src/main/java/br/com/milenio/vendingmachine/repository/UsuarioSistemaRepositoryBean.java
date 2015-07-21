@@ -37,7 +37,7 @@ public class UsuarioSistemaRepositoryBean extends AbstractVendingMachineReposito
 	public UsuarioSistema findUsuarioByLoginEquals(String login) {
 		EntityManager em = getEntityManager();
 		
-		TypedQuery<UsuarioSistema> query = em.createQuery("SELECT user FROM UsuarioSistema user JOIN FETCH user.perfils WHERE user.login = :login", UsuarioSistema.class);
+		TypedQuery<UsuarioSistema> query = em.createQuery("SELECT user FROM UsuarioSistema user JOIN FETCH user.perfil WHERE user.login = :login", UsuarioSistema.class);
 		query.setParameter("login", login);
 		
 		UsuarioSistema usuario = (UsuarioSistema) query.getSingleResult();

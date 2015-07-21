@@ -27,9 +27,12 @@
 						
 						<div class="form-group">
 							<label for="email">Perfil *</label>
-							<h:selectOneMenu id="perfil" value="#{loginMB.usuario}" styleClass="form-control">
+							<h:selectOneMenu id="perfil" value="#{usuarioMB.perfilId}" styleClass="form-control">
 				                <f:selectItem itemLabel="[Selecione]" itemValue="" noSelectionOption="true" />
-				                <f:selectItems value="#{loginMB.perfil}" />
+				                <f:selectItem itemLabel="Administrador" itemValue="1" noSelectionOption="false" />
+				                <f:selectItem itemLabel="Gestor" itemValue="2" noSelectionOption="false" />
+				                <f:selectItem itemLabel="Gerente" itemValue="3" noSelectionOption="false" />
+				                <f:selectItem itemLabel="Operador" itemValue="4" noSelectionOption="false" />
 			            	</h:selectOneMenu>
 		            	</div>
 					</div>
@@ -73,20 +76,6 @@
 				</div>
 			</p:panel>
 		</h:form>
-	
-		<p:dataTable var="user" value="#{loginMB.usuariosSistemas}">
-			<p:column headerText="Nome">
-				<h:outputText value="#{user.nome}" />
-			</p:column>
-		
-			<p:column headerText="Senha">
-				<h:outputText value="#{user.senhaAplicacao}" />
-			</p:column>
-		
-			<p:column headerText="E-mail">
-				<h:outputText value="#{user.email}" />
-			</p:column>
-		</p:dataTable>
 	</ui:define>
 
 </ui:composition>

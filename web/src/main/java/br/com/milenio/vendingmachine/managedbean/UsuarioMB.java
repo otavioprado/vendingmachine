@@ -1,7 +1,7 @@
 package br.com.milenio.vendingmachine.managedbean;
 
-import java.nio.charset.Charset;
 import java.util.Date;
+import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -25,11 +25,22 @@ public class UsuarioMB {
 	@Inject
 	private FacesContext ctx;
 	
-	private UsuarioSistema usuario = new UsuarioSistema();
-	
 	@Inject
 	private UsuarioService usuarioService;
 	
+	private UsuarioSistema usuario = new UsuarioSistema();
+	private Long perfilId;
+
+	private List<UsuarioSistema> listUsuarios;
+	private String nome;
+	private boolean status;
+
+	/**
+	 * Método responsável por realizar a chamada ao serviço de cadastro de usuários
+	 * e informar a view do resultado, exibindo as mensagens de sucesso/erro.
+	 * 
+	 * @return
+	 */
 	public String cadastrarUsuario() {
 		logger.debug("Tentando realizar o cadastro do usuário " + usuario.getNome());
 		
@@ -40,18 +51,33 @@ public class UsuarioMB {
 		usuario.setIndObrigaTrocaSenha(true);
 		
 		try{
-			usuarioService.cadastrarUsuario(usuario);
+			usuarioService.cadastrarUsuario(usuario, perfilId);
 			
 			// Sucesso - Exibe mensagem de cadastro realizado com sucesso
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário " + usuario.getLogin() + " cadastrado com sucesso.", null));
 			logger.info("Usuário " + usuario.getNome() + " cadastrado no sistema com sucesso.");
 			
 		} catch(ConteudoJaExistenteNoBancoDeDadosException e) {
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Já Ça Tá ô õ É é não ? !", null));
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
 		}
 		
 		usuario = new UsuarioSistema();
+		perfilId = null;
 		return "";
+	}
+	
+	public String pesquisarUsuario() {
+		listUsuarios = usuarioService.listarTodos();
+		
+		return "";
+	}
+	
+	public String editarUsuario() {
+		return null;
+	}
+	
+	public String excluirUsuario() {
+		return null;
 	}
 
 	public UsuarioSistema getUsuario() {
@@ -60,5 +86,41 @@ public class UsuarioMB {
 
 	public void setUsuario(UsuarioSistema usuario) {
 		this.usuario = usuario;
+	}
+	
+	public Long getPerfilId() {
+		return perfilId;
+	}
+
+	public void setPerfilId(Long perfilId) {
+		this.perfilId = perfilId;
+	}
+	
+	public List<UsuarioSistema> getUsuariosSistema() {
+		return usuarioService.listarTodos();
+	}
+	
+	public List<UsuarioSistema> getListUsuarios() {
+		return listUsuarios;
+	}
+
+	public void setListUsuarios(List<UsuarioSistema> listUsuarios) {
+		this.listUsuarios = listUsuarios;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public boolean isStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 }

@@ -19,9 +19,13 @@
 	<http pattern="/layoutPadrao.xhtml" security="none" />
 	<http pattern="/usuario.xhtml" security="none" />
 	<http pattern="/javax.faces.resource/**" security="none" />
-
-	<http auto-config="true">
-		<intercept-url pattern="/**" access="ROLE_ADMINISTRATOR" />
+	
+	<http auto-config="true" use-expressions="true">
+	
+		<!-- Define as permissões para as páginas do perfil ADMINISTRADOR -->
+		<intercept-url pattern="/usuario.xhtml" access="hasRole('ROLE_ADMIN_CAD_USUARIO')"/>
+	
+		<intercept-url pattern="/**" access="hasRole('ROLE_USUARIO_LOGADO')" />
 		
 		<form-login login-page="/login.xhtml" default-target-url="/admin/layoutLogado.xhtml" always-use-default-target="true"
 			 authentication-failure-url="/login.xhtml?error_login=1"/>

@@ -18,7 +18,7 @@ public class Permissao implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id")
+	@Column(name = "ID")
 	private Long id;
 	
 	@NotNull

@@ -6,9 +6,12 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -21,15 +24,16 @@ public class Perfil implements Serializable {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @Column(name = "ID")
     private Long id;
 	
 	@NotNull
 	@Column(name = "NOME")
 	private String nome;
 
-	@OneToMany
-    private Set<Permissao> permissoes = new HashSet<Permissao>();
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinTable(name="PERFIL_PERMISSAO", joinColumns={@JoinColumn(name="PERFIL_ID", referencedColumnName="id")}, inverseJoinColumns={@JoinColumn(name="PERMISSAO_ID", referencedColumnName="id")})
+    private Set<Permissao> permissoes;
 
 	public Long getId() {
 		return id;
