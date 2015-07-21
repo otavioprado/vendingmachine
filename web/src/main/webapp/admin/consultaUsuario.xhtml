@@ -1,0 +1,91 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;"> 
+]>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:c="http://java.sun.com/jstl/core"
+    template="layoutLogado.xhtml">
+
+	<ui:define name="conteudo">
+		<p:panel id="basic" header="Filtro de pesquisa de usuários" style="margin-bottom:20px">
+			<h:form prependId="false">
+				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="row">
+					
+					<div class="col-lg-4">	
+						<div class="form-group">
+							<label for="login">Login do usuário</label>
+							<input id="login" name="login" type="text" class="form-control" placeholder="Login" jsf:value="#{usuarioMB.nome}" />
+						</div>
+					</div>
+					
+					<div class="col-lg-4">	
+						<div class="form-group">
+							<label for="status">Status</label>
+							<input id="status" name="status" type="text" class="form-control" placeholder="Status" jsf:value="#{usuarioMB.status}" />
+						</div>
+					</div>
+					
+					<div class="col-lg-4">	
+						<div class="form-group">
+							<label for="perfil">Perfil</label>
+							<h:selectOneMenu id="perfil" value="#{usuarioMB.perfilId}" styleClass="form-control">
+				                <f:selectItem itemLabel="[Selecione]" itemValue="" noSelectionOption="true" />
+				                <f:selectItem itemLabel="Administrador" itemValue="1" noSelectionOption="false" />
+				                <f:selectItem itemLabel="Gestor" itemValue="2" noSelectionOption="false" />
+				                <f:selectItem itemLabel="Gerente" itemValue="3" noSelectionOption="false" />
+				                <f:selectItem itemLabel="Operador" itemValue="4" noSelectionOption="false" />
+			            	</h:selectOneMenu>
+						</div>
+					</div>
+					
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandLink id="btn-signup" class="btn btn-primary" actionListener="#{usuarioMB.pesquisarUsuario}" update="table-users" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-hand-right"></i>&nbsp;Pesquisar&nbsp;
+							</h:commandLink>
+						</div>
+					</div>
+				</div>
+			</h:form>
+			<c:if test="${not empty usuarioMB.listUsuarios}">
+				<f:facet name="footer">
+					<h:form prependId="false">
+					
+						<p:dataTable tableStyleClass="table-hover" id="table-users" var="user" value="#{usuarioMB.listUsuarios}">
+							<p:column headerText="Nome">
+								<h:outputText value="#{user.nome}" />
+							</p:column>
+						
+							<p:column headerText="Senha">
+								<h:outputText value="#{user.senhaAplicacao}" />
+							</p:column>
+						
+							<p:column headerText="E-mail">
+								<h:outputText value="#{user.email}" />
+							</p:column>
+							
+							<p:column style="width:128px; text-align: center">
+								<p:commandButton action="#{usuarioMB.editarUsuario}" icon="ui-icon-pencil" title="Editar">
+									<f:setPropertyActionListener value="#{user}" target="#{usuarioMB.usuario}" />
+					            </p:commandButton>
+				
+								<p:commandButton action="#{usuarioMB.excluirUsuario}" icon="ui-icon-closethick" title="Bloquear">
+									<f:setPropertyActionListener value="#{user}" target="#{usuarioMB.usuario}" />
+					            </p:commandButton>
+							</p:column>
+						</p:dataTable>
+					</h:form>
+				</f:facet>
+			</c:if>
+		</p:panel>
+		
+		
+
+	</ui:define>
+
+</ui:composition>
