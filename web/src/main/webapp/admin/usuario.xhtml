@@ -27,7 +27,7 @@
 						
 						<div class="form-group">
 							<label for="email">Perfil *</label>
-							<h:selectOneMenu id="perfil" value="#{usuarioMB.perfilId}" styleClass="form-control">
+							<h:selectOneMenu id="perfil" value="#{usuarioMB.perfilId}" styleClass="form-control" required="true">
 				                <f:selectItem itemLabel="[Selecione]" itemValue="" noSelectionOption="true" />
 				                <f:selectItem itemLabel="Administrador" itemValue="1" noSelectionOption="false" />
 				                <f:selectItem itemLabel="Gestor" itemValue="2" noSelectionOption="false" />
@@ -67,9 +67,9 @@
 					
 					<div class="col-md-3">
 						<div class="form-group">
-							<h:commandLink id="btn-cancel" class="btn btn-danger" action="#{usuarioMB.cadastrarUsuario}" style="width: 100%; color:white;">
+							<a id="btn-cancel" class="btn btn-danger" href="#{request.contextPath}/admin/layoutLogado.xhtml" style="width: 100%; color:white;">
 								<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
-							</h:commandLink>
+							</a>
 						</div>
 					</div>
 					

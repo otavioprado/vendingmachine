@@ -29,7 +29,7 @@ import javax.validation.constraints.NotNull;
 	})
 public class UsuarioSistema implements Serializable {
 
-	private static final long serialVersionUID = 4885294130406744926L;
+	private static final long serialVersionUID = -6030429686620788418L;
 
 	@Id
 	@Column(name = "ID")
@@ -67,8 +67,8 @@ public class UsuarioSistema implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataUltimaTrocaSenha;
 	
-	@Column(name = "IND_OBRIGA_TROCA_SENHA")
-	private Boolean indObrigaTrocaSenha;
+	@Column(name = "IND_ATIVO")
+	private Boolean indAtivo;
 	
 	@ManyToOne
 	@JoinTable(name="USUARIO_SISTEMA_PERFIL", joinColumns={@JoinColumn(name="USUARIO_SISTEMA_ID", referencedColumnName="id")}, inverseJoinColumns={@JoinColumn(name="PERFIL_ID", referencedColumnName="id")})
@@ -146,12 +146,12 @@ public class UsuarioSistema implements Serializable {
 		this.dataUltimaTrocaSenha = dataUltimaTrocaSenha;
 	}
 
-	public Boolean getIndObrigaTrocaSenha() {
-		return indObrigaTrocaSenha;
+	public Boolean getIndAtivo() {
+		return indAtivo;
 	}
 
-	public void setIndObrigaTrocaSenha(Boolean indObrigaTrocaSenha) {
-		this.indObrigaTrocaSenha = indObrigaTrocaSenha;
+	public void setIndAtivo(Boolean indAtivo) {
+		this.indAtivo = indAtivo;
 	}
 	
 	public Perfil getPerfil() {

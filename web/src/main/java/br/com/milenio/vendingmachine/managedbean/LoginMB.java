@@ -1,9 +1,7 @@
 package br.com.milenio.vendingmachine.managedbean;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.enterprise.context.RequestScoped;
@@ -16,9 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.Logger;
-
-import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
-// Solução: http://stackoverflow.com/questions/25644007/request-io-undertow-servlet-spec-httpservletrequestimpl-was-not-original-or-a-wr
 
 @Named
 @RequestScoped
@@ -37,23 +32,6 @@ public class LoginMB {
 	private Logger logger;
 	
 	private Map<String,Object> perfil = new LinkedHashMap<String,Object>();
-	
-	private List<UsuarioSistema> usuariosSistemas = new ArrayList<UsuarioSistema>();
-
-	public List<UsuarioSistema> getUsuariosSistemas() {
-		UsuarioSistema user = new UsuarioSistema();
-		user.setNome("Otávio Prado");
-		user.setSenhaAplicacao("123");
-		user.setEmail("otavio_lipe@hotmail.com");
-		
-		usuariosSistemas.add(user);
-		
-		return usuariosSistemas;
-	}
-
-	public void setUsuariosSistemas(List<UsuarioSistema> usuariosSistemas) {
-		this.usuariosSistemas = usuariosSistemas;
-	}
 
 	private String usuario;
 	private String senha;

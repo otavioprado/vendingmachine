@@ -14,4 +14,6 @@ public interface UsuarioSistemaRepository extends Repository<UsuarioSistema, Lon
 	UsuarioSistema findUsuarioByLoginAndEmail(UsuarioSistema usuario);
 	
 	List<Long> findClientesComEmail();
+
+	List<UsuarioSistema> buscarUsuariosComFiltro(String nome, Boolean status, Long perfilId);
 }

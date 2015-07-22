@@ -45,42 +45,46 @@
 					
 					<div class="col-md-3">
 						<div class="form-group">
-							<h:commandLink id="btn-signup" class="btn btn-primary" actionListener="#{usuarioMB.pesquisarUsuario}" update="table-users" style="width: 100%; color:white;">
-								<i class="glyphicon glyphicon-hand-right"></i>&nbsp;Pesquisar&nbsp;
+							<h:commandLink id="btn-signup" class="btn btn-primary" actionListener="#{usuarioMB.consultarUsuario}" update="table-users" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-search"></i>&nbsp;Pesquisar&nbsp;
 							</h:commandLink>
 						</div>
 					</div>
 				</div>
 			</h:form>
 			<c:if test="${not empty usuarioMB.listUsuarios}">
-				<f:facet name="footer">
 					<h:form prependId="false">
-					
-						<p:dataTable tableStyleClass="table-hover" id="table-users" var="user" value="#{usuarioMB.listUsuarios}">
+						<p:dataTable tableStyleClass="table-hover" id="table-users" var="user" value="#{usuarioMB.listUsuarios}" rows="10" paginator="true" paginatorPosition="bottom"
+							paginatorAlwaysVisible="false" rowsPerPageTemplate="5,10,15,20">
+							<h:inputHidden id="idUsuario" value="#{user.id}" />
+							
 							<p:column headerText="Nome">
-								<h:outputText value="#{user.nome}" />
+								<h:outputText id="userName" value="#{user.nome}" />
 							</p:column>
-						
-							<p:column headerText="Senha">
-								<h:outputText value="#{user.senhaAplicacao}" />
+							
+							<p:column headerText="Login">
+								<h:outputText id="userLogin" value="#{user.login}" />
 							</p:column>
 						
 							<p:column headerText="E-mail">
-								<h:outputText value="#{user.email}" />
+								<h:outputText id="userEmail" value="#{user.email}" />
 							</p:column>
 							
-							<p:column style="width:128px; text-align: center">
-								<p:commandButton action="#{usuarioMB.editarUsuario}" icon="ui-icon-pencil" title="Editar">
+							<p:column headerText="Perfil">
+								<h:outputText id="userPerfil" value="#{user.perfil.nome}" />
+			            	</p:column>
+							
+							<p:column style="width:128px; text-align: center" headerText="Ações">
+								<p:commandButton styleaction="#{usuarioMB.editarUsuario}" icon="ui-icon-pencil" title="Editar">
 									<f:setPropertyActionListener value="#{user}" target="#{usuarioMB.usuario}" />
 					            </p:commandButton>
 				
-								<p:commandButton action="#{usuarioMB.excluirUsuario}" icon="ui-icon-closethick" title="Bloquear">
+								<p:commandButton styleaction="#{usuarioMB.excluirUsuario}" icon="ui-icon-closethick" title="Bloquear">
 									<f:setPropertyActionListener value="#{user}" target="#{usuarioMB.usuario}" />
 					            </p:commandButton>
 							</p:column>
 						</p:dataTable>
 					</h:form>
-				</f:facet>
 			</c:if>
 		</p:panel>
 		

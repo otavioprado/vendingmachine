@@ -7,6 +7,12 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
+import com.uaihebert.uaicriteria.UaiCriteria;
+import com.uaihebert.uaicriteria.UaiCriteriaFactory;
 
 import br.com.milenio.vendingmachine.domain.AbstractVendingMachineRepositoryBean;
 import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
@@ -64,6 +70,28 @@ public class UsuarioSistemaRepositoryBean extends AbstractVendingMachineReposito
 		}
 		
 		return null;
+	}
+	
+	@Override
+	public List<UsuarioSistema> buscarUsuariosComFiltro(String nome, Boolean status, Long perfilId) {
+		UaiCriteria<UsuarioSistema> uaiCriteria = UaiCriteriaFactory.createQueryCriteria(getEntityManager(), UsuarioSistema.class);
+		
+		if(nome != null && !nome.isEmpty()) {
+			uaiCriteria.orEquals("nome", nome);
+			uaiCriteria.orStringLike("nome", "%" + nome + "%");
+		}
+		
+		if(status != null)
+			uaiCriteria.orEquals("indAtivo", status);
+		
+		if(perfilId != null) {
+			uaiCriteria.innerJoin("perfil");
+			uaiCriteria.andEquals("perfil.id", perfilId);
+		}
+		
+		List<UsuarioSistema> usuarios = (List<UsuarioSistema>) uaiCriteria.getResultList();
+		
+		return usuarios;
 	}
 	
 }

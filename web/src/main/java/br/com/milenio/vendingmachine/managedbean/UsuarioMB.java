@@ -1,9 +1,10 @@
 package br.com.milenio.vendingmachine.managedbean;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -16,9 +17,11 @@ import br.com.milenio.vendingmachine.exceptions.ConteudoJaExistenteNoBancoDeDado
 import br.com.milenio.vendingmachine.service.UsuarioService;
 
 @Named
-@RequestScoped
-public class UsuarioMB {
+@SessionScoped
+public class UsuarioMB implements Serializable {
 	
+	private static final long serialVersionUID = -8922001136406729460L;
+
 	@Inject
 	private Logger logger;
 	
@@ -29,11 +32,10 @@ public class UsuarioMB {
 	private UsuarioService usuarioService;
 	
 	private UsuarioSistema usuario = new UsuarioSistema();
-	private Long perfilId;
-
 	private List<UsuarioSistema> listUsuarios;
 	private String nome;
-	private boolean status;
+	private Boolean status;
+	private Long perfilId;
 
 	/**
 	 * Método responsável por realizar a chamada ao serviço de cadastro de usuários
@@ -47,15 +49,15 @@ public class UsuarioMB {
 		// Registra o usuario com a data atual
 		usuario.setDataCadastro(new Date());
 		
-		// Informa que o cadastro do usuario deve ter a senha alterada
-		usuario.setIndObrigaTrocaSenha(true);
+		// Informa que o cadastro do usuario está ativo
+		usuario.setIndAtivo(true);
 		
 		try{
 			usuarioService.cadastrarUsuario(usuario, perfilId);
 			
 			// Sucesso - Exibe mensagem de cadastro realizado com sucesso
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário " + usuario.getLogin() + " cadastrado com sucesso.", null));
-			logger.info("Usuário " + usuario.getNome() + " cadastrado no sistema com sucesso.");
+			logger.info("Usuário " + usuario.getNome() + " foi cadastrado no sistema com sucesso.");
 			
 		} catch(ConteudoJaExistenteNoBancoDeDadosException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
@@ -66,9 +68,12 @@ public class UsuarioMB {
 		return "";
 	}
 	
-	public String pesquisarUsuario() {
-		listUsuarios = usuarioService.listarTodos();
+	public String consultarUsuario() {
+		listUsuarios = usuarioService.buscarUsuariosComFiltro(nome, status, perfilId);
 		
+		nome = null;
+		status = null;
+		perfilId = null;
 		return "";
 	}
 	
@@ -96,6 +101,14 @@ public class UsuarioMB {
 		this.perfilId = perfilId;
 	}
 	
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
+
 	public List<UsuarioSistema> getUsuariosSistema() {
 		return usuarioService.listarTodos();
 	}
@@ -114,13 +127,5 @@ public class UsuarioMB {
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-	public boolean isStatus() {
-		return status;
-	}
-
-	public void setStatus(boolean status) {
-		this.status = status;
 	}
 }

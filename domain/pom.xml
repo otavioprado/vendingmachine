@@ -59,6 +59,13 @@
             <artifactId>arquillian-protocol-servlet</artifactId>
             <scope>test</scope>               
         </dependency>
+		
+		<!-- API que ajuda a criar as queries Criteria -->
+		<dependency>
+			<groupId>uaihebert.com</groupId>
+			<artifactId>uaiCriteria</artifactId>
+			<version>4.0.0</version>
+		</dependency>
 
     </dependencies>
 

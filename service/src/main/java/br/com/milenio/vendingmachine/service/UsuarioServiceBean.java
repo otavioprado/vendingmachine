@@ -13,6 +13,7 @@ import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 import br.com.milenio.vendingmachine.exceptions.ConteudoJaExistenteNoBancoDeDadosException;
 import br.com.milenio.vendingmachine.repository.PerfilRepository;
 import br.com.milenio.vendingmachine.repository.UsuarioSistemaRepository;
+import br.com.milenio.vendingmachine.utils.MD5Util;
 
 @Stateless
 public class UsuarioServiceBean implements UsuarioService {
@@ -46,6 +47,10 @@ public class UsuarioServiceBean implements UsuarioService {
 		try{
 			Perfil perfil = perfilRepository.findById(perfilId);
 			novoUsuario.setPerfil(perfil);
+			
+			// Criptografa a senha digitada antes de persistir no banco de dados
+			novoUsuario.setSenhaAplicacao(MD5Util.criptografar(novoUsuario.getSenhaAplicacao()));
+			
 			usuarioSistemaRepository.persist(novoUsuario);
 		} catch(Exception e) {
 			// Erro desconhecido ao tentar realizar a persistência dos dados no banco de dados
@@ -57,6 +62,17 @@ public class UsuarioServiceBean implements UsuarioService {
 	
 	public List<UsuarioSistema> listarTodos() {
 		return usuarioSistemaRepository.getAll();
+	}
+
+	@Override
+	public List<UsuarioSistema> buscarUsuariosComFiltro(String nome, Boolean status, Long perfilId) {
+		
+		// Se não houver filtros informados, fará a busca de todos os registros
+		if(((nome == null || nome.isEmpty()) && status == null && perfilId == null)) {
+			return usuarioSistemaRepository.getAll();
+		} else {
+			return usuarioSistemaRepository.buscarUsuariosComFiltro(nome, status, perfilId);
+		}
 	}
 	
 }
