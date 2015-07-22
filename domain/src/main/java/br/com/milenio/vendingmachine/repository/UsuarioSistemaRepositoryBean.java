@@ -73,12 +73,12 @@ public class UsuarioSistemaRepositoryBean extends AbstractVendingMachineReposito
 	}
 	
 	@Override
-	public List<UsuarioSistema> buscarUsuariosComFiltro(String nome, Boolean status, Long perfilId) {
+	public List<UsuarioSistema> buscarUsuariosComFiltro(String login, Boolean status, Long perfilId) {
 		UaiCriteria<UsuarioSistema> uaiCriteria = UaiCriteriaFactory.createQueryCriteria(getEntityManager(), UsuarioSistema.class);
 		
-		if(nome != null && !nome.isEmpty()) {
-			uaiCriteria.orEquals("nome", nome);
-			uaiCriteria.orStringLike("nome", "%" + nome + "%");
+		if(login != null && !login.isEmpty()) {
+			uaiCriteria.orEquals("login", login);
+			uaiCriteria.orStringLike("login", "%" + login + "%");
 		}
 		
 		if(status != null)

@@ -65,14 +65,18 @@ public class UsuarioServiceBean implements UsuarioService {
 	}
 
 	@Override
-	public List<UsuarioSistema> buscarUsuariosComFiltro(String nome, Boolean status, Long perfilId) {
+	public List<UsuarioSistema> buscarUsuariosComFiltro(String login, Boolean status, Long perfilId) {
 		
 		// Se não houver filtros informados, fará a busca de todos os registros
-		if(((nome == null || nome.isEmpty()) && status == null && perfilId == null)) {
+		if(((login == null || login.isEmpty()) && status == null && perfilId == null)) {
 			return usuarioSistemaRepository.getAll();
 		} else {
-			return usuarioSistemaRepository.buscarUsuariosComFiltro(nome, status, perfilId);
+			return usuarioSistemaRepository.buscarUsuariosComFiltro(login, status, perfilId);
 		}
+	}
+	
+	public UsuarioSistema findById(Long editUserId) {
+		return usuarioSistemaRepository.findById(editUserId);
 	}
 	
 }

@@ -1,14 +1,18 @@
 package br.com.milenio.vendingmachine.managedbean;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.enterprise.context.SessionScoped;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +21,7 @@ import br.com.milenio.vendingmachine.exceptions.ConteudoJaExistenteNoBancoDeDado
 import br.com.milenio.vendingmachine.service.UsuarioService;
 
 @Named
-@SessionScoped
+@ViewScoped
 public class UsuarioMB implements Serializable {
 	
 	private static final long serialVersionUID = -8922001136406729460L;
@@ -31,11 +35,20 @@ public class UsuarioMB implements Serializable {
 	@Inject
 	private UsuarioService usuarioService;
 	
-	private UsuarioSistema usuario = new UsuarioSistema();
+	@Inject
+	private ExternalContext ec;
+	
+	@Inject
+	private HttpSession session;
+	
+	private UsuarioSistema usuario;
 	private List<UsuarioSistema> listUsuarios;
-	private String nome;
+	private String login;
+
 	private Boolean status;
 	private Long perfilId;
+	
+	private Long editUserId;
 
 	/**
 	 * Método responsável por realizar a chamada ao serviço de cadastro de usuários
@@ -69,16 +82,20 @@ public class UsuarioMB implements Serializable {
 	}
 	
 	public String consultarUsuario() {
-		listUsuarios = usuarioService.buscarUsuariosComFiltro(nome, status, perfilId);
+		listUsuarios = usuarioService.buscarUsuariosComFiltro(login, status, perfilId);
 		
-		nome = null;
+		login = null;
 		status = null;
 		perfilId = null;
 		return "";
 	}
 	
-	public String editarUsuario() {
-		return null;
+	public void carregarDadosUsuarioParaEdicao() {
+		usuario = usuarioService.findById(editUserId);
+	}
+	
+	public void limparLista() {
+		listUsuarios = null;
 	}
 	
 	public String excluirUsuario() {
@@ -120,12 +137,20 @@ public class UsuarioMB implements Serializable {
 	public void setListUsuarios(List<UsuarioSistema> listUsuarios) {
 		this.listUsuarios = listUsuarios;
 	}
-
-	public String getNome() {
-		return nome;
+	
+	public String getLogin() {
+		return login;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setLogin(String login) {
+		this.login = login;
+	}
+	
+	public Long getEditUserId() {
+		return editUserId;
+	}
+
+	public void setEditUserId(Long editUserId) {
+		this.editUserId = editUserId;
 	}
 }

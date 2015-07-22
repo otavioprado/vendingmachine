@@ -1,0 +1,86 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;"> 
+]>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    template="layoutLogado.xhtml">
+    
+    <f:metadata>
+	    <f:viewParam name="userId" value="#{usuarioMB.editUserId}" />
+	    <f:event type="preRenderView" listener="#{usuarioMB.carregarDadosUsuarioParaEdicao}"/>
+	</f:metadata>
+
+	<ui:define name="conteudo">
+		<h:form prependId="false">
+			<p:panel id="basic" header="Editar usuário" footer="Detalhes do usuário" style="margin-bottom:20px">
+				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="row">
+					<div class="col-lg-6">	
+						<div class="form-group">
+							<label for="login">Login *</label>
+							<input id="login" name="login" type="text" class="form-control" placeholder="Login" jsf:value="#{usuarioMB.usuario.login}" jsf:required="true" />
+						</div>
+						
+						<div class="form-group">
+							<label for="nome">Nome *</label>
+							<input id="nome" name="nome" type="text" class="form-control" placeholder="Nome" jsf:value="#{usuarioMB.usuario.nome}" jsf:required="true" />
+						</div>
+						
+						<div class="form-group">
+							<label for="email">Perfil *</label>
+							<h:selectOneMenu id="perfil" value="#{usuarioMB.usuario.perfil.id}" styleClass="form-control" required="true" >
+				                <f:selectItem itemLabel="[Selecione]" itemValue="" noSelectionOption="true" />
+				                <f:selectItem itemLabel="Administrador" itemValue="1" />
+				                <f:selectItem itemLabel="Gestor" itemValue="2"/>
+				                <f:selectItem itemLabel="Gerente" itemValue="3" />
+				                <f:selectItem itemLabel="Operador" itemValue="4" />
+			            	</h:selectOneMenu>
+		            	</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="form-group">
+							<label for="senha">Senha *</label>
+							<input id="senha" name="senha" type="password" class="form-control" placeholder="Senha" 
+								jsf:value="#{usuarioMB.usuario.senhaAplicacao}" 
+								jsf:required="true">
+								<f:validateLength minimum="6" />
+							</input>
+						</div>
+						
+						<div class="form-group">
+							<label for="email">E-mail *</label>
+							<input id="email" name="email" type="text" class="form-control" placeholder="Endereço de E-mail" jsf:value="#{usuarioMB.usuario.email}" jsf:required="true" />
+						</div>
+					</div>
+					<div class="col-lg-12">
+						<div class="form-group">
+							<div class="required">* Campos obrigatórios</div>
+						</div>
+					</div>
+					
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandLink id="btn-signup" class="btn btn-primary" action="#{usuarioMB.cadastrarUsuario}" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-hand-right"></i>&nbsp;Cadastrar&nbsp;
+							</h:commandLink>
+						</div>
+					</div>
+					
+					<div class="col-md-3">
+						<div class="form-group">
+							<a id="btn-cancel" class="btn btn-danger" href="#{request.contextPath}/admin/layoutLogado.xhtml" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+							</a>
+						</div>
+					</div>
+					
+				</div>
+			</p:panel>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

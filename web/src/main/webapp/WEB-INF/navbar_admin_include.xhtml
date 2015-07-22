@@ -22,13 +22,13 @@
 				<li class="#{view.viewId eq '/admin/layoutLogado.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/layoutLogado.xhtml"><span class="glyphicon glyphicon-home"/>Home</a></li>
 			</ul>
 			<ul class="nav navbar-nav">
-				<li class="#{view.viewId eq '/admin/usuario.xhtml' ? 'active' : ''}"><a href="#"><span class="glyphicon glyphicon-wrench"></span>Configurações</a></li>
+				<li class="#{view.viewId eq '/admin/configuracao.xhtml' ? 'active' : ''}"><a href="#"><span class="glyphicon glyphicon-wrench"></span>Configurações</a></li>
 			</ul>
 			<ul class="nav navbar-nav">
 				
 				<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_ADMIN_CAD_USUARIO') eq true}">
 				
-					<li class="dropdown">
+					<li class="dropdown #{view.viewId eq '/admin/usuario.xhtml' or view.viewId eq '/admin/consultaUsuario.xhtml'? 'active' : ''}">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user"/>Usuários<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="#{request.contextPath}/admin/usuario.xhtml">Cadastrar</a></li>

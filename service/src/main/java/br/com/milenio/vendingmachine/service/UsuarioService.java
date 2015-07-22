@@ -13,5 +13,7 @@ public interface UsuarioService {
 	
 	public List<UsuarioSistema> listarTodos();
 
-	public List<UsuarioSistema> buscarUsuariosComFiltro(String nome, Boolean status, Long perfilId);
+	public List<UsuarioSistema> buscarUsuariosComFiltro(String login, Boolean status, Long perfilId);
+
+	public UsuarioSistema findById(Long editUserId);
 }

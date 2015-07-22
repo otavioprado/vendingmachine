@@ -3,17 +3,17 @@
 --------------------------------------------
 --  Cria os usuários default do sistema   --
 --------------------------------------------
-INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME) VALUES (1, 'otavio', 'a3d4a413a3f981422388a46cbf1292fb', NOW(), 'fulano@gmail.com', 'Otávio Felipe do Prado');
-INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME) VALUES (2, 'lucas', 'a3d4a413a3f981422388a46cbf1292fb', NOW(), 'fulano@gmail.com', 'Otávio Felipe do Prado');
+INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME, IND_ATIVO) VALUES (1, 'otavio', 'a3d4a413a3f981422388a46cbf1292fb', NOW(), 'fulano@gmail.com', 'Otávio Felipe do Prado', true);
+INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME, IND_ATIVO) VALUES (2, 'lucas', 'a3d4a413a3f981422388a46cbf1292fb', NOW(), 'fulano@gmail.com', 'Otávio Felipe do Prado', true);
 
-INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME) VALUES (3, 'bruna', 'a3d4a413a3f981422388a46cbf1292fb', NOW(), 'fulano@gmail.com', 'Otávio Felipe do Prado');
-INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME) VALUES (3, 'rafaela', 'a3d4a413a3f981422388a46cbf1292fb', NOW(), 'fulano@gmail.com', 'Otávio Felipe do Prado');
-INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME) VALUES (4, 'pedro', 'a3d4a413a3f981422388a46cbf1292fb', NOW(), 'fulano@gmail.com', 'Otávio Felipe do Prado');
-INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME) VALUES (5, 'joao', 'a3d4a413a3f981422388a46cbf1292fb', NOW(), 'fulano@gmail.com', 'Otávio Felipe do Prado');
-INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME) VALUES (6, 'marcelo', 'a3d4a413a3f981422388a46cbf1292fb', NOW(), 'fulano@gmail.com', 'Otávio Felipe do Prado');
-INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME) VALUES (7, 'silvia', 'a3d4a413a3f981422388a46cbf1292fb', NOW(), 'fulano@gmail.com', 'Otávio Felipe do Prado');
-INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME) VALUES (8, 'roberto', 'a3d4a413a3f981422388a46cbf1292fb', NOW(), 'fulano@gmail.com', 'Otávio Felipe do Prado');
-INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME) VALUES (9, 'jose', 'a3d4a413a3f981422388a46cbf1292fb', NOW(), 'fulano@gmail.com', 'Otávio Felipe do Prado');
+INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME, IND_ATIVO) VALUES (3, 'bruna', 'a3d4a413a3f981422388a46cbf1292fb', NOW(), 'fulano@gmail.com', 'Otávio Felipe do Prado', true);
+INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME, IND_ATIVO) VALUES (3, 'rafaela', 'a3d4a413a3f981422388a46cbf1292fb', NOW(), 'fulano@gmail.com', 'Otávio Felipe do Prado', true);
+INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME, IND_ATIVO) VALUES (4, 'pedro', 'a3d4a413a3f981422388a46cbf1292fb', NOW(), 'fulano@gmail.com', 'Otávio Felipe do Prado', true);
+INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME, IND_ATIVO) VALUES (5, 'joao', 'a3d4a413a3f981422388a46cbf1292fb', NOW(), 'fulano@gmail.com', 'Otávio Felipe do Prado', true);
+INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME, IND_ATIVO) VALUES (6, 'marcelo', 'a3d4a413a3f981422388a46cbf1292fb', NOW(), 'fulano@gmail.com', 'Otávio Felipe do Prado', true);
+INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME, IND_ATIVO) VALUES (7, 'silvia', 'a3d4a413a3f981422388a46cbf1292fb', NOW(), 'fulano@gmail.com', 'Otávio Felipe do Prado', true);
+INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME, IND_ATIVO) VALUES (8, 'roberto', 'a3d4a413a3f981422388a46cbf1292fb', NOW(), 'fulano@gmail.com', 'Otávio Felipe do Prado', true);
+INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME, IND_ATIVO) VALUES (9, 'jose', 'a3d4a413a3f981422388a46cbf1292fb', NOW(), 'fulano@gmail.com', 'Otávio Felipe do Prado', true);
 -- Obs.: "a3d4a413a3f981422388a46cbf1292fb" é "gudiao" em MD5
 
 --------------------------------------------

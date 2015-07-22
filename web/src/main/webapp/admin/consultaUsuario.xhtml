@@ -19,14 +19,18 @@
 					<div class="col-lg-4">	
 						<div class="form-group">
 							<label for="login">Login do usuário</label>
-							<input id="login" name="login" type="text" class="form-control" placeholder="Login" jsf:value="#{usuarioMB.nome}" />
+							<input id="login" name="login" type="text" class="form-control" placeholder="Login" jsf:value="#{usuarioMB.login}" />
 						</div>
 					</div>
 					
 					<div class="col-lg-4">	
 						<div class="form-group">
 							<label for="status">Status</label>
-							<input id="status" name="status" type="text" class="form-control" placeholder="Status" jsf:value="#{usuarioMB.status}" />
+							<h:selectOneMenu id="status" value="#{usuarioMB.status}" styleClass="form-control">
+				                <f:selectItem itemLabel="[Selecione]" itemValue="" noSelectionOption="true" />
+				                <f:selectItem itemLabel="Ativo" itemValue="true" noSelectionOption="false" />
+				                <f:selectItem itemLabel="Bloqueado" itemValue="false" noSelectionOption="false" />
+			            	</h:selectOneMenu>
 						</div>
 					</div>
 					
@@ -53,9 +57,10 @@
 				</div>
 			</h:form>
 			<c:if test="${not empty usuarioMB.listUsuarios}">
+			
 					<h:form prependId="false">
 						<p:dataTable tableStyleClass="table-hover" id="table-users" var="user" value="#{usuarioMB.listUsuarios}" rows="10" paginator="true" paginatorPosition="bottom"
-							paginatorAlwaysVisible="false" rowsPerPageTemplate="5,10,15,20">
+							paginatorAlwaysVisible="false" rowsPerPageTemplate="10,15,20,25,30">
 							<h:inputHidden id="idUsuario" value="#{user.id}" />
 							
 							<p:column headerText="Nome">
@@ -74,12 +79,12 @@
 								<h:outputText id="userPerfil" value="#{user.perfil.nome}" />
 			            	</p:column>
 							
-							<p:column style="width:128px; text-align: center" headerText="Ações">
-								<p:commandButton styleaction="#{usuarioMB.editarUsuario}" icon="ui-icon-pencil" title="Editar">
-									<f:setPropertyActionListener value="#{user}" target="#{usuarioMB.usuario}" />
-					            </p:commandButton>
+							<p:column style="width:192px; text-align: center" headerText="Ações">
+					            <p:button icon="ui-icon-pencil" title="Editar" outcome="editar_usuario.xhtml">
+									<f:param name="userId" value="#{user.id}" />
+								</p:button>
 				
-								<p:commandButton styleaction="#{usuarioMB.excluirUsuario}" icon="ui-icon-closethick" title="Bloquear">
+								<p:commandButton actionListener="#{usuarioMB.excluirUsuario}" icon="ui-icon-closethick" title="Bloquear" ajax="false">
 									<f:setPropertyActionListener value="#{user}" target="#{usuarioMB.usuario}" />
 					            </p:commandButton>
 							</p:column>
