@@ -19,6 +19,7 @@
 			<p:panel id="basic" header="Editar usuário" footer="Detalhes do usuário" style="margin-bottom:20px">
 				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
 				<div class="row">
+					<h:inputHidden id="idUsuario" value="#{usuarioMB.usuario.id}" />
 					<div class="col-lg-6">	
 						<div class="form-group">
 							<label for="login">Login *</label>
@@ -43,7 +44,7 @@
 					</div>
 					<div class="col-lg-6">
 						<div class="form-group">
-							<label for="senha">Senha *</label>
+							<label for="senha">Senha </label>
 							<input id="senha" name="senha" type="password" class="form-control" placeholder="Senha" 
 								jsf:value="#{usuarioMB.usuario.senhaAplicacao}" 
 								jsf:required="true">
@@ -65,7 +66,7 @@
 					<div class="col-md-3">
 						<div class="form-group">
 							<h:commandLink id="btn-signup" class="btn btn-primary" action="#{usuarioMB.cadastrarUsuario}" style="width: 100%; color:white;">
-								<i class="glyphicon glyphicon-hand-right"></i>&nbsp;Cadastrar&nbsp;
+								<i class="glyphicon glyphicon-hand-right"></i>&nbsp;Salvar&nbsp;
 							</h:commandLink>
 						</div>
 					</div>
@@ -78,9 +79,50 @@
 						</div>
 					</div>
 					
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandButton onclick="PF('dlgBloq').show();" class="btn btn-danger" id="btn-bloq" value="Bloquear" type="button" style="width: 100%; color:white;" ajax="false" icon="glyphicon glyphicon-hand-right" />
+						</div>
+					</div>
 				</div>
 			</p:panel>
 		</h:form>
+		
+		<h:form prependId="false">
+			<p:dialog widgetVar="dlgBloq" minHeight="100" minWidth="400" showHeader="false" resizable="false">
+				<div class="form-group">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="nome">Digite o motivo do bloqueio: *</label>
+								<input id="motivo-bloqueio" name="motivo-bloqueio" type="text" class="form-control" placeholder="Motivo Bloqueio" jsf:value="#{usuarioMB.usuario.nome}" jsf:required="true" />
+							</div>
+						</div>
+						
+						<div class="col-lg-12">
+							<div class="form-group">
+								<div class="required">* Campo obrigatório</div>
+							</div>
+						</div>
+							
+						<div class="col-md-6">
+							<div class="form-group">
+								<h:commandLink id="btn-bloquear" class="btn btn-primary" action="#{usuarioMB.cadastrarUsuario}" style="width: 100%; color:white;">
+									<i class="glyphicon glyphicon-hand-right"></i>&nbsp;Bloquear&nbsp;
+								</h:commandLink>
+							</div>
+						</div>
+						
+						<div class="col-md-6">
+							<div class="form-group">
+								<h:commandButton onclick="PF('dlgBloq').hide();" class="btn btn-danger" id="btn-bloq-cancel" value="Cancelar" type="button" style="width: 100%; color:white;" ajax="false" icon="glyphicon glyphicon-hand-right" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</p:dialog>
+		</h:form>
+		
 	</ui:define>
 
 </ui:composition>

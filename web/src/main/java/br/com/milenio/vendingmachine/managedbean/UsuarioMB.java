@@ -90,6 +90,10 @@ public class UsuarioMB implements Serializable {
 		return "";
 	}
 	
+	public void bloquearUsuario() {
+		
+	}
+	
 	public void carregarDadosUsuarioParaEdicao() {
 		usuario = usuarioService.findById(editUserId);
 	}
