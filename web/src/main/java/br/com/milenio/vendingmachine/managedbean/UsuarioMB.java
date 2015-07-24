@@ -45,7 +45,8 @@ public class UsuarioMB implements Serializable {
 
 	private Boolean status;
 	private Long perfilId;
-	
+	private String motivoBloqueio;
+
 	private Long id;
 
 	/**
@@ -79,24 +80,23 @@ public class UsuarioMB implements Serializable {
 		return "";
 	}
 	
-	public String consultarUsuario() {
+	public void consultarUsuario() {
 		listUsuarios = usuarioService.buscarUsuariosComFiltro(login, status, perfilId);
-		
-		login = null;
-		status = null;
-		perfilId = null;
-		return "";
 	}
 	
 	public void bloquearUsuario() {
-		if(usuarioService.bloquearUsuario(id)) {
+		if(usuarioService.bloquearUsuario(id, motivoBloqueio)) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário " + usuario.getLogin() + " bloqueado com sucesso.", null));
+			// Após bloqueio, carrega a lista de usuários para atualizar na view de consulta
+			consultarUsuario();
 		}
 	}
 	
 	public void desbloquearUsuario() {
 		if(usuarioService.desbloquearUsuario(id)) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário " + usuario.getLogin() + " desbloqueado com sucesso.", null));
+			// Após desbloqueio, carrega a lista de usuários para atualizar na view de consulta
+			consultarUsuario();
 		}
 	}
 	
@@ -158,5 +158,13 @@ public class UsuarioMB implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public String getMotivoBloqueio() {
+		return motivoBloqueio;
+	}
+
+	public void setMotivoBloqueio(String motivoBloqueio) {
+		this.motivoBloqueio = motivoBloqueio;
 	}
 }

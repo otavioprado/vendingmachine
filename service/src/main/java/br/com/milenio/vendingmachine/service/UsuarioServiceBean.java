@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import br.com.milenio.vendingmachine.domain.model.Perfil;
 import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 import br.com.milenio.vendingmachine.exceptions.ConteudoJaExistenteNoBancoDeDadosException;
+import br.com.milenio.vendingmachine.exceptions.UsuarioBloqueadoNoSistemaException;
 import br.com.milenio.vendingmachine.repository.PerfilRepository;
 import br.com.milenio.vendingmachine.repository.UsuarioSistemaRepository;
 import br.com.milenio.vendingmachine.utils.MD5Util;
@@ -89,12 +90,22 @@ public class UsuarioServiceBean implements UsuarioService {
 	}
 
 	@Override
-	public boolean bloquearUsuario(Long id) {
+	public boolean bloquearUsuario(Long id, String motivoBloqueio) {
 		UsuarioSistema usuario = usuarioSistemaRepository.findById(id);
 		usuario.setIndAtivo(false);
+		usuario.setMotivoBloqueio(motivoBloqueio);
 		usuarioSistemaRepository.persist(usuario);
 		
 		return true;
+	}
+	
+	@Override
+	public void validarUsuarioAtivoPeloLogin(String login) throws UsuarioBloqueadoNoSistemaException {
+		UsuarioSistema usuario = usuarioSistemaRepository.findUsuarioByLoginEquals(login);
+		
+		if(!usuario.getIndAtivo()) {
+			throw new UsuarioBloqueadoNoSistemaException(usuario.getMotivoBloqueio());
+		}
 	}
 	
 }

@@ -63,16 +63,20 @@
 							paginatorAlwaysVisible="false" rowsPerPageTemplate="10,15,20,25,30">
 							<h:inputHidden id="idUsuario" value="#{user.id}" />
 							
+							<p:column headerText="Login">
+								<h:outputText id="userLogin" value="#{user.login}" />
+							</p:column>
+							
 							<p:column headerText="Nome">
 								<h:outputText id="userName" value="#{user.nome}" />
 							</p:column>
 							
-							<p:column headerText="Login">
-								<h:outputText id="userLogin" value="#{user.login}" />
-							</p:column>
-						
 							<p:column headerText="E-mail">
 								<h:outputText id="userEmail" value="#{user.email}" />
+							</p:column>
+							
+							<p:column headerText="Status">
+								<h:outputText id="userStatus" value="#{user.indAtivo eq true ? 'Ativo' : 'Bloqueado'}" />
 							</p:column>
 							
 							<p:column headerText="Perfil">
@@ -84,7 +88,12 @@
 									<f:param name="userId" value="#{user.id}" />
 								</p:button>
 
-								<p:commandButton onclick="PF('dlgBloq').show();" icon="ui-icon-locked" title="Bloquear" ajax="false" type="button">
+								<p:commandButton onclick="PF('dlgBloq').show();" icon="ui-icon-locked" title="Bloquear" rendered="#{user.indAtivo eq true? true : false}">
+									<f:setPropertyActionListener value="#{user.id}" target="#{usuarioMB.id}" />
+									<f:setPropertyActionListener value="#{user}" target="#{usuarioMB.usuario}" />
+					            </p:commandButton>
+					            <p:commandButton action="#{usuarioMB.desbloquearUsuario}" icon="ui-icon-unlocked" title="Desbloquear" rendered="#{user.indAtivo eq false? true : false}" update="table-users">
+									<f:setPropertyActionListener value="#{user.id}" target="#{usuarioMB.id}" />
 									<f:setPropertyActionListener value="#{user}" target="#{usuarioMB.usuario}" />
 					            </p:commandButton>
 							</p:column>
@@ -94,13 +103,13 @@
 		</p:panel>
 		
 		<h:form prependId="false">
-			<p:dialog widgetVar="dlgBloq" width="400" showHeader="false" resizable="false" modal="true">
+			<p:dialog widgetVar="dlgBloq" width="450" showHeader="false" resizable="false" modal="true">
 				<div class="form-group">
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
 								<label for="nome">Digite o motivo do bloqueio: *</label>
-								<input id="motivo-bloqueio" name="motivo-bloqueio" type="text" class="form-control" placeholder="Motivo Bloqueio" jsf:value="#{usuarioMB.usuario.nome}" jsf:required="true" />
+								<input id="motivo-bloqueio" name="motivo-bloqueio" type="text" class="form-control" placeholder="Motivo Bloqueio" jsf:value="#{usuarioMB.motivoBloqueio}" jsf:required="true" />
 							</div>
 						</div>
 						
@@ -112,7 +121,7 @@
 							
 						<div class="col-md-6">
 							<div class="form-group">
-								<h:commandLink id="btn-bloquear" class="btn btn-primary" action="#{usuarioMB.cadastrarUsuario}" style="width: 100%; color:white;">
+								<h:commandLink id="btn-bloquear" class="btn btn-primary" action="#{usuarioMB.bloquearUsuario}" style="width: 100%; color:white;">
 									<i class="glyphicon glyphicon-lock"></i>&nbsp;Bloquear&nbsp;
 								</h:commandLink>
 							</div>

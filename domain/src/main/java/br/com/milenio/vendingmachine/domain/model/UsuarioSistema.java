@@ -70,6 +70,9 @@ public class UsuarioSistema implements Serializable {
 	@Column(name = "IND_ATIVO")
 	private Boolean indAtivo;
 	
+	@Column(name = "MOTIVO_BLOQUEIO")
+	private String motivoBloqueio;
+
 	@ManyToOne
 	@JoinTable(name="USUARIO_SISTEMA_PERFIL", joinColumns={@JoinColumn(name="USUARIO_SISTEMA_ID", referencedColumnName="id")}, inverseJoinColumns={@JoinColumn(name="PERFIL_ID", referencedColumnName="id")})
     private Perfil perfil;
@@ -164,5 +167,13 @@ public class UsuarioSistema implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+	
+	public String getMotivoBloqueio() {
+		return motivoBloqueio;
+	}
+
+	public void setMotivoBloqueio(String motivoBloqueio) {
+		this.motivoBloqueio = motivoBloqueio;
 	}
 }
