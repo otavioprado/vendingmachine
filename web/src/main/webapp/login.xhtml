@@ -22,6 +22,10 @@
 	<div id="container">
 			<!-- http://bootsnipp.com/snippets/featured/login-amp-signup-forms-in-panel -->
 			
+			<f:metadata>
+				<f:event listener="#{loginMB.preRender}" type="preRenderView" />
+			</f:metadata>
+			
 			<div id="loginbox" style="margin-top: 50px;" class="mainbox col-md-4 col-md-offset-4 col-sm-8 col-sm-offset-2">
 				
 				<div class="text-vertical-center">
@@ -47,14 +51,14 @@
 							<div style="margin-bottom: 25px" class="input-group">
 								<span class="input-group-addon">
 									<i class="glyphicon glyphicon-user"></i></span>
-								<input id="j_username" name="j_username" type="text" class="form-control" 
+								<input id="usuario" name="usuario" type="text" class="form-control"
 									placeholder="Usuário" jsf:value="#{loginMB.usuario}" 
 									jsf:required="true" />
 							</div>
 
 							<div style="margin-bottom: 25px" class="input-group">
 								<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span> 
-								<input id="j_password" name="j_password" type="password" class="form-control"
+								<input id="senha" name="senha" type="password" class="form-control"
 									placeholder="Senha" jsf:value="#{loginMB.senha}" 
 									jsf:required="true" />
 							</div>

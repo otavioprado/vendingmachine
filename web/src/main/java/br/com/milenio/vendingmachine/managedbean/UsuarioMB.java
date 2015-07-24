@@ -1,11 +1,9 @@
 package br.com.milenio.vendingmachine.managedbean;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -41,7 +39,7 @@ public class UsuarioMB implements Serializable {
 	@Inject
 	private HttpSession session;
 	
-	private UsuarioSistema usuario;
+	private UsuarioSistema usuario = new UsuarioSistema();
 	private List<UsuarioSistema> listUsuarios;
 	private String login;
 
@@ -51,18 +49,18 @@ public class UsuarioMB implements Serializable {
 	private Long editUserId;
 
 	/**
-	 * Método responsável por realizar a chamada ao serviço de cadastro de usuários
+	 * Método responsável por realizar a chamada ao serviçoo de cadastro de usuários
 	 * e informar a view do resultado, exibindo as mensagens de sucesso/erro.
 	 * 
 	 * @return
 	 */
 	public String cadastrarUsuario() {
-		logger.debug("Tentando realizar o cadastro do usuário " + usuario.getNome());
+		logger.debug("Tentando realizar o cadastro do usuï¿½rio " + usuario.getNome());
 		
 		// Registra o usuario com a data atual
 		usuario.setDataCadastro(new Date());
 		
-		// Informa que o cadastro do usuario está ativo
+		// Informa que o cadastro do usuario estï¿½ ativo
 		usuario.setIndAtivo(true);
 		
 		try{
@@ -94,16 +92,16 @@ public class UsuarioMB implements Serializable {
 		
 	}
 	
+	public void desbloquearUsuario() {
+		
+	}
+	
 	public void carregarDadosUsuarioParaEdicao() {
 		usuario = usuarioService.findById(editUserId);
 	}
 	
 	public void limparLista() {
 		listUsuarios = null;
-	}
-	
-	public String excluirUsuario() {
-		return null;
 	}
 
 	public UsuarioSistema getUsuario() {

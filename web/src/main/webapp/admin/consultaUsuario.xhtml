@@ -79,12 +79,12 @@
 								<h:outputText id="userPerfil" value="#{user.perfil.nome}" />
 			            	</p:column>
 							
-							<p:column style="width:192px; text-align: center" headerText="Ações">
+							<p:column style="width:128px; text-align: center" headerText="Ações">
 					            <p:button icon="ui-icon-pencil" title="Editar" outcome="editar_usuario.xhtml">
 									<f:param name="userId" value="#{user.id}" />
 								</p:button>
-				
-								<p:commandButton actionListener="#{usuarioMB.excluirUsuario}" icon="ui-icon-closethick" title="Bloquear" ajax="false">
+
+								<p:commandButton onclick="PF('dlgBloq').show();" icon="ui-icon-locked" title="Bloquear" ajax="false" type="button">
 									<f:setPropertyActionListener value="#{user}" target="#{usuarioMB.usuario}" />
 					            </p:commandButton>
 							</p:column>
@@ -93,8 +93,43 @@
 			</c:if>
 		</p:panel>
 		
+		<h:form prependId="false">
+			<p:dialog widgetVar="dlgBloq" width="400" showHeader="false" resizable="false" modal="true">
+				<div class="form-group">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="nome">Digite o motivo do bloqueio: *</label>
+								<input id="motivo-bloqueio" name="motivo-bloqueio" type="text" class="form-control" placeholder="Motivo Bloqueio" jsf:value="#{usuarioMB.usuario.nome}" jsf:required="true" />
+							</div>
+						</div>
+						
+						<div class="col-lg-12">
+							<div class="form-group">
+								<div class="required">* Campo obrigatório</div>
+							</div>
+						</div>
+							
+						<div class="col-md-6">
+							<div class="form-group">
+								<h:commandLink id="btn-bloquear" class="btn btn-primary" action="#{usuarioMB.cadastrarUsuario}" style="width: 100%; color:white;">
+									<i class="glyphicon glyphicon-lock"></i>&nbsp;Bloquear&nbsp;
+								</h:commandLink>
+							</div>
+						</div>
+						
+						<div class="col-md-6">
+							<div class="form-group">
+								<h:commandLink id="btn-bloq-cancel" class="btn btn-danger" onclick="PF('dlgBloq').hide();" style="width: 100%; color:white;" type="button" immediate="true">
+									<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+								</h:commandLink>
+							</div>
+						</div>
+					</div>
+				</div>
+			</p:dialog>
+		</h:form>
 		
-
 	</ui:define>
 
 </ui:composition>
