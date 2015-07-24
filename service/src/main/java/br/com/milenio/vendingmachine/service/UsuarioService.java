@@ -16,4 +16,8 @@ public interface UsuarioService {
 	public List<UsuarioSistema> buscarUsuariosComFiltro(String login, Boolean status, Long perfilId);
 
 	public UsuarioSistema findById(Long editUserId);
+
+	public boolean desbloquearUsuario(Long id);
+
+	public boolean bloquearUsuario(Long id);
 }

@@ -46,7 +46,7 @@ public class UsuarioMB implements Serializable {
 	private Boolean status;
 	private Long perfilId;
 	
-	private Long editUserId;
+	private Long id;
 
 	/**
 	 * Método responsável por realizar a chamada ao serviçoo de cadastro de usuários
@@ -89,15 +89,19 @@ public class UsuarioMB implements Serializable {
 	}
 	
 	public void bloquearUsuario() {
-		
+		if(usuarioService.bloquearUsuario(id)) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário " + usuario.getLogin() + " bloqueado com sucesso.", null));
+		}
 	}
 	
 	public void desbloquearUsuario() {
-		
+		if(usuarioService.desbloquearUsuario(id)) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário " + usuario.getLogin() + " desbloqueado com sucesso.", null));
+		}
 	}
 	
 	public void carregarDadosUsuarioParaEdicao() {
-		usuario = usuarioService.findById(editUserId);
+		usuario = usuarioService.findById(id);
 	}
 	
 	public void limparLista() {
@@ -148,11 +152,11 @@ public class UsuarioMB implements Serializable {
 		this.login = login;
 	}
 	
-	public Long getEditUserId() {
-		return editUserId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setEditUserId(Long editUserId) {
-		this.editUserId = editUserId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 }

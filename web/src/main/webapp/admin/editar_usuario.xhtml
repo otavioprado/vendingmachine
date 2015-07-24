@@ -10,7 +10,7 @@
     template="layoutLogado.xhtml">
     
     <f:metadata>
-	    <f:viewParam name="userId" value="#{usuarioMB.editUserId}" />
+	    <f:viewParam name="userId" value="#{usuarioMB.id}" />
 	    <f:event type="preRenderView" listener="#{usuarioMB.carregarDadosUsuarioParaEdicao}"/>
 	</f:metadata>
 
@@ -41,13 +41,20 @@
 				                <f:selectItem itemLabel="Operador" itemValue="4" />
 			            	</h:selectOneMenu>
 		            	</div>
+		            	
+		            	<div class="form-group">
+							<label for="status">Status *</label>
+							<h:selectOneMenu id="status" value="#{usuarioMB.usuario.indAtivo}" styleClass="form-control" required="true" disabled="true" >
+				                <f:selectItem itemLabel="Ativo" itemValue="true" />
+				                <f:selectItem itemLabel="Bloqueado" itemValue="false" />
+			            	</h:selectOneMenu>
+		            	</div>
 					</div>
 					<div class="col-lg-6">
 						<div class="form-group">
 							<label for="senha">Senha </label>
 							<input id="senha" name="senha" type="password" class="form-control" placeholder="Senha" 
-								jsf:value="#{usuarioMB.usuario.senhaAplicacao}" 
-								jsf:required="true">
+								jsf:value="#{usuarioMB.usuario.senhaAplicacao}">
 								<f:validateLength minimum="6" />
 							</input>
 						</div>
@@ -81,10 +88,14 @@
 					
 					<div class="col-md-3">
 						<div class="form-group">
-							<h:commandButton id="btn-bloq" onclick="PF('dlgBloq').show();" class="btn btn-danger" value="Bloquear" type="button" style="width: 100%; color:white;" ajax="false" 
-								icon="glyphicon glyphicon-hand-right" rendered="#{usuarioMB.usuario.indAtivo eq true? true : false}"/>
-							<h:commandButton id="btn-desbloq"  onclick="PF('dlgBloq').show();" class="btn btn-danger" value="Desbloquear" type="button" style="width: 100%; color:white;" ajax="false" 
-								icon="glyphicon glyphicon-hand-right" rendered="#{usuarioMB.usuario.indAtivo eq false? true : false}"/>
+							<button id="btn-bloq" onclick="PF('dlgBloq').show();" class="btn btn-danger" type="button" style="width: 100%; color:white;"
+								jsf:rendered="#{usuarioMB.usuario.indAtivo eq true? true : false}">
+								<i class="glyphicon glyphicon-lock"/>&nbsp;Bloquear&nbsp;
+							</button>
+							<h:commandLink id="btn-desbloq" class="btn btn-danger" actionListener="#{usuarioMB.desbloquearUsuario}" style="width: 100%; color:white;" 
+								rendered="#{usuarioMB.usuario.indAtivo eq false? true : false}" immediate="true" type="button">
+								<i class="glyphicon glyphicon-thumbs-up"/>&nbsp;Desbloquear&nbsp;
+							</h:commandLink>
 						</div>
 					</div>
 				</div>
@@ -110,7 +121,7 @@
 							
 						<div class="col-md-6">
 							<div class="form-group">
-								<h:commandLink id="btn-bloquear" class="btn btn-primary" action="#{usuarioMB.cadastrarUsuario}" style="width: 100%; color:white;">
+								<h:commandLink id="btn-bloquear" class="btn btn-primary" action="#{usuarioMB.bloquearUsuario}" style="width: 100%; color:white;">
 									<i class="glyphicon glyphicon-hand-right"></i>&nbsp;Bloquear&nbsp;
 								</h:commandLink>
 							</div>
