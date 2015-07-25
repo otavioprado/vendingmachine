@@ -19,6 +19,7 @@
 				<module>service</module>
 				<module>domain</module>
 				<module>ear</module>
+				<module>functest</module>
 			</modules>
 		</profile>
 	</profiles>
