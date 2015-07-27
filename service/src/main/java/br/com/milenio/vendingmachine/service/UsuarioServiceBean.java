@@ -3,7 +3,9 @@ package br.com.milenio.vendingmachine.service;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.ejb.Stateless;
+import javax.persistence.NoResultException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,6 +14,7 @@ import br.com.milenio.vendingmachine.domain.model.Perfil;
 import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 import br.com.milenio.vendingmachine.exceptions.ConteudoJaExistenteNoBancoDeDadosException;
 import br.com.milenio.vendingmachine.exceptions.UsuarioBloqueadoNoSistemaException;
+import br.com.milenio.vendingmachine.exceptions.UsuarioInexistenteNoSistemaException;
 import br.com.milenio.vendingmachine.repository.PerfilRepository;
 import br.com.milenio.vendingmachine.repository.UsuarioSistemaRepository;
 import br.com.milenio.vendingmachine.utils.MD5Util;
@@ -100,11 +103,19 @@ public class UsuarioServiceBean implements UsuarioService {
 	}
 	
 	@Override
-	public void validarUsuarioAtivoPeloLogin(String login) throws UsuarioBloqueadoNoSistemaException {
-		UsuarioSistema usuario = usuarioSistemaRepository.findUsuarioByLoginEquals(login);
+	public void validarUsuarioAtivoPeloLogin(String login) throws UsuarioBloqueadoNoSistemaException, UsuarioInexistenteNoSistemaException {
 		
-		if(!usuario.getIndAtivo()) {
-			throw new UsuarioBloqueadoNoSistemaException(usuario.getMotivoBloqueio());
+		try {
+			UsuarioSistema usuario = usuarioSistemaRepository.findUsuarioByLoginEquals(login);
+			
+			if(!usuario.getIndAtivo()) {
+				throw new UsuarioBloqueadoNoSistemaException(usuario.getMotivoBloqueio());
+			}
+			
+		} catch(EJBException e) {
+			if(e.getCause() instanceof NoResultException) {
+				throw new UsuarioInexistenteNoSistemaException("Usuário " + login + " não existe cadastrado no sistema.");
+			}
 		}
 	}
 	

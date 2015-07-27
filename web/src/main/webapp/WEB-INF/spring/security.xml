@@ -23,6 +23,8 @@
 	
 	<http auto-config="true" use-expressions="true">
 	
+		<access-denied-handler error-page="/denied.xhtml" />
+	
 		<!-- Define as permissões para as páginas do perfil ADMINISTRADOR -->
 		<intercept-url pattern="/usuario.xhtml" access="hasRole('ROLE_ADMIN_CAD_USUARIO')"/>
 	

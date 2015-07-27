@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.Logger;
 
 import br.com.milenio.vendingmachine.exceptions.UsuarioBloqueadoNoSistemaException;
+import br.com.milenio.vendingmachine.exceptions.UsuarioInexistenteNoSistemaException;
 import br.com.milenio.vendingmachine.service.UsuarioService;
 
 @Named
@@ -47,8 +48,11 @@ public class LoginMB {
 		
 		try{ 
 			usuarioService.validarUsuarioAtivoPeloLogin(usuario);
-		} catch(UsuarioBloqueadoNoSistemaException e){
+		} catch(UsuarioBloqueadoNoSistemaException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Este usuário está bloqueado no sistema. Motivo: " + e.getMessage(), null));
+			return;
+		} catch (UsuarioInexistenteNoSistemaException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
 			return;
 		}
 		

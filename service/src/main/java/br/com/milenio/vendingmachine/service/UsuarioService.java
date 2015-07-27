@@ -7,6 +7,7 @@ import javax.ejb.Local;
 import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 import br.com.milenio.vendingmachine.exceptions.ConteudoJaExistenteNoBancoDeDadosException;
 import br.com.milenio.vendingmachine.exceptions.UsuarioBloqueadoNoSistemaException;
+import br.com.milenio.vendingmachine.exceptions.UsuarioInexistenteNoSistemaException;
 
 @Local
 public interface UsuarioService {
@@ -22,5 +23,5 @@ public interface UsuarioService {
 
 	public boolean bloquearUsuario(Long id, String motivoBloqueio);
 	
-	public void validarUsuarioAtivoPeloLogin(String login) throws UsuarioBloqueadoNoSistemaException;
+	public void validarUsuarioAtivoPeloLogin(String login) throws UsuarioBloqueadoNoSistemaException, UsuarioInexistenteNoSistemaException;
 }

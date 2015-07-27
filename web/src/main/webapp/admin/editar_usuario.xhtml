@@ -57,7 +57,7 @@
 						</div>
 						
 						<div class="row">
-							<div class="col-md-4">
+							<div class="#{usuarioMB.usuario.indAtivo eq true? 'col-md-6' : 'col-md-4'}">
 				            	<div class="form-group">
 									<label for="status">Status</label>
 									<h:selectOneMenu id="status" value="#{usuarioMB.usuario.indAtivo}" styleClass="form-control" required="true" disabled="true" >
@@ -66,8 +66,15 @@
 					            	</h:selectOneMenu>
 				            	</div>
 							</div>
+							
+							<div class="col-md-4" jsf:rendered="#{usuarioMB.usuario.indAtivo eq false? true : false}">
+				            	<div class="form-group">
+									<label for="mtvBloqeio">Motivo bloqueio: </label>
+									<input id="mtvBloqeio" name="mtvBloqeio" type="text" class="form-control" jsf:value="#{usuarioMB.usuario.motivoBloqueio}" disabled="disabled"/>
+				            	</div>
+				            </div>
 					
-				            <div class="col-md-4">
+				            <div class="#{usuarioMB.usuario.indAtivo eq true? 'col-md-6' : 'col-md-4'}">
 								<div class="form-group">
 									<label>&nbsp;</label>
 									<button id="btn-bloq" onclick="PF('dlgBloq').show();" class="btn btn-warning" type="button" style="width: 100%; color:white;"
@@ -76,17 +83,10 @@
 									</button>
 									<h:commandLink id="btn-desbloq" class="btn btn-success" actionListener="#{usuarioMB.desbloquearUsuario}" style="width: 100%; color:white;" 
 										rendered="#{usuarioMB.usuario.indAtivo eq false? true : false}" immediate="true" type="button">
-										<i class="glyphicon glyphicon-thumbs-up"/>&nbsp;Desbloquear&nbsp;
+										<i class="glyphicon glyphicon-check"/>&nbsp;Desbloquear&nbsp;
 									</h:commandLink>
 								</div>
 							</div>
-							
-							<div class="col-md-4" jsf:rendered="#{usuarioMB.usuario.indAtivo eq false? true : false}">
-				            	<div class="form-group">
-									<label for="mtvBloqeio">Motivo bloqueio: </label>
-									<input id="mtvBloqeio" name="mtvBloqeio" type="text" class="form-control" jsf:value="#{usuarioMB.usuario.motivoBloqueio}" disabled="disabled"/>
-				            	</div>
-				            </div>
 						</div>
 					</div>
 				</div>
@@ -100,7 +100,7 @@
 					<div class="col-md-3">
 						<div class="form-group">
 							<h:commandLink id="btn-signup" class="btn btn-primary" action="#{usuarioMB.cadastrarUsuario}" style="width: 100%; color:white;">
-								<i class="glyphicon glyphicon-hand-right"></i>&nbsp;Salvar&nbsp;
+								<i class="glyphicon glyphicon-saved"></i>&nbsp;Salvar&nbsp;
 							</h:commandLink>
 						</div>
 					</div>
