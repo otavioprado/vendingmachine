@@ -28,7 +28,7 @@
 		<!-- Define as permissões para as páginas do perfil ADMINISTRADOR -->
 		<intercept-url pattern="/usuario.xhtml" access="hasRole('ROLE_ADMIN_CAD_USUARIO')"/>
 	
-		<intercept-url pattern="/**" access="hasRole('ROLE_USUARIO_LOGADO')" />
+		<intercept-url pattern="/**" access="hasRole('ROLE_USUARIO_LOGADO_PAINEL_ADMIN')" />
 		
 		<form-login login-page="/login.xhtml" 
 					default-target-url="/admin/layoutLogado.xhtml" 
