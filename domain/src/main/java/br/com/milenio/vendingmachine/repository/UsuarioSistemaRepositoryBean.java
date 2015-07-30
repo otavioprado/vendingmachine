@@ -77,12 +77,12 @@ public class UsuarioSistemaRepositoryBean extends AbstractVendingMachineReposito
 		UaiCriteria<UsuarioSistema> uaiCriteria = UaiCriteriaFactory.createQueryCriteria(getEntityManager(), UsuarioSistema.class);
 		
 		if(login != null && !login.isEmpty()) {
-			uaiCriteria.orEquals("login", login);
-			uaiCriteria.orStringLike("login", "%" + login + "%");
+			uaiCriteria.andEquals("login", login);
+			uaiCriteria.andStringLike("login", "%" + login + "%");
 		}
 		
 		if(status != null)
-			uaiCriteria.orEquals("indAtivo", status);
+			uaiCriteria.andEquals("indAtivo", status);
 		
 		if(perfilId != null) {
 			uaiCriteria.innerJoin("perfil");

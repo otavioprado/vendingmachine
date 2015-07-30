@@ -107,7 +107,7 @@
 					
 					<div class="col-md-3">
 						<div class="form-group">
-							<a id="btn-cancel" class="btn btn-danger" href="#{request.contextPath}/admin/layoutLogado.xhtml" style="width: 100%; color:white;">
+							<a id="btn-cancel" class="btn btn-danger" href="#{request.contextPath}/admin/consultaUsuario.xhtml" style="width: 100%; color:white;">
 								<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
 							</a>
 						</div>
@@ -123,7 +123,7 @@
 						<div class="col-md-12">
 							<div class="form-group">
 								<label for="nome">Digite o motivo do bloqueio: *</label>
-								<input id="motivo-bloqueio" name="motivo-bloqueio" type="text" class="form-control" placeholder="Motivo Bloqueio" jsf:value="#{usuarioMB.motivoBloqueio}" jsf:required="true" />
+								<input id="motivo-bloqueio" name="motivo-bloqueio" type="text" class="form-control" placeholder="Motivo Bloqueio" jsf:value="#{usuarioMB.motivoBloqueio}" jsf:required="true" maxlength="100"/>
 							</div>
 						</div>
 						

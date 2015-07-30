@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 import br.com.milenio.vendingmachine.domain.model.Perfil;
 import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
+import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.exceptions.ConteudoJaExistenteNoBancoDeDadosException;
 import br.com.milenio.vendingmachine.exceptions.UsuarioBloqueadoNoSistemaException;
 import br.com.milenio.vendingmachine.exceptions.UsuarioInexistenteNoSistemaException;
@@ -74,13 +75,27 @@ public class UsuarioServiceBean implements UsuarioService {
 	}
 
 	@Override
-	public List<UsuarioSistema> buscarUsuariosComFiltro(String login, Boolean status, Long perfilId) {
+	public List<UsuarioSistema> buscarUsuariosComFiltro(String login, Boolean status, Long perfilId) throws CadastroInexistenteException {
+		
+		List<UsuarioSistema> usuarios;
 		
 		// Se não houver filtros informados, fará a busca de todos os registros
 		if(((login == null || login.isEmpty()) && status == null && perfilId == null)) {
-			return usuarioSistemaRepository.getAll();
+			usuarios = usuarioSistemaRepository.getAll();
+			
+			if(usuarios.isEmpty()) {
+				throw new CadastroInexistenteException("Não existem usuários cadastrados no sistema");
+			}
+			
+			return usuarios;
 		} else {
-			return usuarioSistemaRepository.buscarUsuariosComFiltro(login, status, perfilId);
+			usuarios = usuarioSistemaRepository.buscarUsuariosComFiltro(login, status, perfilId);
+			
+			if(usuarios.isEmpty()) {
+				throw new CadastroInexistenteException("Não existe nenhum cadastro de usuário para o filtro informado.");
+			}
+			
+			return usuarios;
 		}
 	}
 	

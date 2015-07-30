@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.Logger;
 
 import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
+import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.exceptions.ConteudoJaExistenteNoBancoDeDadosException;
 import br.com.milenio.vendingmachine.service.UsuarioService;
 
@@ -81,7 +82,12 @@ public class UsuarioMB implements Serializable {
 	}
 	
 	public void consultarUsuario() {
-		listUsuarios = usuarioService.buscarUsuariosComFiltro(login, status, perfilId);
+		try {
+			listUsuarios = usuarioService.buscarUsuariosComFiltro(login, status, perfilId);
+		} catch (CadastroInexistenteException e) {
+			listUsuarios.clear();
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
+		}
 	}
 	
 	public void bloquearUsuario() {
