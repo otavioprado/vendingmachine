@@ -1,5 +1,6 @@
 package br.com.milenio.vendingmachine.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -15,6 +16,7 @@ import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 import br.com.milenio.vendingmachine.exceptions.ConteudoJaExistenteNoBancoDeDadosException;
 import br.com.milenio.vendingmachine.exceptions.UsuarioBloqueadoNoSistemaException;
 import br.com.milenio.vendingmachine.exceptions.UsuarioInexistenteNoSistemaException;
+import br.com.milenio.vendingmachine.repository.ConfiguracaoSistemaRepository;
 import br.com.milenio.vendingmachine.repository.PerfilRepository;
 import br.com.milenio.vendingmachine.repository.UsuarioSistemaRepository;
 import br.com.milenio.vendingmachine.utils.MD5Util;
@@ -24,6 +26,9 @@ public class UsuarioServiceBean implements UsuarioService {
 
 	@EJB
 	UsuarioSistemaRepository usuarioSistemaRepository;
+	
+	@EJB
+	ConfiguracaoSistemaRepository configuracaoSistemaRepository;
 	
 	@EJB
 	PerfilRepository perfilRepository;
@@ -103,13 +108,32 @@ public class UsuarioServiceBean implements UsuarioService {
 	}
 	
 	@Override
-	public void validarUsuarioAtivoPeloLogin(String login) throws UsuarioBloqueadoNoSistemaException, UsuarioInexistenteNoSistemaException {
+	public void validarUsuarioAtivoPeloLoginSenha(String login, String senha) throws UsuarioBloqueadoNoSistemaException, UsuarioInexistenteNoSistemaException {
 		
 		try {
 			UsuarioSistema usuario = usuarioSistemaRepository.findUsuarioByLoginEquals(login);
 			
+			// 1°  Se o usuário já estiver bloqueado nem prossegue com as demais validações
 			if(!usuario.getIndAtivo()) {
 				throw new UsuarioBloqueadoNoSistemaException(usuario.getMotivoBloqueio());
+			}
+			
+			// Valida a senha digitada. Se errou a senha, incrementa a quantidade de tentativas com senha errada
+			if(!validarSenhaUsuario(usuario, senha)) {
+				usuario.setQtdTentativasAcessoInvalido(usuario.getQtdTentativasAcessoInvalido() + 1);
+				
+				int qtdMaxTentativasComSenhaInvalida  = Integer.parseInt(configuracaoSistemaRepository.getValorConfiguracaoPeloNome("QTD_MAX_TENTATIVAS_ACESSO_COM_SENHA_INVALIDA"));
+				
+				if(usuario.getQtdTentativasAcessoInvalido() >= qtdMaxTentativasComSenhaInvalida) {
+					usuario.setDataBloqueio(new Date());
+					usuario.setIndAtivo(false);
+					usuario.setMotivoBloqueio("Quantidade máxima de tentativas de acesso com senha inválida excedido");
+					usuarioSistemaRepository.merge(usuario);
+					
+					throw new UsuarioBloqueadoNoSistemaException("Quantidade máxima de tentativas de acesso com senha inválida excedido");
+				} else {
+					usuarioSistemaRepository.merge(usuario);
+				}
 			}
 			
 		} catch(EJBException e) {
@@ -117,6 +141,12 @@ public class UsuarioServiceBean implements UsuarioService {
 				throw new UsuarioInexistenteNoSistemaException("Usuário " + login + " não existe cadastrado no sistema.");
 			}
 		}
+	}
+	
+	private boolean validarSenhaUsuario(UsuarioSistema usuario, String senhaDigitada) {
+		String senhaDigitadaCriptografada = MD5Util.criptografar(senhaDigitada);
+		
+		return senhaDigitadaCriptografada.equals(usuario.getSenhaAplicacao());
 	}
 	
 }

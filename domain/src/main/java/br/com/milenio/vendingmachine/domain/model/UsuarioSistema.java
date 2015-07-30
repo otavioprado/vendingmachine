@@ -2,8 +2,6 @@ package br.com.milenio.vendingmachine.domain.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +13,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -72,6 +69,9 @@ public class UsuarioSistema implements Serializable {
 	
 	@Column(name = "MOTIVO_BLOQUEIO")
 	private String motivoBloqueio;
+	
+	@Column(name = "QTD_TENTATIVAS_ACESSO_INVALIDO", columnDefinition="int(2) default '0'")
+	private Integer qtdTentativasAcessoInvalido;
 
 	@ManyToOne
 	@JoinTable(name="USUARIO_SISTEMA_PERFIL", joinColumns={@JoinColumn(name="USUARIO_SISTEMA_ID", referencedColumnName="id")}, inverseJoinColumns={@JoinColumn(name="PERFIL_ID", referencedColumnName="id")})
@@ -175,5 +175,13 @@ public class UsuarioSistema implements Serializable {
 
 	public void setMotivoBloqueio(String motivoBloqueio) {
 		this.motivoBloqueio = motivoBloqueio;
+	}
+	
+	public Integer getQtdTentativasAcessoInvalido() {
+		return qtdTentativasAcessoInvalido;
+	}
+
+	public void setQtdTentativasAcessoInvalido(Integer qtdTentativasAcessoInvalido) {
+		this.qtdTentativasAcessoInvalido = qtdTentativasAcessoInvalido;
 	}
 }

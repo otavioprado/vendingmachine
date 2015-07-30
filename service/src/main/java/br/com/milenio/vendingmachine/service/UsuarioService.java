@@ -23,5 +23,5 @@ public interface UsuarioService {
 
 	public boolean bloquearUsuario(Long id, String motivoBloqueio);
 	
-	public void validarUsuarioAtivoPeloLogin(String login) throws UsuarioBloqueadoNoSistemaException, UsuarioInexistenteNoSistemaException;
+	public void validarUsuarioAtivoPeloLoginSenha(String login, String senha) throws UsuarioBloqueadoNoSistemaException, UsuarioInexistenteNoSistemaException;
 }

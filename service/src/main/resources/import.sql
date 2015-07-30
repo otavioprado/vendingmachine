@@ -58,6 +58,11 @@ INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (2, 1); -- Gestor: 
 INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (3, 1); -- Gerente: Usuário logado painel de Admin
 -- INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (4, 1); -- Operador: Usuário logado painel de Admin
 
+----------------------------------------------------------------
+--  	Atribui as configurações do sistema					  --
+----------------------------------------------------------------
+INSERT INTO CONFIGURACAO_SISTEMA(ID, NOME, DESCRICAO, VALOR) VALUES (1, 'QTD_MAX_TENTATIVAS_ACESSO_COM_SENHA_INVALIDA', 'Define a quantidade máxima de vezes em que um usuário pode errar a senha ao tentar realizar login antes que a conta seja bloqueada', 3);
+
 
 
 

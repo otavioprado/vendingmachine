@@ -47,7 +47,7 @@ public class LoginMB {
 	public void efetuarLogin() throws ServletException, IOException {
 		
 		try{ 
-			usuarioService.validarUsuarioAtivoPeloLogin(usuario);
+			usuarioService.validarUsuarioAtivoPeloLoginSenha(usuario, senha);
 		} catch(UsuarioBloqueadoNoSistemaException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Este usuário está bloqueado no sistema. Motivo: " + e.getMessage(), null));
 			return;
