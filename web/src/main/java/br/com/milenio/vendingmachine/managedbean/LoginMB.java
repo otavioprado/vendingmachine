@@ -63,7 +63,7 @@ public class LoginMB {
 	
 	public void preRender() {
 		if("true".equals(request.getParameter("invalid"))) {
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário ou senha inválido!", null));
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário ou senha inválidos!", null));
 		}
 	}
 

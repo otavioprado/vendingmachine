@@ -43,6 +43,7 @@
 								jsf:value="#{usuarioMB.usuario.senhaAplicacao}" 
 								jsf:required="true">
 								<f:validateLength minimum="6" />
+								<f:validator validatorId="custom.passwordValidator" />
 							</input>
 						</div>
 						
