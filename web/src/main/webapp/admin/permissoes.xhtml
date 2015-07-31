@@ -1,0 +1,68 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;"> 
+]>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    template="layoutLogado.xhtml">
+    
+
+	<ui:define name="conteudo">
+		<p:panel id="basic" header="Alterar permissões de perfil" style="margin-bottom:20px">
+			<h:form prependId="false">
+				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="row">
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="perfil">Perfil</label>
+							<h:selectOneMenu id="perfil" value="#{permissoesMB.idPerfilSelecionado}" styleClass="form-control" >
+								<p:ajax listener="#{permissoesMB.carregarPermissoesPerfil}" update="tablePermissoes" />
+				                <f:selectItem itemLabel="[Selecione]" itemValue="" noSelectionOption="true" />
+				                <f:selectItem itemLabel="Administrador" itemValue="1" noSelectionOption="false" />
+				                <f:selectItem itemLabel="Gestor" itemValue="2" noSelectionOption="false" />
+				                <f:selectItem itemLabel="Gerente" itemValue="3" noSelectionOption="false" />
+				                <f:selectItem itemLabel="Operador" itemValue="4" noSelectionOption="false" />
+			            	</h:selectOneMenu>
+						</div>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<p:dataTable id="tablePermissoes" var="permissao" value="#{permissoesMB.permissoes}" selection="#{permissoesMB.permissoesSelecionadas}" rowKey="#{permissao.id}" style="margin-bottom:0">
+				        <p:column selectionMode="multiple" style="width:35px;text-align:center"></p:column>
+				        <p:column headerText="Descrição">
+				            <h:outputText value="#{permissao.descricao}" />
+				        </p:column>
+				        <p:column headerText="Nome da chave">
+				            <h:outputText value="#{permissao.nome}" />
+				        </p:column>
+				    </p:dataTable>
+			    </div>
+				
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandLink id="btn-signup" class="btn btn-primary" action="#{usuarioMB.cadastrarUsuario}" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-saved"></i>&nbsp;Salvar&nbsp;
+							</h:commandLink>
+						</div>
+					</div>
+					
+					<div class="col-md-3">
+						<div class="form-group">
+							<a id="btn-cancel" class="btn btn-danger" href="#{request.contextPath}/admin/consultaUsuario.xhtml" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+							</a>
+						</div>
+					</div>
+				</div>
+				
+			</h:form>
+		</p:panel>
+	</ui:define>
+
+</ui:composition>
