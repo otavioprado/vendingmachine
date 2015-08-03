@@ -7,6 +7,7 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui"
     xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:c="http://java.sun.com/jstl/core"
     template="layoutLogado.xhtml">
     
 
@@ -21,7 +22,7 @@
 							<label for="perfil">Perfil</label>
 							<h:selectOneMenu id="perfil" value="#{permissoesMB.idPerfilSelecionado}" styleClass="form-control" >
 								<p:ajax listener="#{permissoesMB.carregarPermissoesPerfil}" update="tablePermissoes" />
-				                <f:selectItem itemLabel="[Selecione]" itemValue="" noSelectionOption="true" />
+				                <f:selectItem itemLabel="[Selecione]" itemValue="0" noSelectionOption="false" />
 				                <f:selectItem itemLabel="Administrador" itemValue="1" noSelectionOption="false" />
 				                <f:selectItem itemLabel="Gestor" itemValue="2" noSelectionOption="false" />
 				                <f:selectItem itemLabel="Gerente" itemValue="3" noSelectionOption="false" />
@@ -32,13 +33,10 @@
 				</div>
 				
 				<div class="form-group">
-					<p:dataTable id="tablePermissoes" var="permissao" value="#{permissoesMB.permissoes}" selection="#{permissoesMB.permissoesSelecionadas}" rowKey="#{permissao.id}" style="margin-bottom:0">
+					<p:dataTable id="tablePermissoes" var="permissao" value="#{permissoesMB.permissoes}" selection="#{permissoesMB.permissoesSelecionadas}" rowKey="#{permissao.id}" style="margin-bottom:0" emptyMessage="Nenhum registro encontrado para o perfil selecionado.">
 				        <p:column selectionMode="multiple" style="width:35px;text-align:center"></p:column>
-				        <p:column headerText="Descrição">
+				        <p:column headerText="Descrição da permissão">
 				            <h:outputText value="#{permissao.descricao}" />
-				        </p:column>
-				        <p:column headerText="Nome da chave">
-				            <h:outputText value="#{permissao.nome}" />
 				        </p:column>
 				    </p:dataTable>
 			    </div>
@@ -46,7 +44,7 @@
 				<div class="row">
 					<div class="col-md-3">
 						<div class="form-group">
-							<h:commandLink id="btn-signup" class="btn btn-primary" action="#{usuarioMB.cadastrarUsuario}" style="width: 100%; color:white;">
+							<h:commandLink id="btn-signup" class="btn btn-primary" action="#{permissoesMB.solicitarAlteracoesDasPermissoesDoPerfil}" style="width: 100%; color:white;">
 								<i class="glyphicon glyphicon-saved"></i>&nbsp;Salvar&nbsp;
 							</h:commandLink>
 						</div>

@@ -41,10 +41,10 @@ INSERT INTO USUARIO_SISTEMA_PERFIL(USUARIO_SISTEMA_ID, PERFIL_ID) VALUES (10, 2)
 ----------------------------------------------------------------
 --  	Insere todas as permissões cridadas até o momento  	  --
 ----------------------------------------------------------------
-INSERT INTO PERMISSAO(ID, NOME, DESCRICAO) VALUES (1, 'ROLE_USUARIO_LOGADO_PAINEL_ADMIN', 'Usuário logado no painel administrativo');
-INSERT INTO PERMISSAO(ID, NOME, DESCRICAO) VALUES (2, 'ROLE_ADMIN_CAD_USUARIO', 'Cadastrar novos usuários no sistema');
-INSERT INTO PERMISSAO(ID, NOME, DESCRICAO) VALUES (3, 'ROLE_ADMIN_EDT_USUARIO', 'Editar usuários existentes no sistema');
-INSERT INTO PERMISSAO(ID, NOME, DESCRICAO) VALUES (4, 'ROLE_ADMIN_EXCL_USUARIO', 'Excluir usuários existentes no sistema');
+INSERT INTO PERMISSAO(ID, NOME, DESCRICAO) VALUES (1, 'ROLE_USUARIO_LOGADO_PAINEL_ADMIN', 'Login no painel administrativo'); 
+INSERT INTO PERMISSAO(ID, NOME, DESCRICAO) VALUES (2, 'ROLE_CAD_USUARIO', 'Cadastrar novos usuários');
+INSERT INTO PERMISSAO(ID, NOME, DESCRICAO) VALUES (3, 'ROLE_EDT_USUARIO', 'Editar usuários existentes');
+INSERT INTO PERMISSAO(ID, NOME, DESCRICAO) VALUES (4, 'ROLE_BLOQ_USUARIO', 'Bloquear usuários');
 
 ----------------------------------------------------------------
 --  	Atribui as permissoes de cada perfil				  --

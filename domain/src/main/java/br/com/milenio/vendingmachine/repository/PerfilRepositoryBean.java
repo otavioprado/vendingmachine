@@ -1,6 +1,6 @@
 package br.com.milenio.vendingmachine.repository;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.ejb.Stateless;
 
@@ -16,8 +16,8 @@ public class PerfilRepositoryBean extends AbstractVendingMachineRepositoryBean<P
 		super(Perfil.class);
 	}
 	
-	public Set<Permissao> getPermissoesPerfil(Perfil perfil) {
-		Set<Permissao> permissoes = perfil.getPermissoes();
+	public List<Permissao> getPermissoesPerfil(Perfil perfil) {
+		List<Permissao> permissoes = perfil.getPermissoes();
 		
 		return permissoes;
 	}

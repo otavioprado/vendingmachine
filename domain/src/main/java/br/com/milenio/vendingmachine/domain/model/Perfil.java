@@ -1,8 +1,7 @@
 package br.com.milenio.vendingmachine.domain.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -31,9 +30,9 @@ public class Perfil implements Serializable {
 	@Column(name = "NOME")
 	private String nome;
 
-	@OneToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name="PERFIL_PERMISSAO", joinColumns={@JoinColumn(name="PERFIL_ID", referencedColumnName="id")}, inverseJoinColumns={@JoinColumn(name="PERMISSAO_ID", referencedColumnName="id")})
-    private Set<Permissao> permissoes;
+    private List<Permissao> permissoes;
 
 	public Long getId() {
 		return id;
@@ -51,11 +50,11 @@ public class Perfil implements Serializable {
 		this.nome = nome;
 	}
 
-	public Set<Permissao> getPermissoes() {
+	public List<Permissao> getPermissoes() {
 		return permissoes;
 	}
 
-	public void setPermissoes(Set<Permissao> permissoes) {
+	public void setPermissoes(List<Permissao> permissoes) {
 		this.permissoes = permissoes;
 	}
 
