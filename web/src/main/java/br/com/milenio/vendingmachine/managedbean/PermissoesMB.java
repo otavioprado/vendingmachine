@@ -10,13 +10,10 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-
 import br.com.milenio.vendingmachine.domain.model.Perfil;
 import br.com.milenio.vendingmachine.domain.model.Permissao;
 import br.com.milenio.vendingmachine.repository.PerfilRepository;
 import br.com.milenio.vendingmachine.repository.PermissaoRepository;
-import br.com.milenio.vendingmachine.security.UsuarioSistemaSpring;
 import br.com.milenio.vendingmachine.security.spring.Teste;
 
 @Named

@@ -2,47 +2,23 @@ package br.com.milenio.vendingmachine.security.spring;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import javax.annotation.Resource;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("teste")
 public class Teste {
 	
-	@Autowired
-	@Qualifier("sessionRegistry")
-	private SessionRegistry sessionRegistry;
-	
-	public Teste() {
-	}
-	
-	public SessionRegistry getSessionRegistry() {
-		return sessionRegistry;
-	}
-
-	public void setSessionRegistry(SessionRegistry sessionRegistry) {
-		this.sessionRegistry = sessionRegistry;
-	}
-
-	@Autowired
-	private ApplicationContext ap;
-	
-	public ApplicationContext getAp() {
-		return ap;
-	}
-
-	public void setAp(ApplicationContext ap) {
-		this.ap = ap;
-	}
-
 	public void invalidar() {
 		
-		SessionRegistry sr = (SessionRegistry) ap.getBean("sessionRegistry");
+		ApplicationContext applicationContext = SpringUtils.getApplicationContext();
+		SessionRegistry sessionRegistry = (SessionRegistry) applicationContext.getBean("sessionRegistry", SessionRegistryImpl.class);
 		
 		SecurityContextHolder.getContext().getAuthentication();
 		
