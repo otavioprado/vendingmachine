@@ -43,18 +43,24 @@ INSERT INTO USUARIO_SISTEMA_PERFIL(USUARIO_SISTEMA_ID, PERFIL_ID) VALUES (10, 2)
 ----------------------------------------------------------------
 INSERT INTO PERMISSAO(ID, NOME, DESCRICAO) VALUES (1, 'ROLE_USUARIO_LOGADO_PAINEL_ADMIN', 'Login no painel administrativo'); 
 INSERT INTO PERMISSAO(ID, NOME, DESCRICAO) VALUES (2, 'ROLE_CAD_USUARIO', 'Cadastrar novos usuários');
-INSERT INTO PERMISSAO(ID, NOME, DESCRICAO) VALUES (3, 'ROLE_EDT_USUARIO', 'Editar usuários existentes');
-INSERT INTO PERMISSAO(ID, NOME, DESCRICAO) VALUES (4, 'ROLE_BLOQ_USUARIO', 'Bloquear usuários');
+INSERT INTO PERMISSAO(ID, NOME, DESCRICAO) VALUES (3, 'ROLE_CONS_USUARIO', 'Consultar usuários');
+INSERT INTO PERMISSAO(ID, NOME, DESCRICAO) VALUES (4, 'ROLE_EDT_USUARIO', 'Editar usuários existentes');
+INSERT INTO PERMISSAO(ID, NOME, DESCRICAO) VALUES (5, 'ROLE_BLOQ_USUARIO', 'Bloquear usuários');
+
 
 ----------------------------------------------------------------
 --  	Atribui as permissoes de cada perfil				  --
 ----------------------------------------------------------------
 INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (1, 1); -- Admin: Usuário logado painel de Admin
-INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (1, 2); -- Admin: Cadastrar novos usuários no sistema
-INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (1, 3); -- Admin: Editar usuários existentes no sistema
-INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (1, 4); -- Admin: Excluir usuários existentes no sistema
+INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (1, 2); -- Admin: Cadastrar novos usuários
+INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (1, 3); -- Admin: Consultar usuários
+INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (1, 4); -- Admin: Editar usuários existentes
+INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (1, 5); -- Admin: Bloquear usuários
 
 INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (2, 1); -- Gestor: Usuário logado painel de Admin
+INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (2, 4); -- Gestor: Editar usuários existentes
+INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (2, 5); -- Gestor: Bloquear usuários
+
 INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (3, 1); -- Gerente: Usuário logado painel de Admin
 -- INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (4, 1); -- Operador: Usuário logado painel de Admin
 

@@ -83,22 +83,26 @@
 								<h:outputText id="userPerfil" value="#{user.perfil.nome}" />
 			            	</p:column>
 							
-							<p:column style="width:128px; text-align: center" headerText="Ações">
-					            <p:button icon="ui-icon-pencil" title="Editar" outcome="editar_usuario.xhtml">
-									<f:param name="userId" value="#{user.id}" />
-								</p:button>
-								
-								<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_BLOQ_USUARIO') eq true}">
-									<p:commandButton onclick="PF('dlgBloq').show();" icon="ui-icon-locked" title="Bloquear" rendered="#{user.indAtivo eq true? true : false}">
-										<f:setPropertyActionListener value="#{user.id}" target="#{usuarioMB.id}" />
-										<f:setPropertyActionListener value="#{user}" target="#{usuarioMB.usuario}" />
-						            </p:commandButton>
-						            <p:commandButton action="#{usuarioMB.desbloquearUsuario}" icon="ui-icon-unlocked" title="Desbloquear" rendered="#{user.indAtivo eq false? true : false}" update="table-users">
-										<f:setPropertyActionListener value="#{user.id}" target="#{usuarioMB.id}" />
-										<f:setPropertyActionListener value="#{user}" target="#{usuarioMB.usuario}" />
-						            </p:commandButton>
-					            </c:if>
-							</p:column>
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EDT_USUARIO') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_BLOQ_USUARIO') eq true}">
+								<p:column style="width:128px; text-align: center" headerText="Ações">
+						            <c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EDT_USUARIO') eq true}">
+							            <p:button icon="ui-icon-pencil" title="Editar" outcome="editar_usuario.xhtml">
+											<f:param name="userId" value="#{user.id}" />
+										</p:button>
+									</c:if>
+									
+									<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_BLOQ_USUARIO') eq true}">
+										<p:commandButton onclick="PF('dlgBloq').show();" icon="ui-icon-locked" title="Bloquear" rendered="#{user.indAtivo eq true? true : false}">
+											<f:setPropertyActionListener value="#{user.id}" target="#{usuarioMB.id}" />
+											<f:setPropertyActionListener value="#{user}" target="#{usuarioMB.usuario}" />
+							            </p:commandButton>
+							            <p:commandButton action="#{usuarioMB.desbloquearUsuario}" icon="ui-icon-unlocked" title="Desbloquear" rendered="#{user.indAtivo eq false? true : false}" update="table-users">
+											<f:setPropertyActionListener value="#{user.id}" target="#{usuarioMB.id}" />
+											<f:setPropertyActionListener value="#{user}" target="#{usuarioMB.usuario}" />
+							            </p:commandButton>
+						            </c:if>
+								</p:column>
+							</c:if>
 						</p:dataTable>
 					</h:form>
 			</c:if>

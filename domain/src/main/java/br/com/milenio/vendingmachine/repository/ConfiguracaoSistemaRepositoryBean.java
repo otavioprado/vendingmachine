@@ -37,4 +37,24 @@ public class ConfiguracaoSistemaRepositoryBean extends AbstractVendingMachineRep
 		return null;
 	}
 	
+	public ConfiguracaoSistema getConfiguracaoPeloNome(String nome) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT config FROM ConfiguracaoSistema config WHERE ");
+		sb.append(" config.nome = :nome");
+
+		TypedQuery<ConfiguracaoSistema> query = getEntityManager().createQuery(sb.toString(), ConfiguracaoSistema.class);
+
+		query.setParameter("nome", nome);
+
+		List<ConfiguracaoSistema> configs = (List<ConfiguracaoSistema>) query.getResultList();
+		
+		if(!configs.isEmpty()) {
+			ConfiguracaoSistema first = (ConfiguracaoSistema) configs.get(0);
+			
+			return first;
+		}
+		
+		return null;
+	}
+	
 }

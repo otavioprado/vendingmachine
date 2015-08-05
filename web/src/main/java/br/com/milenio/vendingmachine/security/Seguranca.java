@@ -41,6 +41,17 @@ public class Seguranca {
 		return email;
 	}
 	
+	public String getPerfilUsuarioLogado() {
+		String perfil = null;
+		UsuarioSistemaSpring usuario = getUsuarioSistemaSpringLogado();
+
+		if (usuario != null) {
+			perfil = usuario.getUsuario().getPerfil().getNome();
+		}
+		
+		return perfil;
+	}
+	
 	public boolean getPermissaoUsuarioLogado(String permissao) {
 		UsuarioSistemaSpring usuario = getUsuarioSistemaSpringLogado();
 

@@ -22,7 +22,7 @@
 							<label for="perfil">Perfil</label>
 							<h:selectOneMenu id="perfil" value="#{permissoesMB.idPerfilSelecionado}" styleClass="form-control" >
 								<p:ajax listener="#{permissoesMB.carregarPermissoesPerfil}" update="tablePermissoes" />
-				                <f:selectItem itemLabel="[Selecione]" itemValue="0" noSelectionOption="false" />
+				                <f:selectItem itemLabel="[Selecione]" itemValue="0" noSelectionOption="true" />
 				                <f:selectItem itemLabel="Administrador" itemValue="1" noSelectionOption="false" />
 				                <f:selectItem itemLabel="Gestor" itemValue="2" noSelectionOption="false" />
 				                <f:selectItem itemLabel="Gerente" itemValue="3" noSelectionOption="false" />
@@ -52,7 +52,7 @@
 					
 					<div class="col-md-3">
 						<div class="form-group">
-							<a id="btn-cancel" class="btn btn-danger" href="#{request.contextPath}/admin/consultaUsuario.xhtml" style="width: 100%; color:white;">
+							<a id="btn-cancel" class="btn btn-danger" href="#{request.contextPath}/admin/layoutLogado.xhtml" style="width: 100%; color:white;">
 								<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
 							</a>
 						</div>

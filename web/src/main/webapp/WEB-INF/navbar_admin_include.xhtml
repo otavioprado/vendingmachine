@@ -21,30 +21,34 @@
 			<ul class="nav navbar-nav">
 				<li class="#{view.viewId eq '/admin/layoutLogado.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/layoutLogado.xhtml"><span class="glyphicon glyphicon-home"/>Home</a></li>
 			</ul>
-			<ul class="nav navbar-nav">
-				<li class="#{view.viewId eq '/admin/configuracao.xhtml' ? 'active' : ''}"><a href="#"><span class="glyphicon glyphicon-wrench"></span>Configurações</a></li>
-			</ul>
+			<c:if test="#{seguranca.perfilUsuarioLogado eq 'ADMINISTRATOR'}">
+				<ul class="nav navbar-nav">
+					<li class="#{view.viewId eq '/admin/configuracao.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/configuracoes.xhtml"><span class="glyphicon glyphicon-wrench"></span>Configurações</a></li>
+				</ul>
+			</c:if>
 			<ul class="nav navbar-nav">
 				
-				<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_USUARIO') eq true}">
+				<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_USUARIO') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_CONS_USUARIO') eq true}">
 				
 					<li class="dropdown #{view.viewId eq '/admin/usuario.xhtml' or view.viewId eq '/admin/consultaUsuario.xhtml'? 'active' : ''}">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user"/>Usuários<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
-							<li><a href="#{request.contextPath}/admin/usuario.xhtml">Cadastrar</a></li>
-							<li><a href="#{request.contextPath}/admin/consultaUsuario.xhtml">Consultar</a></li>
-							<li class="divider"></li>
-							<li class="dropdown-header">Nav header</li>
-							<li><a href="#">Separated link</a></li>
-							<li><a href="#">One more separated link</a></li>
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_USUARIO') eq true}">
+								<li><a href="#{request.contextPath}/admin/usuario.xhtml">Cadastrar</a></li>
+							</c:if>
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CONS_USUARIO') eq true}">
+								<li><a href="#{request.contextPath}/admin/consultaUsuario.xhtml">Consultar</a></li>
+							</c:if>
 			            </ul>
 		            </li>
 		            
 	            </c:if>
             </ul>
-            <ul class="nav navbar-nav">
-				<li class="#{view.viewId eq '/admin/permissoes.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/permissoes.xhtml"><span class="glyphicon glyphicon-list-alt"></span>Permissões</a></li>
-			</ul>
+            <c:if test="#{seguranca.perfilUsuarioLogado eq 'ADMINISTRATOR'}">
+	            <ul class="nav navbar-nav">
+					<li class="#{view.viewId eq '/admin/permissoes.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/permissoes.xhtml"><span class="glyphicon glyphicon-list-alt"></span>Permissões</a></li>
+				</ul>
+			</c:if>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">

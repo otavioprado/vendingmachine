@@ -1,5 +1,6 @@
 package br.com.milenio.vendingmachine.managedbean;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -9,6 +10,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import br.com.milenio.vendingmachine.domain.model.Perfil;
 import br.com.milenio.vendingmachine.domain.model.Permissao;
@@ -30,6 +34,12 @@ public class PermissoesMB implements Serializable {
 	
 	@Inject
 	private FacesContext ctx;
+	
+	@Inject
+	private HttpServletRequest request;
+
+	@Inject
+	private HttpServletResponse response;
 
 	private List<Permissao> permissoes;
 	
@@ -40,7 +50,7 @@ public class PermissoesMB implements Serializable {
 	private Perfil perfilSelecionado;
 	
 	public void carregarPermissoesPerfil() {
-		if(idPerfilSelecionado == null ||idPerfilSelecionado == 0) {
+		if(idPerfilSelecionado == null || idPerfilSelecionado == 0) {
 			permissoes.clear();
 			permissoesSelecionadas.clear();
 			return;
@@ -54,7 +64,12 @@ public class PermissoesMB implements Serializable {
 		permissoesSelecionadas = perfilRepository.getPermissoesPerfil(perfilSelecionado);
 	}
 	
-	public void solicitarAlteracoesDasPermissoesDoPerfil() {
+	public void solicitarAlteracoesDasPermissoesDoPerfil() throws ServletException, IOException {
+		if(idPerfilSelecionado == null || idPerfilSelecionado == 0) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Selecione um perfil antes de realizar essa operação.", null));
+			return;
+		}
+		
 		perfilSelecionado.setPermissoes(permissoesSelecionadas);
 		perfilRepository.merge(perfilSelecionado);
 		
@@ -62,7 +77,7 @@ public class PermissoesMB implements Serializable {
 		
 		
 		Teste teste = new Teste();
-		teste.invalidar();
+		teste.atualizarPermissoesDosUsuariosLogadosComPerfil(perfilSelecionado);
 	}
 	
 	public List<Permissao> getPermissoes() {

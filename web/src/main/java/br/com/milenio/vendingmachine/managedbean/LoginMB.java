@@ -58,6 +58,7 @@ public class LoginMB {
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/j_spring_security_check");
 		dispatcher.forward(request, response);
+		
 		ctx.responseComplete();
 	}
 	
