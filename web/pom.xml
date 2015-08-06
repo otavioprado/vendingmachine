@@ -93,6 +93,11 @@
 			<artifactId>all-themes</artifactId>  
 			<version>1.0.10</version>  
 		</dependency>
+		<dependency>
+			<groupId>org.primefaces.extensions</groupId>
+			<artifactId>primefaces-extensions</artifactId>
+			<version>3.2.0</version>
+		</dependency>
 
 		<!-- Import the JPA API, we use provided scope as the API is included in 
 			JBoss WildFly -->
@@ -125,6 +130,12 @@
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-validator</groupId>
+			<artifactId>commons-validator</artifactId>
+			<version>1.4.1</version>
 		</dependency>
 	</dependencies>
 

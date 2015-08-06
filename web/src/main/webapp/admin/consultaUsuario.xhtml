@@ -8,6 +8,7 @@
     xmlns:p="http://primefaces.org/ui"
     xmlns:jsf="http://xmlns.jcp.org/jsf"
     xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:pe="http://primefaces.org/ui/extensions"
     template="layoutLogado.xhtml">
 
 	<ui:define name="conteudo">
@@ -20,10 +21,12 @@
 						<div class="form-group">
 							<label for="login">Login do usuário</label>
 							<input id="login" name="login" type="text" class="form-control" placeholder="Login" jsf:value="#{usuarioMB.login}" />
+							<pe:keyFilter regEx="/[a-zA-Z0-9_]/i" for="login"/>
+							<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="motivo-bloqueio"/>					 
 						</div>
 					</div>
 					
-					<div class="col-lg-4">	
+					<div class="col-lg-4">
 						<div class="form-group">
 							<label for="status">Status</label>
 							<h:selectOneMenu id="status" value="#{usuarioMB.status}" styleClass="form-control">

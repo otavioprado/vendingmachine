@@ -45,10 +45,10 @@ public class UsuarioServiceBean implements UsuarioService {
 			String login = usuario.getLogin();
 			String email = usuario.getEmail();
 			
-			if(login.equals(novoUsuario.getLogin())) {
+			if(login.equalsIgnoreCase(novoUsuario.getLogin())) {
 				logger.info("Já existe um usuário com login " + usuario.getLogin() + " cadastrado no banco de dados.");
 				throw new ConteudoJaExistenteNoBancoDeDadosException("O login " + usuario.getLogin() + " já existe cadastrado no sistema.");
-			} else if(email.equals(novoUsuario.getEmail())) {
+			} else if(email.equalsIgnoreCase(novoUsuario.getEmail())) {
 				logger.info("Já existe um usuário com email " + usuario.getEmail() + " cadastrado no banco de dados.");
 				throw new ConteudoJaExistenteNoBancoDeDadosException("O email " + usuario.getEmail() + " já existe cadastrado no sistema.");
 			}
@@ -68,6 +68,51 @@ public class UsuarioServiceBean implements UsuarioService {
 		}
 		
 		logger.info("Cadastro do usuário " + novoUsuario.getLogin() + " salvo com sucesso no banco de dados.");
+	}
+	
+	public void editarUsuario(UsuarioSistema usuarioEditado) throws ConteudoJaExistenteNoBancoDeDadosException {
+		// Carrega um objeto com os dados atuais do usuário sendo editado
+		UsuarioSistema usuarioAtual = usuarioSistemaRepository.findById(usuarioEditado.getId());
+		
+		UsuarioSistema usuario = null;
+		
+		if(!usuarioAtual.getLogin().equalsIgnoreCase(usuarioEditado.getLogin())) {
+			// Se houve mudança no login, é necessário validar se o novo login já não existe no sistema
+			
+			// Verifica se já existe um usuário com o mesmo login cadastrado no banco de dados do sistema
+			usuario = usuarioSistemaRepository.findUsuarioByLogin(usuarioEditado.getLogin());
+			
+		} else if(!usuarioAtual.getEmail().equalsIgnoreCase(usuarioEditado.getEmail())) {
+			// Se houve mudança no email, é necessário validar se o novo email já não existe no sistema
+			
+			// Verifica se já existe um usuário com o mesmo e-mail cadastrado no banco de dados do sistema
+			usuario = usuarioSistemaRepository.findUsuarioByEmail(usuarioEditado.getEmail());
+		}
+			
+		if(usuario != null) {
+			String login = usuario.getLogin();
+			String email = usuario.getEmail();
+			
+			if(login.equalsIgnoreCase(usuarioEditado.getLogin())) {
+				logger.info("Já existe um usuário com login " + usuario.getLogin() + " cadastrado no banco de dados.");
+				throw new ConteudoJaExistenteNoBancoDeDadosException("O login " + usuario.getLogin() + " já existe cadastrado no sistema.");
+			} else if(email.equalsIgnoreCase(usuarioEditado.getEmail())) {
+				logger.info("Já existe um usuário com email " + usuario.getEmail() + " cadastrado no banco de dados.");
+				throw new ConteudoJaExistenteNoBancoDeDadosException("O email " + usuario.getEmail() + " já existe cadastrado no sistema.");
+			}
+		}
+			
+		try {
+			Perfil perfil = perfilRepository.findById(usuarioEditado.getPerfil().getId());
+			usuarioEditado.setPerfil(perfil);
+			
+			usuarioSistemaRepository.merge(usuarioEditado);
+		} catch(Exception e) {
+			// Erro desconhecido ao tentar realizar a persistência dos dados no banco de dados
+			logger.error("Erro ao tentar alterar o cadastro do usuário " + usuarioEditado.getNome() + " no banco de dados");
+		}
+		
+		logger.info("Cadastro do usuário " + usuarioEditado.getLogin() + " alterado com sucesso no banco de dados.");
 	}
 	
 	public List<UsuarioSistema> listarTodos() {

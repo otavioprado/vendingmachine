@@ -71,7 +71,7 @@ public class UsuarioSistema implements Serializable {
 	private String motivoBloqueio;
 	
 	@Column(name = "QTD_TENTATIVAS_ACESSO_INVALIDO", columnDefinition="int(2) default '0'")
-	private Integer qtdTentativasAcessoInvalido;
+	private Integer qtdTentativasAcessoInvalido = 0;
 
 	@ManyToOne
 	@JoinTable(name="USUARIO_SISTEMA_PERFIL", joinColumns={@JoinColumn(name="USUARIO_SISTEMA_ID", referencedColumnName="id")}, inverseJoinColumns={@JoinColumn(name="PERFIL_ID", referencedColumnName="id")})

@@ -7,6 +7,7 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui"
     xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:pe="http://primefaces.org/ui/extensions"
     template="layoutLogado.xhtml">
 
 	<ui:define name="conteudo">
@@ -17,12 +18,14 @@
 					<div class="col-lg-6">	
 						<div class="form-group">
 							<label for="login">Login *</label>
-							<input id="login" name="login" type="text" class="form-control" placeholder="Login" jsf:value="#{usuarioMB.usuario.login}" jsf:required="true" />
+							<input id="login" name="login" type="text" class="form-control" placeholder="Login" jsf:value="#{usuarioMB.usuario.login}" jsf:required="true" maxlength="25"/>
+							<pe:keyFilter regEx="/[a-z0-9_]/i" for="login"/>
+							<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="nome, senha"/>	
 						</div>
 						
 						<div class="form-group">
 							<label for="nome">Nome *</label>
-							<input id="nome" name="nome" type="text" class="form-control" placeholder="Nome" jsf:value="#{usuarioMB.usuario.nome}" jsf:required="true" />
+							<input id="nome" name="nome" type="text" class="form-control" placeholder="Nome" jsf:value="#{usuarioMB.usuario.nome}" jsf:required="true" maxlength="25"/>
 						</div>
 						
 						<div class="form-group">
@@ -41,7 +44,7 @@
 							<label for="senha">Senha *</label>
 							<input id="senha" name="senha" type="password" class="form-control" placeholder="Senha" 
 								jsf:value="#{usuarioMB.usuario.senhaAplicacao}" 
-								jsf:required="true">
+								jsf:required="true" maxlength="25">
 								<f:validateLength minimum="6" />
 								<f:validator validatorId="custom.passwordValidator" />
 							</input>
@@ -49,7 +52,8 @@
 						
 						<div class="form-group">
 							<label for="email">E-mail *</label>
-							<input id="email" name="email" type="text" class="form-control" placeholder="Endereço de E-mail" jsf:value="#{usuarioMB.usuario.email}" jsf:required="true" />
+							<input id="email" name="email" type="text" class="form-control" placeholder="Endereço de E-mail" jsf:value="#{usuarioMB.usuario.email}" jsf:required="true" maxlength="40"/>
+							<pe:keyFilter regEx="/[a-z0-9_\.\-@]/i" for="email"/>
 						</div>
 					</div>
 					<div class="col-lg-12">

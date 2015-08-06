@@ -7,7 +7,8 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:jsf="http://xmlns.jcp.org/jsf">
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:pe="http://primefaces.org/ui/extensions">
 <h:head class="geometryimg">
 	<title>Login</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -51,16 +52,20 @@
 							<div style="margin-bottom: 25px" class="input-group">
 								<span class="input-group-addon">
 									<i class="glyphicon glyphicon-user"></i></span>
-								<input id="usuario" name="usuario" type="text" class="form-control"
-									placeholder="Usuário" jsf:value="#{loginMB.usuario}" 
-									jsf:required="true" />
+								<h:inputText id="usuario" name="usuario" class="form-control"
+									placeholder="Usuário" value="#{loginMB.usuario}" 
+									required="true"  maxlength="25">
+								</h:inputText>
+								<pe:keyFilter regEx="/[a-z0-9_]/i" for="usuario"/>
 							</div>
 
 							<div style="margin-bottom: 25px" class="input-group">
 								<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span> 
-								<input id="senha" name="senha" type="password" class="form-control"
-									placeholder="Senha" jsf:value="#{loginMB.senha}" 
-									jsf:required="true" />
+								<h:inputSecret id="senha" name="senha" class="form-control"
+									placeholder="Senha" value="#{loginMB.senha}" 
+									required="true" maxlength="25">
+								</h:inputSecret>
+								<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="senha"/>
 							</div>
 
 							<div class="input-group">
@@ -92,7 +97,7 @@
 				</div>
 				
 				<footer class="footer" style="text-align: right;">
-					<p>Versão 0.0.6 Spartan © Copyright 2015</p>
+					<p>Versão 0.0.6.1 Spartan © Copyright 2015</p>
 				</footer>
 				
 			</div>

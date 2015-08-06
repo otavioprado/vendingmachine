@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.logging.log4j.Logger;
 
 import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
@@ -41,6 +42,7 @@ public class UsuarioMB implements Serializable {
 	private HttpSession session;
 	
 	private UsuarioSistema usuario = new UsuarioSistema();
+
 	private List<UsuarioSistema> listUsuarios;
 	private String login;
 
@@ -62,8 +64,15 @@ public class UsuarioMB implements Serializable {
 		// Registra o usuario com a data atual
 		usuario.setDataCadastro(new Date());
 		
-		// Informa que o cadastro do usuario estï¿½ ativo
+		// Informa que o cadastro do usuario esta ativo
 		usuario.setIndAtivo(true);
+		usuario.setQtdTentativasAcessoInvalido(0);
+		
+		EmailValidator validator = EmailValidator.getInstance();
+		if (!validator.isValid(usuario.getEmail())) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "O e-mail informado não é válido.", null));
+			return "";
+		}
 		
 		try{
 			usuarioService.cadastrarUsuario(usuario, perfilId);
@@ -81,6 +90,26 @@ public class UsuarioMB implements Serializable {
 		return "";
 	}
 	
+	public void editarUsuario() {
+		logger.debug("Tentando realizar alterações no cadastro do usuário " + usuario.getNome());
+
+		EmailValidator validator = EmailValidator.getInstance();
+		if (!validator.isValid(usuario.getEmail())) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "O e-mail informado não é válido.", null));
+			return;
+		}
+		
+		try {
+			usuarioService.editarUsuario(usuario);
+			
+			// Sucesso - Exibe mensagem de cadastro realizado com sucesso
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "As alterações no cadastro do usuário " + usuario.getLogin() + " foram salvas com sucesso.", null));
+			logger.info("As alterações no cadastro do usuário " + usuario.getNome() + " foram salvas com sucesso.");
+		} catch(ConteudoJaExistenteNoBancoDeDadosException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+		}
+	}
+	
 	public void consultarUsuario() {
 		try {
 			listUsuarios = usuarioService.buscarUsuariosComFiltro(login, status, perfilId);
@@ -91,6 +120,12 @@ public class UsuarioMB implements Serializable {
 	}
 	
 	public void bloquearUsuario() {
+		
+		if (motivoBloqueio != null && motivoBloqueio.length() < 10) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "O campo motivo bloqueio deve conter pelo menos 10 caracteres.", null));
+			return;
+		}
+		
 		if(usuarioService.bloquearUsuario(id, motivoBloqueio)) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário " + usuario.getLogin() + " bloqueado com sucesso.", null));
 			// Após bloqueio, carrega a lista de usuários para atualizar na view de consulta
