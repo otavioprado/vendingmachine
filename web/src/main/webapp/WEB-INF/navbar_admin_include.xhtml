@@ -21,7 +21,7 @@
 			<ul class="nav navbar-nav">
 				<li class="#{view.viewId eq '/admin/layoutLogado.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/layoutLogado.xhtml"><span class="glyphicon glyphicon-home"/>Home</a></li>
 			</ul>
-			<c:if test="#{seguranca.perfilUsuarioLogado eq 'ADMINISTRATOR'}">
+			<c:if test="#{seguranca.perfilUsuarioLogado eq 'ADMINISTRADOR'}">
 				<ul class="nav navbar-nav">
 					<li class="#{view.viewId eq '/admin/configuracao.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/configuracoes.xhtml"><span class="glyphicon glyphicon-wrench"></span>Configurações</a></li>
 				</ul>
@@ -44,11 +44,25 @@
 		            
 	            </c:if>
             </ul>
-            <c:if test="#{seguranca.perfilUsuarioLogado eq 'ADMINISTRATOR'}">
+            <c:if test="#{seguranca.perfilUsuarioLogado eq 'ADMINISTRADOR'}">
 	            <ul class="nav navbar-nav">
 					<li class="#{view.viewId eq '/admin/permissoes.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/permissoes.xhtml"><span class="glyphicon glyphicon-list-alt"></span>Permissões</a></li>
 				</ul>
 			</c:if>
+			<ul class="nav navbar-nav">
+				<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_ATIVIDADE') eq true}">
+					<li class="dropdown #{view.viewId eq '/admin/agendar_atividade.xhtml'? 'active' : ''}">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-book"/>Atividade<span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_ATIVIDADE') eq true}">
+								<li class="dropdown #{view.viewId eq '/admin/agendar_atividade.xhtml' ? 'active' : ''}">
+									<li class="#{view.viewId eq '/admin/permissoes.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/agendar_atividade.xhtml">Agendar</a></li>
+								</li>
+							</c:if>
+						</ul>
+					</li>
+				</c:if>
+			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">

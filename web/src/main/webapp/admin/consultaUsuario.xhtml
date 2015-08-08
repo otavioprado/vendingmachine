@@ -21,8 +21,7 @@
 						<div class="form-group">
 							<label for="login">Login do usuário</label>
 							<input id="login" name="login" type="text" class="form-control" placeholder="Login" jsf:value="#{usuarioMB.login}" />
-							<pe:keyFilter regEx="/[a-zA-Z0-9_]/i" for="login"/>
-							<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="motivo-bloqueio"/>					 
+							<pe:keyFilter regEx="/[a-zA-Z0-9_]/i" for="login"/>			 
 						</div>
 					</div>
 					
@@ -120,6 +119,7 @@
 								<div class="form-group">
 									<label for="nome">Digite o motivo do bloqueio: *</label>
 									<input id="motivo-bloqueio" name="motivo-bloqueio" type="text" class="form-control" placeholder="Motivo Bloqueio" jsf:value="#{usuarioMB.motivoBloqueio}" jsf:required="true" maxlength="100" />
+									<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="motivo-bloqueio"/>
 								</div>
 							</div>
 							

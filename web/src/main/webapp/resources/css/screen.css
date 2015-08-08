@@ -59,3 +59,11 @@
 .label, .glyphicon {
 	margin-right: 5px;
 }
+
+.preview-box {
+    padding: 15px;
+    cursor: pointer;
+    overflow: hidden;
+    background: #FFFFFF;
+    border: 1px solid #CACACA;
+}

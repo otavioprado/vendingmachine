@@ -14,7 +14,7 @@
 	<ui:define name="conteudo">
 		<p:panel id="basic" header="Alterar permissões de perfil" style="margin-bottom:20px">
 			<h:form prependId="false">
-				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
+				<p:messages id="messages" for="Message1" showDetail="false" autoUpdate="true" closable="true"/>
 				<div class="row">
 					
 					<div class="col-lg-4">
@@ -32,11 +32,15 @@
 					</div>
 				</div>
 				
+				
 				<div class="form-group">
 					<p:dataTable id="tablePermissoes" var="permissao" value="#{permissoesMB.permissoes}" selection="#{permissoesMB.permissoesSelecionadas}" rowKey="#{permissao.id}" style="margin-bottom:0" emptyMessage="Nenhum registro encontrado para o perfil selecionado.">
 				        <p:column selectionMode="multiple" style="width:35px;text-align:center"></p:column>
 				        <p:column headerText="Descrição da permissão">
 				            <h:outputText value="#{permissao.descricao}" />
+				        </p:column>
+				        <p:column headerText="Dependência">
+				            <h:outputText value="#{permissao.dependencia.descricao}" />
 				        </p:column>
 				    </p:dataTable>
 			    </div>

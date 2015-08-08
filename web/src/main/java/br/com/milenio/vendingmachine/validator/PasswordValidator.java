@@ -33,8 +33,7 @@ public class PasswordValidator implements Validator, ClientValidator {
         }
     	
     	if(!pattern.matcher(value.toString()).matches()) {
-            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Dados inválidos: a senha '" + 
-                        value + "' informada deveria ser composta por números e letras.", null));
+            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Dados inválidos: a senha informada deve ser composta por números e letras.", null));
         }
 	}
 

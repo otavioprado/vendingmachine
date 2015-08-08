@@ -70,6 +70,12 @@ public class PermissoesMB implements Serializable {
 			return;
 		}
 		
+		if(!validarDependenciaEntrePermissoes(permissoesSelecionadas)) {
+			// Busca novamente as permissões do perfil selecionado
+			permissoesSelecionadas = perfilRepository.getPermissoesPerfil(perfilSelecionado);
+			return;
+		}
+		
 		perfilSelecionado.setPermissoes(permissoesSelecionadas);
 		perfilRepository.merge(perfilSelecionado);
 		
@@ -78,6 +84,21 @@ public class PermissoesMB implements Serializable {
 		
 		Teste teste = new Teste();
 		teste.atualizarPermissoesDosUsuariosLogadosComPerfil(perfilSelecionado);
+	}
+	
+	public boolean validarDependenciaEntrePermissoes(List<Permissao> permissoesSelecionadas) {
+		for(Permissao permissao : permissoesSelecionadas) {
+			if(permissao.getDependencia() != null) {
+				Permissao dependencia = permissao.getDependencia();
+				
+				if(!permissoesSelecionadas.contains(dependencia)){
+					ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Para atribuir a permissão " + permissao.getDescricao() + " é necessário selecionar a permissão " + dependencia.getDescricao() + ".", null));
+					return false;
+				}
+			}
+		}
+		
+		return true;
 	}
 	
 	public List<Permissao> getPermissoes() {

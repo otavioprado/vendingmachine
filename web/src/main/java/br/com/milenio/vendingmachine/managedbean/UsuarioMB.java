@@ -3,6 +3,8 @@ package br.com.milenio.vendingmachine.managedbean;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.logging.log4j.Logger;
+import org.primefaces.context.RequestContext;
 
 import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
@@ -118,8 +121,16 @@ public class UsuarioMB implements Serializable {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
 		}
 	}
-	
+
 	public void bloquearUsuario() {
+		
+		motivoBloqueio = motivoBloqueio.trim();
+		
+		if(motivoBloqueio != null && motivoBloqueio.isEmpty()) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "O campo motivo bloqueio não pode conter apenas espaços em branco.", null));
+			return;
+		}
+		
 		
 		if (motivoBloqueio != null && motivoBloqueio.length() < 10) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "O campo motivo bloqueio deve conter pelo menos 10 caracteres.", null));
@@ -131,6 +142,8 @@ public class UsuarioMB implements Serializable {
 			// Após bloqueio, carrega a lista de usuários para atualizar na view de consulta
 			consultarUsuario();
 		}
+		
+		motivoBloqueio = null;
 	}
 	
 	public void desbloquearUsuario() {
