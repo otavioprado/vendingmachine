@@ -80,7 +80,7 @@ public class AgendarAtividadeMB implements Serializable {
 			return;
 		}
 	
-		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Atividade cadastrada para o usuário " + atividade.getUsuario().getLogin() + " com sucesso", null));
+		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Atividade cadastrada para o usuário " + atividade.getUsuario().getLogin() + " com sucesso", null));
 		
 		atividade = new Atividade();
 	}

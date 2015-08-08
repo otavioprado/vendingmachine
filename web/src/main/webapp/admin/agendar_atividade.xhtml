@@ -13,7 +13,7 @@
 
 	<ui:define name="conteudo">
 		<p:panel id="basic" header="Agendar atividade" style="margin-bottom:20px">
-			<h:form prependId="false">
+			<h:form id="formPrincipal" prependId="false">
 				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
 				<div class="row">
 					<div class="col-md-12">
@@ -78,7 +78,7 @@
 							<legend>Data do agendamento *</legend>
 							<div class="form-group">
 			        			<p:calendar id="data" value="#{agendarAtividadeMB.atividade.dataAgendamento}" pattern="dd-MM-yyyy" mask="true" locale="pt" mindate="#{agendarAtividadeMB.todayDate}" 
-			        				required="true" requiredMessage="O campo data do agendamento é obrigatório"/>
+			        				required="true" requiredMessage="O campo data do agendamento é obrigatório" />
 		        			</div>
 	        			</p:fieldset>
         			</div>
@@ -146,7 +146,7 @@
 								<p:dataTable tableStyleClass="table-hover" id="table-users" var="user" value="#{agendarAtividadeMB.listUsuarios}" rows="5" paginator="true" paginatorPosition="bottom"
 									paginatorAlwaysVisible="false" rowsPerPageTemplate="5,10" >
 									<p:column style="width:64px; text-align: center" headerText="">
-										<p:commandButton icon="ui-icon-arrowthick-1-e" title="Selecionar" actionListener="#{agendarAtividadeMB.selecionarUsuario(user.id)}" update="@all" />
+										<p:commandButton icon="ui-icon-arrowthick-1-e" title="Selecionar" actionListener="#{agendarAtividadeMB.selecionarUsuario(user.id)}" update="formPrincipal" />
 									</p:column>
 									<p:column headerText="Login">
 										<h:outputText id="userLogin" value="#{user.login}" />

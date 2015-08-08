@@ -11,8 +11,6 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import br.com.milenio.vendingmachine.domain.model.Perfil;
 import br.com.milenio.vendingmachine.domain.model.Permissao;
@@ -34,12 +32,6 @@ public class PermissoesMB implements Serializable {
 	
 	@Inject
 	private FacesContext ctx;
-	
-	@Inject
-	private HttpServletRequest request;
-
-	@Inject
-	private HttpServletResponse response;
 
 	private List<Permissao> permissoes;
 	
