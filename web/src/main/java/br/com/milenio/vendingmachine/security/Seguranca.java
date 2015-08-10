@@ -1,7 +1,5 @@
 package br.com.milenio.vendingmachine.security;
 
-import java.util.Set;
-
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
@@ -41,6 +39,17 @@ public class Seguranca {
 		return email;
 	}
 	
+	public static String getLoginUsuarioLogado() {
+		String login = null;
+		UsuarioSistemaSpring usuario = getUsuarioSistemaSpringLogado();
+
+		if (usuario != null) {
+			login = usuario.getUsuario().getLogin();
+		}
+		
+		return login;
+	}
+	
 	public String getPerfilUsuarioLogado() {
 		String perfil = null;
 		UsuarioSistemaSpring usuario = getUsuarioSistemaSpringLogado();
@@ -66,7 +75,7 @@ public class Seguranca {
 		return false;
 	}
 
-	private UsuarioSistemaSpring getUsuarioSistemaSpringLogado() {
+	private static UsuarioSistemaSpring getUsuarioSistemaSpringLogado() {
 		UsuarioSistemaSpring usuario = null;
 		
 		UsernamePasswordAuthenticationToken auth = (UsernamePasswordAuthenticationToken)

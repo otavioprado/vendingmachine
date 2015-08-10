@@ -24,7 +24,7 @@
     </beans:bean>
     
     <beans:bean id="successHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler">
-       	<beans:property name="defaultTargetUrl" value="/admin/layoutLogado.xhtml"/>
+       	<beans:property name="defaultTargetUrl" value="/admin/tela_inicial.xhtml"/>
    	</beans:bean>
     
     <beans:bean id="failureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">

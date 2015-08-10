@@ -29,7 +29,11 @@ public class Atividade implements Serializable {
 	private Date dataAgendamento;
 	
 	@NotNull
-	@Column(name= "TEXTO", length=3500)
+	@Column(name= "TITULO")
+	private String titulo;
+
+	@NotNull
+	@Column(name= "TEXTO", length=350)
 	private String texto;
 	
 	@ManyToOne
@@ -66,5 +70,13 @@ public class Atividade implements Serializable {
 
 	public void setUsuario(UsuarioSistema usuario) {
 		this.usuario = usuario;
+	}
+	
+	public String getTitulo() {
+		return titulo;
+	}
+
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
 	}
 }

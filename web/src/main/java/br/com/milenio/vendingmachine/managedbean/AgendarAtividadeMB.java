@@ -1,10 +1,13 @@
 package br.com.milenio.vendingmachine.managedbean;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -12,11 +15,14 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.primefaces.context.RequestContext;
 
 import br.com.milenio.vendingmachine.domain.model.Atividade;
 import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
+import br.com.milenio.vendingmachine.security.Seguranca;
 import br.com.milenio.vendingmachine.service.AtividadeService;
 import br.com.milenio.vendingmachine.service.UsuarioService;
 
@@ -37,8 +43,8 @@ public class AgendarAtividadeMB implements Serializable {
 	private List<UsuarioSistema> listUsuarios = new ArrayList<UsuarioSistema>();
 	private String login;
 	private Long perfilId;
-	
-	private Date todayDate = new Date();
+
+	private Calendar calendar = Calendar.getInstance();
 
 	private Atividade atividade = new Atividade();
 	
@@ -55,12 +61,20 @@ public class AgendarAtividadeMB implements Serializable {
 		}
 	}
 	
-	public void selecionarUsuario(Long usuarioId) {
+	public void selecionarUsuario(String loginUsuario) {
 		login = null;
 		perfilId = null;
 		listUsuarios.clear();
 		
-		atividade.setUsuario(usuarioService.findById(usuarioId));
+		UsuarioSistema usuario = usuarioService.findByLogin(loginUsuario);
+		
+		if(usuario != null) {
+			atividade.setUsuario(usuario);
+		} else{
+			atividade.setUsuario(new UsuarioSistema());
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login inválido: O login "+ loginUsuario + " informado não corresponde a nenhum usuário cadastrado no sistema.", null));
+			return;
+		}
 		
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('dlgConsultaUsuario').hide();");
@@ -68,8 +82,21 @@ public class AgendarAtividadeMB implements Serializable {
 	
 	public void solicitarCadastroAtividade() {
 
-		if(atividade.getTexto() != null & atividade.getTexto().length() > 3500) {
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "A descrição da atividade não pode ser superior a 3.500 caracteres.", null));
+		if(atividade.getTexto() != null & atividade.getTexto().length() > 350) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "A descrição da atividade não pode ser superior a 350 caracteres.", null));
+			return;
+		}
+		
+		// Valida o período de tempo entre as datas, não pode ser maior que um ano
+		DateTime begin = new DateTime(new Date());
+		DateTime end = new DateTime(atividade.getDataAgendamento());
+		Days daysBetween = Days.daysBetween(begin, end);
+		
+		if(daysBetween.getDays() > 365){
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Atividades só podem ser agendadas para datas futuras com prazo máximo de um ano.", null));
+			return;
+		} else if(daysBetween.getDays() < 0) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Atividades não podem ser agendadas para datas passadas.", null));
 			return;
 		}
 		
@@ -97,6 +124,27 @@ public class AgendarAtividadeMB implements Serializable {
 	public void abrirDialog() {
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('dlgConsultaUsuario').show();");
+	}
+	
+	public List<Atividade> solicitarAtividadesAgendadas() {
+		String login = Seguranca.getLoginUsuarioLogado();
+		
+		return atividadeService.buscarAtividadesAgendadas(login);
+	}
+	
+	public Date getTodayDate() {
+		return new Date();
+	}
+	
+	public String getHoje() {
+		SimpleDateFormat formatas = new SimpleDateFormat("dd/MM/yyyy");
+        return formatas.format(new Date());
+	}
+	
+	public Date getMaxDate() {
+		calendar.setTime(new Date());
+		calendar.add( Calendar.DAY_OF_MONTH , 365);  
+		return calendar.getTime();
 	}
 
 	public String getLogin() {
@@ -129,13 +177,5 @@ public class AgendarAtividadeMB implements Serializable {
 
 	public void setAtividade(Atividade atividade) {
 		this.atividade = atividade;
-	}
-	
-	public Date getTodayDate() {
-		return todayDate;
-	}
-
-	public void setTodayDate(Date todayDate) {
-		this.todayDate = todayDate;
 	}
 }

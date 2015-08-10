@@ -147,6 +147,10 @@ public class UsuarioServiceBean implements UsuarioService {
 	public UsuarioSistema findById(Long editUserId) {
 		return usuarioSistemaRepository.findById(editUserId);
 	}
+	
+	public UsuarioSistema findByLogin(String login) {
+		return usuarioSistemaRepository.findUsuarioByLogin(login);
+	}
 
 	@Override
 	public boolean desbloquearUsuario(Long id) {

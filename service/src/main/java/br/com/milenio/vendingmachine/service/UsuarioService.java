@@ -27,4 +27,6 @@ public interface UsuarioService {
 	public void validarUsuarioAtivoPeloLoginSenha(String login, String senha) throws UsuarioBloqueadoNoSistemaException, UsuarioInexistenteNoSistemaException;
 	
 	public void editarUsuario(UsuarioSistema usuarioEditado) throws ConteudoJaExistenteNoBancoDeDadosException;
+	
+	public UsuarioSistema findByLogin(String login);
 }
