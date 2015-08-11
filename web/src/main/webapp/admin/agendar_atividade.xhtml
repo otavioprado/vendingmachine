@@ -10,6 +10,37 @@
     xmlns:c="http://java.sun.com/jstl/core"
     xmlns:pe="http://primefaces.org/ui/extensions"
     template="layoutLogado.xhtml">
+    
+    <ui:define name="script">
+    	<script>
+			PrimeFaces.locales['pt'] = {
+				    closeText: 'Fechar',
+				    prevText: 'Anterior',
+				    nextText: 'Próximo',
+				    currentText: 'Começo',
+				    monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+				    monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun', 'Jul','Ago','Set','Out','Nov','Dez'],
+				    dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
+				    dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],
+				    dayNamesMin: ['D','S','T','Q','Q','S','S'],
+				    weekHeader: 'Semana',
+				    firstDay: 0,
+				    isRTL: false,
+				    showMonthAfterYear: false,
+				    yearSuffix: '',
+				    timeOnlyTitle: 'Só Horas',
+				    timeText: 'Tempo',
+				    hourText: 'Hora',
+				    minuteText: 'Minuto',
+				    secondText: 'Segundo',
+				    ampm: false,
+				    month: 'Mês',
+				    week: 'Semana',
+				    day: 'Dia',
+				    allDayText : 'Todo o Dia'
+				};
+		</script>
+	</ui:define>
 
 	<ui:define name="conteudo">
 		<p:panel id="basic" header="Agendar atividade" style="margin-bottom:20px">
@@ -18,13 +49,13 @@
 				<div class="row">
 					<div class="col-md-12">
 						<p:fieldset style="margin-bottom:20px" styleClass="">
-							<h:inputHidden id="idUsuario" value="#{agendarAtividadeMB.atividade.usuario.id}" />
+							<h:inputHidden id="idUsuario" value="#{atividadeMB.atividade.usuario.id}" />
 							<legend>Usuário</legend>
 							<div class="col-lg-3">
 								<div class="form-group">
 									<label for="login">Login *</label>
-									<p:inputText id="login" name="login" type="text" class="form-control" placeholder="Login" value="#{agendarAtividadeMB.atividade.usuario.login}" required="true" maxlength="25">
-										 <f:ajax event="blur" listener="#{agendarAtividadeMB.selecionarUsuario(agendarAtividadeMB.atividade.usuario.login)}" render="login nome email perfil"/>
+									<p:inputText id="login" name="login" type="text" class="form-control" placeholder="Login" value="#{atividadeMB.atividade.usuario.login}" required="true" maxlength="25">
+										 <f:ajax event="blur" listener="#{atividadeMB.selecionarUsuario(atividadeMB.atividade.usuario.login)}" render="login nome email perfil"/>
 									</p:inputText>
 									<pe:keyFilter regEx="/[a-z0-9_]/i" for="login"/>				 
 								</div>
@@ -33,21 +64,21 @@
 							<div class="col-lg-3">
 								<div class="form-group">
 									<label for="nome">Nome</label>
-									<input id="nome" name="nome" type="text" class="form-control" placeholder="Nome" jsf:value="#{agendarAtividadeMB.atividade.usuario.nome}" disabled="disabled" readonly="readonly"/>				 
+									<input id="nome" name="nome" type="text" class="form-control" placeholder="Nome" jsf:value="#{atividadeMB.atividade.usuario.nome}" disabled="disabled" readonly="readonly"/>				 
 								</div>
 							</div>
 							
 							<div class="col-lg-3">
 								<div class="form-group">
 									<label for="email">Email</label>
-									<input id="email" name="email" type="text" class="form-control" placeholder="E-mail" jsf:value="#{agendarAtividadeMB.atividade.usuario.email}" disabled="disabled" readonly="readonly"/>				 
+									<input id="email" name="email" type="text" class="form-control" placeholder="E-mail" jsf:value="#{atividadeMB.atividade.usuario.email}" disabled="disabled" readonly="readonly"/>				 
 								</div>
 							</div>
 							
 							<div class="col-lg-3">
 								<div class="form-group">
 									<label for="perfil">Perfil</label>
-									<input id="perfil" name="perfil" type="text" class="form-control" placeholder="Perfil" jsf:value="#{agendarAtividadeMB.atividade.usuario.perfil.nome}" disabled="disabled" readonly="readonly"/>				 
+									<input id="perfil" name="perfil" type="text" class="form-control" placeholder="Perfil" jsf:value="#{atividadeMB.atividade.usuario.perfil.nome}" disabled="disabled" readonly="readonly"/>				 
 								</div>
 							</div>
 							
@@ -58,7 +89,7 @@
 							
 							<div class="col-md-3">
 								<div class="form-group">
-									<h:commandLink id="btn-usuarios" class="btn btn-primary" actionListener="#{agendarAtividadeMB.abrirDialog}" style="width: 100%; color:white;" immediate="true">
+									<h:commandLink id="btn-usuarios" class="btn btn-primary" actionListener="#{atividadeMB.abrirDialog}" style="width: 100%; color:white;" immediate="true">
 										<i class="glyphicon glyphicon-search"></i>&nbsp;Usuários&nbsp;
 									</h:commandLink>
 								</div>
@@ -70,13 +101,13 @@
 						<p:fieldset style="margin-bottom:20px" styleClass="">
 							<div class="form-group">
 								<label for="login">Título *</label>
-								<p:inputText id="titulo" name="titulo" type="text" class="form-control" placeholder="Título" value="#{agendarAtividadeMB.atividade.titulo}" required="true" maxlength="25" />
+								<p:inputText id="titulo" name="titulo" type="text" class="form-control" placeholder="Título" value="#{atividadeMB.atividade.titulo}" required="true" maxlength="25" />
 								<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="titulo"/>
 							</div>
 
 							<legend>Descrição da atividade *</legend>
 							<div class="form-group">
-								<p:inputTextarea id="editor" styleClass="form-control" rows="4" value="#{agendarAtividadeMB.atividade.texto}" maxlength="350" required="true" 
+								<p:inputTextarea id="editor" styleClass="form-control" rows="4" value="#{atividadeMB.atividade.texto}" maxlength="350" required="true" 
 									requiredMessage="O campo descrição da atividade é obrigatório"></p:inputTextarea>
 							</div>
 						</p:fieldset>
@@ -86,7 +117,7 @@
 						<p:fieldset style="margin-bottom:20px" styleClass="">
 							<legend>Data do agendamento *</legend>
 							<div class="form-group">
-			        			<p:calendar id="data" value="#{agendarAtividadeMB.atividade.dataAgendamento}" pattern="dd-MM-yyyy" mask="true" locale="pt" mindate="#{agendarAtividadeMB.todayDate}" maxdate="#{agendarAtividadeMB.maxDate}"
+			        			<p:calendar id="data" value="#{atividadeMB.atividade.dataAgendamento}" pattern="dd-MM-yyyy" mask="true" locale="pt" mindate="#{atividadeMB.todayDate}" maxdate="#{atividadeMB.maxDate}"
 			        				required="true" requiredMessage="O campo data do agendamento é obrigatório" />
 		        			</div>
 	        			</p:fieldset>
@@ -101,7 +132,7 @@
 	     		<div class="row">	
 					<div class="col-md-3">
 						<div class="form-group">
-							<h:commandLink id="btn-signup" class="btn btn-primary" actionListener="#{agendarAtividadeMB.solicitarCadastroAtividade}" update="table-users, data" style="width: 100%; color:white;">
+							<h:commandLink id="btn-signup" class="btn btn-primary" actionListener="#{atividadeMB.solicitarCadastroAtividade}" update="table-users, data" style="width: 100%; color:white;">
 								<i class="glyphicon glyphicon-saved"></i>&nbsp;Cadastrar agendamento&nbsp;
 							</h:commandLink>
 						</div>
@@ -126,13 +157,13 @@
 						<div class="col-md-4">
 							<div class="form-group">
 								<label for="dlgLogin">Login:</label>
-								<input id="dlgLogin" name="dlgLogin" type="text" class="form-control" placeholder="Login" jsf:value="#{agendarAtividadeMB.login}" maxlength="25" />
+								<input id="dlgLogin" name="dlgLogin" type="text" class="form-control" placeholder="Login" jsf:value="#{atividadeMB.login}" maxlength="25" />
 							</div>
 						</div>
 						<div class="col-md-4">
 							<div class="form-group">
 								<label for="dlgPerfil">Perfil</label>
-								<h:selectOneMenu id="dlgPerfil" value="#{agendarAtividadeMB.perfilId}" styleClass="form-control">
+								<h:selectOneMenu id="dlgPerfil" value="#{atividadeMB.perfilId}" styleClass="form-control">
 					                <f:selectItem itemLabel="[Selecione]" itemValue="" noSelectionOption="true" />
 					                <f:selectItem itemLabel="Administrador" itemValue="1" noSelectionOption="false" />
 					                <f:selectItem itemLabel="Gestor" itemValue="2" noSelectionOption="false" />
@@ -144,7 +175,7 @@
 						<div class="col-md-4">
 							<div class="form-group">
 								<label>&nbsp;</label>
-								<h:commandLink id="btn-pesquisar" class="btn btn-primary" actionListener="#{agendarAtividadeMB.consultarUsuario}" update="table-users" style="width: 100%; color:white;" immediate="true">
+								<h:commandLink id="btn-pesquisar" class="btn btn-primary" actionListener="#{atividadeMB.consultarUsuario}" update="table-users" style="width: 100%; color:white;" immediate="true">
 									<i class="glyphicon glyphicon-search"></i>&nbsp;Pesquisar&nbsp;
 								</h:commandLink>
 							</div>
@@ -152,10 +183,10 @@
 						
 						<div class="col-md-12">
 							<div class="form-group">
-								<p:dataTable tableStyleClass="table-hover" id="table-users" var="user" value="#{agendarAtividadeMB.listUsuarios}" rows="5" paginator="true" paginatorPosition="bottom"
+								<p:dataTable tableStyleClass="table-hover" id="table-users" var="user" value="#{atividadeMB.listUsuarios}" rows="5" paginator="true" paginatorPosition="bottom"
 									paginatorAlwaysVisible="false" rowsPerPageTemplate="5,10" >
 									<p:column style="width:64px; text-align: center" headerText="">
-										<p:commandButton icon="ui-icon-arrowthick-1-e" title="Selecionar" actionListener="#{agendarAtividadeMB.selecionarUsuario(user.login)}" update="login nome email perfil" />
+										<p:commandButton icon="ui-icon-arrowthick-1-e" title="Selecionar" actionListener="#{atividadeMB.selecionarUsuario(user.login)}" update="login nome email perfil" />
 									</p:column>
 									<p:column headerText="Login">
 										<h:outputText id="userLogin" value="#{user.login}" />
@@ -175,7 +206,7 @@
 							
 						<div class="col-md-3">
 							<div class="form-group">
-								<h:commandLink id="btn-cancel" class="btn btn-danger" actionListener="#{agendarAtividadeMB.fecharDialog}" update="table-users" style="width: 100%; color:white;" immediate="false">
+								<h:commandLink id="btn-cancel" class="btn btn-danger" actionListener="#{atividadeMB.fecharDialog}" update="table-users" style="width: 100%; color:white;" immediate="false">
 									<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
 								</h:commandLink>
 							</div>

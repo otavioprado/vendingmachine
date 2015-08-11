@@ -3,20 +3,15 @@ package br.com.milenio.vendingmachine.managedbean;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.logging.log4j.Logger;
-import org.primefaces.context.RequestContext;
 
 import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
@@ -37,12 +32,6 @@ public class UsuarioMB implements Serializable {
 	
 	@Inject
 	private UsuarioService usuarioService;
-	
-	@Inject
-	private ExternalContext ec;
-	
-	@Inject
-	private HttpSession session;
 	
 	private UsuarioSistema usuario = new UsuarioSistema();
 

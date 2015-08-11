@@ -14,8 +14,8 @@
 	<ui:define name="conteudo">
 		<h:form prependId="false">
 			<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
-			<p:panel id="basic" header="Atividades agendadas para hoje (#{agendarAtividadeMB.hoje})" style="margin-bottom:20px">
-			    <p:accordionPanel value="#{agendarAtividadeMB.solicitarAtividadesAgendadas()}" var="atividade" activeIndex="null">
+			<p:panel id="basic" header="Atividades agendadas para hoje (#{atividadeMB.hoje})" style="margin-bottom:20px">
+			    <p:accordionPanel value="#{atividadeMB.solicitarAtividadesAgendadas()}" var="atividade" activeIndex="null">
 			        <p:tab title="Atividade - #{atividade.titulo}">
 			            <h:panelGrid columns="2" cellpadding="5">                  
 			                <h:outputText value="Descrição: " style="font-weight: bold" />

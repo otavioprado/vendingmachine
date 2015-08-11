@@ -1,0 +1,149 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;"> 
+]>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="layoutLogado.xhtml">
+
+	<ui:define name="script">
+		<h:outputScript name="js/datepicker-pt-BR.js" />
+
+		<script>
+			$(function() {
+				$("#dataAcao").datepicker($.datepicker.regional["pt-BR"]);
+			});
+		</script>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<p:panel id="basic" header="Filtro de pesquisa"
+			style="margin-bottom:20px">
+			<h:form prependId="false">
+				<p:messages id="messages" showDetail="false" autoUpdate="true"
+					closable="true" />
+				<div class="row">
+
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="login">Login</label> <input id="login" name="login"
+								type="text" class="form-control" placeholder="Login"
+								jsf:value="#{auditoriaMB.usuario.login}" maxlength="25" />
+							<pe:keyFilter regEx="/[a-zA-Z0-9_]/i" for="login" />
+						</div>
+					</div>
+
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="nomeUsuario">Nome</label> <input id="nomeUsuario"
+								name="nomeUsuario" type="text" class="form-control"
+								placeholder="Nome" jsf:value="#{auditoriaMB.usuario.nome}"
+								maxlength="25" />
+						</div>
+					</div>
+
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="dataAcao">Data da ação</label>
+							<h:inputText id="dataAcao" value="#{auditoriaMB.dataAcao}"
+								styleClass="form-control" maxlength="10">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:inputText>
+						</div>
+					</div>
+
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="perfil">Perfil</label>
+							<h:selectOneMenu id="perfil" value="#{auditoriaMB.perfilId}"
+								styleClass="form-control">
+								<f:selectItem itemLabel="[Selecione]" itemValue=""
+									noSelectionOption="true" />
+								<f:selectItem itemLabel="Administrador" itemValue="1"
+									noSelectionOption="false" />
+								<f:selectItem itemLabel="Gestor" itemValue="2"
+									noSelectionOption="false" />
+								<f:selectItem itemLabel="Gerente" itemValue="3"
+									noSelectionOption="false" />
+								<f:selectItem itemLabel="Operador" itemValue="4"
+									noSelectionOption="false" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="email">E-mail</label> <input id="email"
+								name="email" type="text" class="form-control"
+								placeholder="Endereço de E-mail"
+								jsf:value="#{auditoriaMB.usuario.email}" maxlength="40" />
+							<pe:keyFilter regEx="/[a-z0-9_\.\-@]/i" for="email" />
+						</div>
+					</div>
+
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="status">Status</label>
+							<h:selectOneMenu id="status"
+								value="#{auditoriaMB.usuario.indAtivo}"
+								styleClass="form-control">
+								<f:selectItem itemLabel="Ativo" itemValue="true" />
+								<f:selectItem itemLabel="Bloqueado" itemValue="false" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandLink id="btn-signup" class="btn btn-primary"
+								actionListener="#{auditoriaMB.consultarAcoes}"
+								update="table-users" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-search"></i>&nbsp;Pesquisar&nbsp;
+							</h:commandLink>
+						</div>
+					</div>
+				</div>
+			</h:form>
+			<c:if test="${not empty auditoriaMB.listAuditoria}">
+				<h:form prependId="false">
+					<p:dataTable tableStyleClass="table-hover" id="table-users"
+						var="auditoria" value="#{auditoriaMB.listAuditoria}" rows="10"
+						paginator="true" paginatorPosition="bottom"
+						paginatorAlwaysVisible="false"
+						rowsPerPageTemplate="10,15,20,25,30">
+						<h:inputHidden id="idUsuario" value="#{user.id}" />
+
+						<p:column headerText="Login">
+							<h:outputText id="userLogin" value="#{auditoria.usuario.login}" />
+						</p:column>
+
+						<p:column headerText="Perfil">
+							<h:outputText id="userPerfil"
+								value="#{auditoria.usuario.perfil.nome}" />
+						</p:column>
+
+						<p:column headerText="Data da ação">
+							<h:outputText id="dataDoOcorrido" value="#{auditoria.dataAcao}" >
+								<f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="GMT-03:00" />
+							</h:outputText>
+						</p:column>
+						
+						<p:column headerText="Descrição">
+							<h:outputText id="descrição" value="#{auditoria.descricao}" />
+						</p:column>
+						
+						<p:column headerText="IP">
+							<h:outputText id="ip" value="#{auditoria.ip}" />
+						</p:column>
+					</p:dataTable>
+				</h:form>
+			</c:if>
+		</p:panel>
+
+	</ui:define>
+
+</ui:composition>

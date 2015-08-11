@@ -172,10 +172,10 @@ public class UsuarioServiceBean implements UsuarioService {
 	}
 	
 	@Override
-	public void validarUsuarioAtivoPeloLoginSenha(String login, String senha) throws UsuarioBloqueadoNoSistemaException, UsuarioInexistenteNoSistemaException {
-		
+	public UsuarioSistema validarUsuarioAtivoPeloLoginSenha(String login, String senha) throws UsuarioBloqueadoNoSistemaException, UsuarioInexistenteNoSistemaException {
+		UsuarioSistema usuario = null;
 		try {
-			UsuarioSistema usuario = usuarioSistemaRepository.findUsuarioByLoginEquals(login);
+			usuario = usuarioSistemaRepository.findUsuarioByLoginEquals(login);
 			
 			// 1°  Se o usuário já estiver bloqueado nem prossegue com as demais validações
 			if(!usuario.getIndAtivo()) {
@@ -199,12 +199,12 @@ public class UsuarioServiceBean implements UsuarioService {
 					usuarioSistemaRepository.merge(usuario);
 				}
 			}
-			
 		} catch(EJBException e) {
 			if(e.getCause() instanceof NoResultException) {
 				throw new UsuarioInexistenteNoSistemaException("Usuário " + login + " não existe cadastrado no sistema.");
 			}
 		}
+		return usuario;
 	}
 	
 	private boolean validarSenhaUsuario(UsuarioSistema usuario, String senhaDigitada) {

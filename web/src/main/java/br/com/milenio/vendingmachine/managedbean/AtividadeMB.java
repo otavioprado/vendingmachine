@@ -7,7 +7,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -28,7 +27,7 @@ import br.com.milenio.vendingmachine.service.UsuarioService;
 
 @Named
 @ViewScoped
-public class AgendarAtividadeMB implements Serializable {
+public class AtividadeMB implements Serializable {
 	private static final long serialVersionUID = -7422829646714382705L;
 	
 	@EJB
