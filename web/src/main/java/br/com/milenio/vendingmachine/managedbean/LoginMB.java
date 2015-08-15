@@ -21,6 +21,7 @@ import br.com.milenio.vendingmachine.domain.model.Auditoria;
 import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 import br.com.milenio.vendingmachine.exceptions.UsuarioBloqueadoNoSistemaException;
 import br.com.milenio.vendingmachine.exceptions.UsuarioInexistenteNoSistemaException;
+import br.com.milenio.vendingmachine.security.Seguranca;
 import br.com.milenio.vendingmachine.service.AuditoriaService;
 import br.com.milenio.vendingmachine.service.UsuarioService;
 
@@ -76,7 +77,6 @@ public class LoginMB {
 		auditoria.setUsuario(usuarioValidado);
 		auditoria.setIp(request.getRemoteAddr());
 		auditoriaService.cadastrarNovaAcao(auditoria);
-		
 	}
 	
 	public void preRender() {

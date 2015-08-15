@@ -13,16 +13,19 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.primefaces.context.RequestContext;
 
 import br.com.milenio.vendingmachine.domain.model.Atividade;
+import br.com.milenio.vendingmachine.domain.model.Auditoria;
 import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.security.Seguranca;
 import br.com.milenio.vendingmachine.service.AtividadeService;
+import br.com.milenio.vendingmachine.service.AuditoriaService;
 import br.com.milenio.vendingmachine.service.UsuarioService;
 
 @Named
@@ -38,6 +41,12 @@ public class AtividadeMB implements Serializable {
 	
 	@Inject
 	private FacesContext ctx;
+	
+	@Inject
+	private HttpServletRequest request;
+	
+	@Inject
+	private AuditoriaService auditoriaService;
 	
 	private List<UsuarioSistema> listUsuarios = new ArrayList<UsuarioSistema>();
 	private String login;
@@ -107,6 +116,15 @@ public class AtividadeMB implements Serializable {
 		}
 	
 		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Atividade cadastrada para o usuário " + atividade.getUsuario().getLogin() + " com sucesso", null));
+		
+		// Processo de auditoria
+		Auditoria auditoria = new Auditoria();
+		auditoria.setDataAcao(new Date());
+		auditoria.setTitulo("Cadastro");
+		auditoria.setDescricao("Cadastrou a atividade " + atividade.getTitulo());
+		auditoria.setUsuario(Seguranca.getUsuarioLogado());
+		auditoria.setIp(request.getRemoteAddr());
+		auditoriaService.cadastrarNovaAcao(auditoria);
 		
 		atividade = new Atividade();
 	}

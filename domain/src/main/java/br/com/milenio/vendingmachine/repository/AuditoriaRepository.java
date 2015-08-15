@@ -7,10 +7,10 @@ import javax.ejb.Local;
 
 import br.com.milenio.vendingmachine.domain.Repository;
 import br.com.milenio.vendingmachine.domain.model.Auditoria;
+import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 
 @Local
 public interface AuditoriaRepository extends Repository<Auditoria, Long> {
 
-	public List<Auditoria> buscarAcoesRealizadas(String login, Date dataAcao);
-	
+	public List<Auditoria> buscarAcoesRealizadas(UsuarioSistema usuario, Date dataAcao, String ip);
 }

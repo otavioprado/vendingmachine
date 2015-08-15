@@ -139,7 +139,7 @@
 					</div>
 					<div class="col-md-3">
 						<div class="form-group">
-							<a id="btn-cancel" class="btn btn-danger" href="#{request.contextPath}/admin/layoutLogado.xhtml" style="width: 100%; color:white;">
+							<a id="btn-cancel" class="btn btn-danger" href="#{request.contextPath}/admin/tela_inicial.xhtml" style="width: 100%; color:white;">
 								<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
 							</a>
 						</div>
@@ -175,7 +175,7 @@
 						<div class="col-md-4">
 							<div class="form-group">
 								<label>&nbsp;</label>
-								<h:commandLink id="btn-pesquisar" class="btn btn-primary" actionListener="#{atividadeMB.consultarUsuario}" update="table-users" style="width: 100%; color:white;" immediate="true">
+								<h:commandLink id="btn-pesquisar" class="btn btn-primary" actionListener="#{atividadeMB.consultarUsuario}" update="table-users" style="width: 100%; color:white;" immediate="false">
 									<i class="glyphicon glyphicon-search"></i>&nbsp;Pesquisar&nbsp;
 								</h:commandLink>
 							</div>

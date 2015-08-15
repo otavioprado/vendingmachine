@@ -10,7 +10,7 @@ import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 
 @Local
 public interface AuditoriaService {
-	public List<Auditoria> buscar(UsuarioSistema usuario, Date dataAcao);
+	public List<Auditoria> buscar(UsuarioSistema usuario, Date dataAcao, String ip, Long perfilId);
 	
 	public void cadastrarNovaAcao(Auditoria auditoria);
 }

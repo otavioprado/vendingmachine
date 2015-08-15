@@ -8,6 +8,7 @@
     xmlns:p="http://primefaces.org/ui"
     xmlns:jsf="http://xmlns.jcp.org/jsf"
     xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:pe="http://primefaces.org/ui/extensions"
     template="layoutLogado.xhtml">
     
 
@@ -24,7 +25,9 @@
 					<div class="col-lg-3">
 						<div class="form-group">
 							<label for="qtdTentAcess">Tentativas de acesso com senha inválida *</label>
-							<input id="qtdTentAcess" name="qtdTentAcess" type="number" class="form-control" jsf:value="#{configuracaoMB.qtdMaxTentAcessSenhaInvalida}" jsf:required="true" />
+							<input id="qtdTentAcess" name="qtdTentAcess" type="number" class="form-control" 
+								jsf:value="#{configuracaoMB.qtdMaxTentAcessSenhaInvalida}" jsf:required="true" min="0" step="1" />
+							<pe:keyFilter regEx="/[0-9]/i" for="qtdTentAcess"/>
 			        	</div>
 					</div>
 					
@@ -46,7 +49,7 @@
 					
 					<div class="col-md-3">
 						<div class="form-group">
-							<a id="btn-cancel" class="btn btn-danger" href="#{request.contextPath}/admin/layoutLogado.xhtml" style="width: 100%; color:white;">
+							<a id="btn-cancel" class="btn btn-danger" href="#{request.contextPath}/admin/tela_inicial.xhtml" style="width: 100%; color:white;">
 								<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
 							</a>
 						</div>

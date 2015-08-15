@@ -44,7 +44,7 @@
 		            
 	            </c:if>
             </ul>
-            <c:if test="#{seguranca.perfilUsuarioLogado eq 'ADMINISTRADOR'}">
+            <c:if test="#{seguranca.perfilUsuarioLogado eq 'ADMINISTRADOR' or seguranca.getPermissaoUsuarioLogado('ROLE_EDT_PERMISSOES') eq true}">
 	            <ul class="nav navbar-nav">
 					<li class="#{view.viewId eq '/admin/permissoes.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/permissoes.xhtml"><span class="glyphicon glyphicon-list-alt"></span>Permissões</a></li>
 				</ul>
@@ -63,9 +63,11 @@
 					</li>
 				</ul>
 			</c:if>
-			<ul class="nav navbar-nav">
-				<li class="#{view.viewId eq '/admin/auditoria.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/auditoria.xhtml"><span class="glyphicon glyphicon-eye-open"/>Auditoria</a></li>
-			</ul>
+			<c:if test="#{seguranca.perfilUsuarioLogado eq 'ADMINISTRADOR' or seguranca.getPermissaoUsuarioLogado('ROLE_CONS_AUDITORIA') eq true}">
+				<ul class="nav navbar-nav">
+					<li class="#{view.viewId eq '/admin/auditoria.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/auditoria.xhtml"><span class="glyphicon glyphicon-eye-open"/>Auditoria</a></li>
+				</ul>
+			</c:if>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">

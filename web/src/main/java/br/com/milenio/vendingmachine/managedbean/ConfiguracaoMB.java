@@ -1,5 +1,6 @@
 package br.com.milenio.vendingmachine.managedbean;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -8,9 +9,13 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 
+import br.com.milenio.vendingmachine.domain.model.Auditoria;
 import br.com.milenio.vendingmachine.domain.model.ConfiguracaoSistema;
 import br.com.milenio.vendingmachine.repository.ConfiguracaoSistemaRepository;
+import br.com.milenio.vendingmachine.security.Seguranca;
+import br.com.milenio.vendingmachine.service.AuditoriaService;
 
 @Named
 @RequestScoped
@@ -23,6 +28,12 @@ public class ConfiguracaoMB {
 	
 	@EJB
 	ConfiguracaoSistemaRepository configuracaoSistemaRepository;
+	
+	@Inject
+	private AuditoriaService auditoriaService;
+	
+	@Inject
+	private HttpServletRequest request;
 	
 	private Long qtdMaxTentAcessSenhaInvalida;
 	
@@ -42,6 +53,15 @@ public class ConfiguracaoMB {
 		configuracaoSistemaRepository.merge(configSis);
 		
 		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Configurações do sistema alteradas com sucesso!", null));
+		
+		// Processo de auditoria
+		Auditoria auditoria = new Auditoria();
+		auditoria.setDataAcao(new Date());
+		auditoria.setTitulo("Edição");
+		auditoria.setDescricao("Editou as configurações do sistema");
+		auditoria.setUsuario(Seguranca.getUsuarioLogado());
+		auditoria.setIp(request.getRemoteAddr());
+		auditoriaService.cadastrarNovaAcao(auditoria);
 	}
 	
 	public Long getQtdMaxTentAcessSenhaInvalida() {

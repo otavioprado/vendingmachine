@@ -9,13 +9,17 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.logging.log4j.Logger;
 
+import br.com.milenio.vendingmachine.domain.model.Auditoria;
 import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.exceptions.ConteudoJaExistenteNoBancoDeDadosException;
+import br.com.milenio.vendingmachine.security.Seguranca;
+import br.com.milenio.vendingmachine.service.AuditoriaService;
 import br.com.milenio.vendingmachine.service.UsuarioService;
 
 @Named
@@ -29,6 +33,12 @@ public class UsuarioMB implements Serializable {
 	
 	@Inject
 	private FacesContext ctx;
+	
+	@Inject
+	private HttpServletRequest request;
+	
+	@Inject
+	private AuditoriaService auditoriaService;
 	
 	@Inject
 	private UsuarioService usuarioService;
@@ -73,12 +83,22 @@ public class UsuarioMB implements Serializable {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário " + usuario.getLogin() + " cadastrado com sucesso.", null));
 			logger.info("Usuário " + usuario.getNome() + " foi cadastrado no sistema com sucesso.");
 			
+			// Processo de auditoria de cadastro de usuário
+			Auditoria auditoria = new Auditoria();
+			auditoria.setDataAcao(new Date());
+			auditoria.setTitulo("Cadastro");
+			auditoria.setDescricao("Cadastrou o usuário " + usuario.getLogin());
+			auditoria.setUsuario(usuario);
+			auditoria.setIp(request.getRemoteAddr());
+			auditoriaService.cadastrarNovaAcao(auditoria);
+			
 		} catch(ConteudoJaExistenteNoBancoDeDadosException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
 		}
 		
 		usuario = new UsuarioSistema();
 		perfilId = null;
+		
 		return "";
 	}
 	
@@ -97,6 +117,15 @@ public class UsuarioMB implements Serializable {
 			// Sucesso - Exibe mensagem de cadastro realizado com sucesso
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "As alterações no cadastro do usuário " + usuario.getLogin() + " foram salvas com sucesso.", null));
 			logger.info("As alterações no cadastro do usuário " + usuario.getNome() + " foram salvas com sucesso.");
+			
+			// Processo de auditoria
+			Auditoria auditoria = new Auditoria();
+			auditoria.setDataAcao(new Date());
+			auditoria.setTitulo("Edição");
+			auditoria.setDescricao("Editou o usuário " + usuario.getLogin());
+			auditoria.setUsuario(Seguranca.getUsuarioLogado());
+			auditoria.setIp(request.getRemoteAddr());
+			auditoriaService.cadastrarNovaAcao(auditoria);
 		} catch(ConteudoJaExistenteNoBancoDeDadosException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
 		}
@@ -106,7 +135,10 @@ public class UsuarioMB implements Serializable {
 		try {
 			listUsuarios = usuarioService.buscarUsuariosComFiltro(login, status, perfilId);
 		} catch (CadastroInexistenteException e) {
-			listUsuarios.clear();
+			if(listUsuarios != null && !listUsuarios.isEmpty()) {
+				listUsuarios.clear();
+			}
+			
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
 		}
 	}
@@ -130,6 +162,15 @@ public class UsuarioMB implements Serializable {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário " + usuario.getLogin() + " bloqueado com sucesso.", null));
 			// Após bloqueio, carrega a lista de usuários para atualizar na view de consulta
 			consultarUsuario();
+			
+			// Processo de auditoria
+			Auditoria auditoria = new Auditoria();
+			auditoria.setDataAcao(new Date());
+			auditoria.setTitulo("Bloqueio");
+			auditoria.setDescricao("Bloqueou o usuário " + usuario.getLogin());
+			auditoria.setUsuario(Seguranca.getUsuarioLogado());
+			auditoria.setIp(request.getRemoteAddr());
+			auditoriaService.cadastrarNovaAcao(auditoria);
 		}
 		
 		motivoBloqueio = null;
@@ -140,6 +181,15 @@ public class UsuarioMB implements Serializable {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário " + usuario.getLogin() + " desbloqueado com sucesso.", null));
 			// Após desbloqueio, carrega a lista de usuários para atualizar na view de consulta
 			consultarUsuario();
+			
+			// Processo de auditoria
+			Auditoria auditoria = new Auditoria();
+			auditoria.setDataAcao(new Date());
+			auditoria.setTitulo("Desbloqueio");
+			auditoria.setDescricao("Desbloqueou o usuário " + usuario.getLogin());
+			auditoria.setUsuario(Seguranca.getUsuarioLogado());
+			auditoria.setIp(request.getRemoteAddr());
+			auditoriaService.cadastrarNovaAcao(auditoria);
 		}
 	}
 	

@@ -2,6 +2,7 @@ package br.com.milenio.vendingmachine.managedbean;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -11,12 +12,16 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 
+import br.com.milenio.vendingmachine.domain.model.Auditoria;
 import br.com.milenio.vendingmachine.domain.model.Perfil;
 import br.com.milenio.vendingmachine.domain.model.Permissao;
 import br.com.milenio.vendingmachine.repository.PerfilRepository;
 import br.com.milenio.vendingmachine.repository.PermissaoRepository;
+import br.com.milenio.vendingmachine.security.Seguranca;
 import br.com.milenio.vendingmachine.security.spring.Teste;
+import br.com.milenio.vendingmachine.service.AuditoriaService;
 
 @Named
 @ViewScoped
@@ -32,6 +37,12 @@ public class PermissoesMB implements Serializable {
 	
 	@Inject
 	private FacesContext ctx;
+	
+	@Inject
+	private AuditoriaService auditoriaService;
+	
+	@Inject
+	private HttpServletRequest request;
 
 	private List<Permissao> permissoes;
 	
@@ -49,7 +60,7 @@ public class PermissoesMB implements Serializable {
 		}
 		
 		// Carrega todas as permissões
-		permissoes = permissaoRepository.getAll();
+		permissoes = permissaoRepository.getPermissoesVisiveis();
 		
 		// Busca as permissões do perfil selecionado
 		perfilSelecionado = perfilRepository.findById(idPerfilSelecionado);
@@ -76,6 +87,15 @@ public class PermissoesMB implements Serializable {
 		
 		Teste teste = new Teste();
 		teste.atualizarPermissoesDosUsuariosLogadosComPerfil(perfilSelecionado);
+		
+		// Processo de auditoria
+		Auditoria auditoria = new Auditoria();
+		auditoria.setDataAcao(new Date());
+		auditoria.setTitulo("Edição");
+		auditoria.setDescricao("Editou as permissões do perfil " + perfilSelecionado.getNome());
+		auditoria.setUsuario(Seguranca.getUsuarioLogado());
+		auditoria.setIp(request.getRemoteAddr());
+		auditoriaService.cadastrarNovaAcao(auditoria);
 	}
 	
 	public boolean validarDependenciaEntrePermissoes(List<Permissao> permissoesSelecionadas) {

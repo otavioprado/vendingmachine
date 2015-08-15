@@ -30,7 +30,7 @@
 
 					<div class="col-lg-4">
 						<div class="form-group">
-							<label for="login">Login</label> <input id="login" name="login"
+							<label for="login">Login</label><input id="login" name="login"
 								type="text" class="form-control" placeholder="Login"
 								jsf:value="#{auditoriaMB.usuario.login}" maxlength="25" />
 							<pe:keyFilter regEx="/[a-zA-Z0-9_]/i" for="login" />
@@ -39,27 +39,18 @@
 
 					<div class="col-lg-4">
 						<div class="form-group">
-							<label for="nomeUsuario">Nome</label> <input id="nomeUsuario"
-								name="nomeUsuario" type="text" class="form-control"
-								placeholder="Nome" jsf:value="#{auditoriaMB.usuario.nome}"
-								maxlength="25" />
-						</div>
-					</div>
-
-					<div class="col-lg-4">
-						<div class="form-group">
 							<label for="dataAcao">Data da ação</label>
 							<h:inputText id="dataAcao" value="#{auditoriaMB.dataAcao}"
 								styleClass="form-control" maxlength="10">
-								<f:convertDateTime pattern="dd/MM/yyyy" />
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
 							</h:inputText>
 						</div>
 					</div>
 
 					<div class="col-lg-4">
 						<div class="form-group">
-							<label for="perfil">Perfil</label>
-							<h:selectOneMenu id="perfil" value="#{auditoriaMB.perfilId}"
+							<label for="slcPerfil">Perfil</label>
+							<h:selectOneMenu id="slcPerfil" value="#{auditoriaMB.perfilId}"
 								styleClass="form-control">
 								<f:selectItem itemLabel="[Selecione]" itemValue=""
 									noSelectionOption="true" />
@@ -77,27 +68,15 @@
 
 					<div class="col-lg-4">
 						<div class="form-group">
-							<label for="email">E-mail</label> <input id="email"
-								name="email" type="text" class="form-control"
-								placeholder="Endereço de E-mail"
-								jsf:value="#{auditoriaMB.usuario.email}" maxlength="40" />
-							<pe:keyFilter regEx="/[a-z0-9_\.\-@]/i" for="email" />
+							<label for="ip">IP</label><input id="ip" name="ip" type="text" class="form-control"
+								placeholder="Endereço de IP" jsf:value="#{auditoriaMB.ip}" maxlength="15" />
+							<pe:keyFilter regEx="/[0-9\.\]/i" for="ip" />
 						</div>
 					</div>
 
-					<div class="col-lg-4">
-						<div class="form-group">
-							<label for="status">Status</label>
-							<h:selectOneMenu id="status"
-								value="#{auditoriaMB.usuario.indAtivo}"
-								styleClass="form-control">
-								<f:selectItem itemLabel="Ativo" itemValue="true" />
-								<f:selectItem itemLabel="Bloqueado" itemValue="false" />
-							</h:selectOneMenu>
-						</div>
-					</div>
-
-					<div class="col-md-3">
+				</div>
+				<div class="row">
+					<div class="col-md-4">
 						<div class="form-group">
 							<h:commandLink id="btn-signup" class="btn btn-primary"
 								actionListener="#{auditoriaMB.consultarAcoes}"
@@ -108,10 +87,10 @@
 					</div>
 				</div>
 			</h:form>
-			<c:if test="${not empty auditoriaMB.listAuditoria}">
+			<c:if test="${not empty auditoriaMB.lstAuditoria}">
 				<h:form prependId="false">
 					<p:dataTable tableStyleClass="table-hover" id="table-users"
-						var="auditoria" value="#{auditoriaMB.listAuditoria}" rows="10"
+						var="auditoria" value="#{auditoriaMB.lstAuditoria}" rows="10"
 						paginator="true" paginatorPosition="bottom"
 						paginatorAlwaysVisible="false"
 						rowsPerPageTemplate="10,15,20,25,30">
@@ -121,23 +100,28 @@
 							<h:outputText id="userLogin" value="#{auditoria.usuario.login}" />
 						</p:column>
 
-						<p:column headerText="Perfil">
-							<h:outputText id="userPerfil"
-								value="#{auditoria.usuario.perfil.nome}" />
-						</p:column>
-
 						<p:column headerText="Data da ação">
 							<h:outputText id="dataDoOcorrido" value="#{auditoria.dataAcao}" >
-								<f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="GMT-03:00" />
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
 							</h:outputText>
 						</p:column>
 						
-						<p:column headerText="Descrição">
-							<h:outputText id="descrição" value="#{auditoria.descricao}" />
+						<p:column headerText="Horário da ação">
+							<h:outputText id="horarioDoOcorrido" value="#{auditoria.horarioAcao}" >
+								<f:convertDateTime pattern="HH:mm" timeZone="GMT-03:00" />
+							</h:outputText>
+						</p:column>
+						
+						<p:column headerText="Perfil">
+							<h:outputText id="perfil" value="#{auditoria.usuario.perfil.nome}" />
 						</p:column>
 						
 						<p:column headerText="IP">
 							<h:outputText id="ip" value="#{auditoria.ip}" />
+						</p:column>
+						
+						<p:column headerText="Descrição">
+							<h:outputText id="descricao" value="#{auditoria.descricao}" />
 						</p:column>
 					</p:dataTable>
 				</h:form>

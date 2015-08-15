@@ -8,6 +8,7 @@ import javax.inject.Named;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import br.com.milenio.vendingmachine.domain.model.Permissao;
+import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 import br.com.milenio.vendingmachine.repository.PerfilRepository;
 
 @Named
@@ -26,6 +27,17 @@ public class Seguranca {
 		}
 		
 		return nome;
+	}
+	
+	public static UsuarioSistema getUsuarioLogado() {
+		UsuarioSistema usuarioSistema = null;
+		UsuarioSistemaSpring usuario = getUsuarioSistemaSpringLogado();
+
+		if (usuario != null) {
+			usuarioSistema = usuario.getUsuario();
+		}
+		
+		return usuarioSistema;
 	}
 	
 	public String getEmailUsuarioLogado() {

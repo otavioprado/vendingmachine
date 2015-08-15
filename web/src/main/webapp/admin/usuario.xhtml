@@ -18,14 +18,16 @@
 					<div class="col-lg-6">	
 						<div class="form-group">
 							<label for="login">Login *</label>
-							<input id="login" name="login" type="text" class="form-control" placeholder="Login" jsf:value="#{usuarioMB.usuario.login}" jsf:required="true" maxlength="25" />
+							<input id="login" name="login" type="text" class="form-control" placeholder="Login" jsf:value="#{usuarioMB.usuario.login}" jsf:required="true" maxlength="25" 
+								jsf:requiredMessage="O campo login é obrigatório"/>
 							<pe:keyFilter regEx="/[a-z0-9_]/i" for="login"/>
 							<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="nomeUsuario, senhaUsuario"/>
 						</div>
 						
 						<div class="form-group">
 							<label for="nomeUsuario">Nome *</label>
-							<input id="nomeUsuario" name="nomeUsuario" type="text" class="form-control" placeholder="Nome" jsf:value="#{usuarioMB.usuario.nome}" jsf:required="true" maxlength="25" />
+							<input id="nomeUsuario" name="nomeUsuario" type="text" class="form-control" placeholder="Nome" jsf:value="#{usuarioMB.usuario.nome}" jsf:required="true" maxlength="25" 
+								jsf:requiredMessage="O campo nome é obrigatório"/>
 						</div>
 						
 						<div class="form-group">
@@ -43,8 +45,8 @@
 						<div class="form-group">
 							<label for="senhaUsuario">Senha *</label>
 							<input id="senhaUsuario" name="senhaUsuario" type="password" class="form-control" placeholder="Senha" 
-								jsf:value="#{usuarioMB.usuario.senhaAplicacao}" 
-								jsf:required="true" maxlength="25" autocomplete="off">
+								jsf:value="#{usuarioMB.usuario.senhaAplicacao}" jsf:required="true" maxlength="25" autocomplete="off" 
+								jsf:requiredMessage="O campo senha é obrigatório">
 								<f:validateLength minimum="6" />
 								<f:validator validatorId="custom.passwordValidator" />
 							</input>
@@ -52,7 +54,8 @@
 						
 						<div class="form-group">
 							<label for="email">E-mail *</label>
-							<input id="email" name="email" type="text" class="form-control" placeholder="Endereço de E-mail" jsf:value="#{usuarioMB.usuario.email}" jsf:required="true" maxlength="40" />
+							<input id="email" name="email" type="text" class="form-control" placeholder="Endereço de E-mail" jsf:value="#{usuarioMB.usuario.email}" 
+								jsf:required="true" maxlength="40" jsf:requiredMessage="O campo e-mail é obrigatório"/>
 							<pe:keyFilter regEx="/[a-z0-9_\.\-@]/i" for="email"/>
 						</div>
 					</div>

@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "AUDITORIA")
@@ -33,8 +35,13 @@ public class Auditoria implements Serializable {
 	private String descricao;
 	
 	@Column(name = "DATA_ACAO")
+	@Temporal(value=TemporalType.DATE)
 	private Date dataAcao;
 	
+	@Column(name = "HORARIO_ACAO")
+	@Temporal(value=TemporalType.TIME)
+	private Date horarioAcao;
+
 	@Column(name = "IP")
 	private String ip;
 
@@ -84,5 +91,13 @@ public class Auditoria implements Serializable {
 
 	public void setIp(String ip) {
 		this.ip = ip;
+	}
+	
+	public Date getHorarioAcao() {
+		return horarioAcao;
+	}
+
+	public void setHorarioAcao(Date horarioAcao) {
+		this.horarioAcao = horarioAcao;
 	}
 }

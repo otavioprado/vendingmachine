@@ -35,6 +35,10 @@ public class Permissao implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)  
 	@JoinColumn(name = "DEPENDENCIA_ID", nullable = true)
 	private Permissao dependencia;
+	
+	@NotNull
+	@Column(name = "IND_ATRIB_ANY_PERFIL")
+	private Boolean indAtribAnyPerfil;
 
 	public Long getId() {
 		return id;
@@ -67,6 +71,14 @@ public class Permissao implements Serializable {
 	public void setDependencia(Permissao dependencia) {
 		this.dependencia = dependencia;
 	}
+	
+	public Boolean getIndAtribAnyPerfil() {
+		return indAtribAnyPerfil;
+	}
+
+	public void setIndAtribAnyPerfil(Boolean indAtribAnyPerfil) {
+		this.indAtribAnyPerfil = indAtribAnyPerfil;
+	}
 
 	@Override
 	public int hashCode() {
@@ -75,6 +87,7 @@ public class Permissao implements Serializable {
 		result = prime * result + ((dependencia == null) ? 0 : dependencia.hashCode());
 		result = prime * result + ((descricao == null) ? 0 : descricao.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((indAtribAnyPerfil == null) ? 0 : indAtribAnyPerfil.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		return result;
 	}
@@ -102,6 +115,11 @@ public class Permissao implements Serializable {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
+			return false;
+		if (indAtribAnyPerfil == null) {
+			if (other.indAtribAnyPerfil != null)
+				return false;
+		} else if (!indAtribAnyPerfil.equals(other.indAtribAnyPerfil))
 			return false;
 		if (nome == null) {
 			if (other.nome != null)
