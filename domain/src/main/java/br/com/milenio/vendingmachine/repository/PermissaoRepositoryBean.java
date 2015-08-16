@@ -26,4 +26,14 @@ public class PermissaoRepositoryBean extends AbstractVendingMachineRepositoryBea
 		
 		return query.getResultList();
 	}
+
+	@Override
+	public List<Permissao> getPermissoesAdministrativasRestritas() {
+		EntityManager em = getEntityManager();
+		
+		TypedQuery<Permissao> query = em.createQuery("SELECT perm FROM Permissao perm WHERE perm.indAtribAnyPerfil = :indAtribAnyPerfil", Permissao.class);
+		query.setParameter("indAtribAnyPerfil", Boolean.valueOf(false));
+		
+		return query.getResultList();
+	}
 }

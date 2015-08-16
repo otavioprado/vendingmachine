@@ -68,9 +68,10 @@
 
 					<div class="col-lg-4">
 						<div class="form-group">
-							<label for="ip">IP</label><input id="ip" name="ip" type="text" class="form-control"
+							<label for="ip">IP</label>
+							<input id="ipUsuario" name="ipUsuario" type="text" class="form-control"
 								placeholder="Endereço de IP" jsf:value="#{auditoriaMB.ip}" maxlength="15" />
-							<pe:keyFilter regEx="/[0-9\.\]/i" for="ip" />
+							<pe:keyFilter regEx="/[0-9.]/i" for="ipUsuario" />
 						</div>
 					</div>
 

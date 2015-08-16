@@ -1,5 +1,6 @@
 package br.com.milenio.vendingmachine.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -36,7 +37,13 @@ public class AtividadeServiceBean implements AtividadeService {
 	}
 
 	@Override
-	public List<Atividade> buscarAtividadesAgendadas(String login) {
-		return atividadeRepository.findAtividadesUsuarioByLogin(login);
+	public List<Atividade> buscarAtividadesAgendadas(String login, Date data) throws CadastroInexistenteException {
+		List<Atividade> atividades = atividadeRepository.findAtividadesUsuarioByLoginDate(login, data);
+		
+		if(atividades == null || atividades.isEmpty()) {
+			throw new CadastroInexistenteException("Não existe nenhum agendamento cadastrado para hoje.");
+		}
+		
+		return atividades;
 	}
 }

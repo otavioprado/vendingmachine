@@ -13,6 +13,7 @@
 
 	<context:component-scan base-package="br.com.milenio.vendingmachine.security.spring" />
 
+	<security:http pattern="/rest/**" security="none" />
 	<security:http pattern="/resources/**" security="none" />
 	<security:http pattern="/login.xhtml" security="none" />
 	<security:http pattern="/javax.faces.resource/**" security="none" />

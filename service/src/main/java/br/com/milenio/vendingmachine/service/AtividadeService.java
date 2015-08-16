@@ -1,5 +1,6 @@
 package br.com.milenio.vendingmachine.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Local;
@@ -11,5 +12,5 @@ import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 public interface AtividadeService {
 	public void cadastrarAtividade(Atividade atividade) throws CadastroInexistenteException;
 
-	public List<Atividade> buscarAtividadesAgendadas(String login);
+	public List<Atividade> buscarAtividadesAgendadas(String login, Date data) throws CadastroInexistenteException;
 }

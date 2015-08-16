@@ -6,11 +6,15 @@ import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import br.com.milenio.vendingmachine.domain.model.Auditoria;
 import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
+import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.service.AuditoriaService;
 
 @Named
@@ -27,12 +31,19 @@ public class AuditoriaMB implements Serializable {
 	@EJB
 	AuditoriaService auditoriaService;
 	
+	@Inject
+	private FacesContext ctx;
+	
 	public List<Auditoria> getLstAuditoria() {
 		return lstAuditoria;
 	}
 	
 	public void consultarAcoes() {
-		lstAuditoria = auditoriaService.buscar(usuario, dataAcao, ip, perfilId);
+		try {
+			lstAuditoria = auditoriaService.buscar(usuario, dataAcao, ip, perfilId);
+		} catch (CadastroInexistenteException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
+		}
 		
 		 usuario = new UsuarioSistema();
 		 perfilId = null;

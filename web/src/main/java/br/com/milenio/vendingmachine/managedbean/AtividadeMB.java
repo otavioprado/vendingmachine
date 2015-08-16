@@ -51,6 +51,7 @@ public class AtividadeMB implements Serializable {
 	private List<UsuarioSistema> listUsuarios = new ArrayList<UsuarioSistema>();
 	private String login;
 	private Long perfilId;
+	private List<Atividade> lstAtividade;
 
 	private Calendar calendar = Calendar.getInstance();
 
@@ -143,10 +144,14 @@ public class AtividadeMB implements Serializable {
 		context.execute("PF('dlgConsultaUsuario').show();");
 	}
 	
-	public List<Atividade> solicitarAtividadesAgendadas() {
+	public void solicitarAtividadesAgendadas() {
 		String login = Seguranca.getLoginUsuarioLogado();
 		
-		return atividadeService.buscarAtividadesAgendadas(login);
+		try {
+			lstAtividade = atividadeService.buscarAtividadesAgendadas(login, new Date());
+		} catch (CadastroInexistenteException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
+		}
 	}
 	
 	public Date getTodayDate() {
@@ -194,5 +199,14 @@ public class AtividadeMB implements Serializable {
 
 	public void setAtividade(Atividade atividade) {
 		this.atividade = atividade;
+	}
+	
+	public List<Atividade> getLstAtividade() {
+		
+		return lstAtividade;
+	}
+
+	public void setLstAtividade(List<Atividade> lstAtividade) {
+		this.lstAtividade = lstAtividade;
 	}
 }

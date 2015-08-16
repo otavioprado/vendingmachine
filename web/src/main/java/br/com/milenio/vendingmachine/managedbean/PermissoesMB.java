@@ -79,6 +79,10 @@ public class PermissoesMB implements Serializable {
 			return;
 		}
 		
+		if("ADMINISTRADOR".equals(perfilSelecionado.getNome())) {
+			permissoesSelecionadas.addAll(permissaoRepository.getPermissoesAdministrativasRestritas());
+		}
+		
 		perfilSelecionado.setPermissoes(permissoesSelecionadas);
 		perfilRepository.merge(perfilSelecionado);
 		
