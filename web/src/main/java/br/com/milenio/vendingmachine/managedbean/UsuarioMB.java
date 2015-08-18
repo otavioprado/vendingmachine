@@ -88,7 +88,7 @@ public class UsuarioMB implements Serializable {
 			auditoria.setDataAcao(new Date());
 			auditoria.setTitulo("Cadastro");
 			auditoria.setDescricao("Cadastrou o usuário " + usuario.getLogin());
-			auditoria.setUsuario(usuario);
+			auditoria.setUsuario(Seguranca.getUsuarioLogado());
 			auditoria.setIp(request.getRemoteAddr());
 			auditoriaService.cadastrarNovaAcao(auditoria);
 			

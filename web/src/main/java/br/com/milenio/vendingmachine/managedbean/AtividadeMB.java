@@ -52,6 +52,7 @@ public class AtividadeMB implements Serializable {
 	private String login;
 	private Long perfilId;
 	private List<Atividade> lstAtividade;
+	private Date data;
 
 	private Calendar calendar = Calendar.getInstance();
 
@@ -122,7 +123,7 @@ public class AtividadeMB implements Serializable {
 		Auditoria auditoria = new Auditoria();
 		auditoria.setDataAcao(new Date());
 		auditoria.setTitulo("Cadastro");
-		auditoria.setDescricao("Cadastrou a atividade " + atividade.getTitulo());
+		auditoria.setDescricao("Cadastrou a atividade " + atividade.getTitulo() + " para o usuário " + atividade.getUsuario().getLogin());
 		auditoria.setUsuario(Seguranca.getUsuarioLogado());
 		auditoria.setIp(request.getRemoteAddr());
 		auditoriaService.cadastrarNovaAcao(auditoria);
@@ -152,6 +153,10 @@ public class AtividadeMB implements Serializable {
 		} catch (CadastroInexistenteException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
 		}
+	}
+	
+	public void consultarAtividades() {
+		lstAtividade = atividadeService.buscarAtividadesComFiltro(login, perfilId, data);
 	}
 	
 	public Date getTodayDate() {
@@ -208,5 +213,13 @@ public class AtividadeMB implements Serializable {
 
 	public void setLstAtividade(List<Atividade> lstAtividade) {
 		this.lstAtividade = lstAtividade;
+	}
+	
+	public Date getData() {
+		return data;
+	}
+
+	public void setData(Date data) {
+		this.data = data;
 	}
 }

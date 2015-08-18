@@ -34,10 +34,10 @@
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user"/>Usuários<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_USUARIO') eq true}">
-								<li><a href="#{request.contextPath}/admin/usuario.xhtml">Cadastrar</a></li>
+								<li class="dropdown #{view.viewId eq '/admin/usuario.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/usuario.xhtml">Cadastrar</a></li>
 							</c:if>
 							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CONS_USUARIO') eq true}">
-								<li><a href="#{request.contextPath}/admin/consultaUsuario.xhtml">Consultar</a></li>
+								<li class="dropdown #{view.viewId eq '/admin/consultaUsuario.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/consultaUsuario.xhtml">Consultar</a></li>
 							</c:if>
 			            </ul>
 		            </li>
@@ -55,8 +55,11 @@
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-book"/>Atividade<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_ATIVIDADE') eq true}">
-								<li class="dropdown #{view.viewId eq '/admin/agendar_atividade.xhtml' ? 'active' : ''}">
-									<li class="#{view.viewId eq '/admin/agendar_atividade.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/agendar_atividade.xhtml">Agendar</a></li>
+								<li class="dropdown #{view.viewId eq '/admin/agendar_atividade.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/agendar_atividade.xhtml">Agendar</a></li>
+							</c:if>
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CONS_ATIVIDADE') eq true}">
+								<li class="dropdown #{view.viewId eq '/admin/consultarAtividade.xhtml' ? 'active' : ''}">
+									<li class="#{view.viewId eq '/admin/consultarAtividade.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/consultarAtividade.xhtml">Consultar</a></li>
 								</li>
 							</c:if>
 						</ul>

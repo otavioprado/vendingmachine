@@ -7,9 +7,11 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import br.com.milenio.vendingmachine.domain.model.Atividade;
+import br.com.milenio.vendingmachine.domain.model.Perfil;
 import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.repository.AtividadeRepository;
+import br.com.milenio.vendingmachine.repository.PerfilRepository;
 import br.com.milenio.vendingmachine.repository.UsuarioSistemaRepository;
 
 @Stateless
@@ -20,6 +22,9 @@ public class AtividadeServiceBean implements AtividadeService {
 	
 	@EJB
 	private UsuarioService usuarioService;
+	
+	@EJB
+	private PerfilRepository perfilRepository;
 	
 	@EJB
 	private UsuarioSistemaRepository usuarioSistemaRepository;
@@ -45,5 +50,18 @@ public class AtividadeServiceBean implements AtividadeService {
 		}
 		
 		return atividades;
+	}
+
+	@Override
+	public List<Atividade> buscarAtividadesComFiltro(String login, Long perfilId, Date data) {
+		Perfil perfil = null;
+		
+		if(perfilId != null) {
+			perfil = perfilRepository.findById(perfilId);
+		}
+		
+		List<Atividade> lstAtividade = atividadeRepository.buscarAtividadesComFiltro(login, perfil, data);
+		
+		return lstAtividade;
 	}
 }

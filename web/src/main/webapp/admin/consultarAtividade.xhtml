@@ -1,0 +1,150 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;"> 
+]>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    template="layoutLogado.xhtml">
+    
+   	<ui:define name="script">
+		<h:outputScript name="js/datepicker-pt-BR.js" />
+
+		<script>
+			$(function() {
+				$("#dataAgendamento").datepicker($.datepicker.regional["pt-BR"]);
+			});
+		</script>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<p:panel id="basic" header="Filtro de pesquisa de atividades" style="margin-bottom:20px">
+			<h:form prependId="false">
+				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="row">
+					
+					<div class="col-lg-4">	
+						<div class="form-group">
+							<label for="login">Login do usuário</label>
+							<input id="login" name="login" type="text" class="form-control" placeholder="Login" jsf:value="#{atividadeMB.login}" />
+							<pe:keyFilter regEx="/[a-zA-Z0-9_]/i" for="login"/>			 
+						</div>
+					</div>
+					
+					<div class="col-lg-4">	
+						<div class="form-group">
+							<label for="perfil">Perfil</label>
+							<h:selectOneMenu id="perfil" value="#{atividadeMB.perfilId}" styleClass="form-control">
+				                <f:selectItem itemLabel="[Selecione]" itemValue="" noSelectionOption="true" />
+				                <f:selectItem itemLabel="Administrador" itemValue="1" noSelectionOption="false" />
+				                <f:selectItem itemLabel="Gestor" itemValue="2" noSelectionOption="false" />
+				                <f:selectItem itemLabel="Gerente" itemValue="3" noSelectionOption="false" />
+				                <f:selectItem itemLabel="Operador" itemValue="4" noSelectionOption="false" />
+			            	</h:selectOneMenu>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="dataAgendamento">Data do agendamento</label>
+							<h:inputText id="dataAgendamento" value="#{atividadeMB.data}"
+								styleClass="form-control" maxlength="10">
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+							</h:inputText>
+						</div>
+					</div>
+					
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandLink id="btn-signup" class="btn btn-primary" actionListener="#{atividadeMB.consultarAtividades}" update="table-users" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-search"></i>&nbsp;Pesquisar&nbsp;
+							</h:commandLink>
+						</div>
+					</div>
+				</div>
+			</h:form>
+			<c:if test="${not empty atividadeMB.lstAtividade}">
+			
+					<h:form prependId="false">
+						<p:dataTable tableStyleClass="table-hover" id="table-users" var="atividade" value="#{atividadeMB.lstAtividade}" rows="10" paginator="true" paginatorPosition="bottom"
+							paginatorAlwaysVisible="false" rowsPerPageTemplate="10,15,20,25,30">
+							<h:inputHidden id="idAtividade" value="#{atividade.id}" />
+							
+							<p:column headerText="Login">
+								<h:outputText id="userLogin" value="#{atividade.usuario.login}" />
+							</p:column>
+							
+							<p:column headerText="Perfil">
+								<h:outputText id="userPerfil" value="#{atividade.usuario.perfil.nome}" />
+			            	</p:column>
+							
+							<p:column headerText="Data da ação">
+								<h:outputText id="dataDoOcorrido" value="#{atividade.dataAgendamento}" >
+									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+								</h:outputText>
+							</p:column>
+							
+							<p:column headerText="Descrição">
+								<h:outputText id="descricao" value="#{atividade.texto}" />
+							</p:column>
+							
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EDT_ATIVIDADE') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_ATIVIDADE') eq true}">
+								<p:column style="width:128px; text-align: center" headerText="Ações">
+						            <c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EDT_ATIVIDADE') eq true}">
+							            <p:button icon="ui-icon-pencil" title="Editar" outcome="editar_usuario.xhtml">
+											<f:param name="idAtividade" value="#{atividade.id}" />
+										</p:button>
+									</c:if>
+									
+									<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_ATIVIDADE') eq true}">
+										<p:commandButton onclick="PF('dlgExcluir').show();" icon="ui-icon-trash" title="Excluir">
+											<f:setPropertyActionListener value="#{atividade.id}" target="#{atividadeMB.idAtividade}" />
+							            </p:commandButton>
+						            </c:if>
+								</p:column>
+							</c:if>
+							
+						</p:dataTable>
+					</h:form>
+			</c:if>
+		</p:panel>
+		
+		<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_ATIVIDADE') eq true}">
+			<h:form prependId="false">
+				<p:dialog widgetVar="dlgExcluir" width="450" showHeader="false" resizable="false" modal="true">
+					<div class="form-group">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label for="nome">Tem certeza que deseja excluir esta atividade? Essa operação não poderá ser desfeita!</label>
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="form-group">
+									<h:commandLink id="btn-bloquear" class="btn btn-primary" action="#{atividadeMB.excluirUsuario}" style="width: 100%; color:white;">
+										<i class="glyphicon glyphicon-lock"></i>&nbsp;Excluir&nbsp;
+									</h:commandLink>
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="form-group">
+									<h:commandLink id="btn-bloq-cancel" class="btn btn-danger" onclick="PF('dlgExcluir').hide();" style="width: 100%; color:white;" type="button" immediate="true">
+										<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+									</h:commandLink>
+								</div>
+							</div>
+						</div>
+					</div>
+				</p:dialog>
+			</h:form>
+		</c:if>
+		
+	</ui:define>
+
+</ui:composition>

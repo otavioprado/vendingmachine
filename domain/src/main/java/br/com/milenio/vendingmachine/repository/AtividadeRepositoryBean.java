@@ -6,8 +6,13 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 
+import com.uaihebert.uaicriteria.UaiCriteria;
+import com.uaihebert.uaicriteria.UaiCriteriaFactory;
+
 import br.com.milenio.vendingmachine.domain.AbstractVendingMachineRepositoryBean;
 import br.com.milenio.vendingmachine.domain.model.Atividade;
+import br.com.milenio.vendingmachine.domain.model.Perfil;
+import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 
 @Stateless(name = "AtividadeRepository")
 public class AtividadeRepositoryBean extends AbstractVendingMachineRepositoryBean<Atividade, Long> 
@@ -33,5 +38,30 @@ public class AtividadeRepositoryBean extends AbstractVendingMachineRepositoryBea
 		
 		return lstAtividades;
 	}
+
+	@Override
+	public List<Atividade> buscarAtividadesComFiltro(String login, Perfil perfil, Date data) {
+		
+		UaiCriteria<Atividade> uaiCriteria = UaiCriteriaFactory.createQueryCriteria(getEntityManager(), Atividade.class);
+		
+		if(login != null && !login.isEmpty()) {
+			uaiCriteria.innerJoin("usuario");
+			uaiCriteria.andStringLike("usuario.login", "%" + login + "%");
+		}
+		
+		if(perfil != null) {
+			uaiCriteria.innerJoin("usuario");
+			uaiCriteria.andEquals("usuario.perfil", perfil);
+		}
+		
+		if(data != null) {
+			uaiCriteria.andEquals("dataAgendamento", data);
+		}
+		
+		List<Atividade> lstAtividades = (List<Atividade>) uaiCriteria.getResultList();
+		
+		return lstAtividades;
+	}
+	
 	
 }

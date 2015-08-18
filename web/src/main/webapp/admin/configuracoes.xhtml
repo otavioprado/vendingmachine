@@ -26,7 +26,7 @@
 						<div class="form-group">
 							<label for="qtdTentAcess">Tentativas de acesso com senha inválida *</label>
 							<input type="number" id="qtdTentAcess" name="qtdTentAcess" jsf:value="#{configuracaoMB.qtdMaxTentAcessSenhaInvalida}" class="form-control" jsf:required="true" max="9" min="1" maxlength="1"/>
-							<pe:keyFilter regEx="^[0-9]{0,1}$" for="qtdTentAcess"/>
+							<pe:keyFilter regEx="/[0-9]{0,1}i/" for="qtdTentAcess"/>
 			        	</div>
 					</div>
 					
