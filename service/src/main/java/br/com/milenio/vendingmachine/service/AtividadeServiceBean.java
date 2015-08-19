@@ -53,15 +53,47 @@ public class AtividadeServiceBean implements AtividadeService {
 	}
 
 	@Override
-	public List<Atividade> buscarAtividadesComFiltro(String login, Long perfilId, Date data) {
+	public List<Atividade> buscarAtividadesComFiltro(String login, Long perfilId, Date data) throws CadastroInexistenteException {
 		Perfil perfil = null;
+		List<Atividade> lstAtividade = null;
 		
 		if(perfilId != null) {
 			perfil = perfilRepository.findById(perfilId);
 		}
 		
-		List<Atividade> lstAtividade = atividadeRepository.buscarAtividadesComFiltro(login, perfil, data);
+		if(login == null || login.isEmpty() && perfilId == null && data == null) {
+			lstAtividade = atividadeRepository.getAll();
+			
+			if(lstAtividade == null || lstAtividade.isEmpty()) {
+				throw new CadastroInexistenteException("Não existe nenhuma atividade agendada no sistema.");
+			}
+		}
+		
+		lstAtividade = atividadeRepository.buscarAtividadesComFiltro(login, perfil, data);
+		
+		if(lstAtividade == null || lstAtividade.isEmpty()) {
+			throw new CadastroInexistenteException("Não existe nenhuma atividade agendada no sistema para o filtro informado.");
+		}
 		
 		return lstAtividade;
+	}
+
+	@Override
+	public Atividade excluirAtividade(Long idAtividade) {
+		Atividade atividade = atividadeRepository.findById(idAtividade);
+		
+		atividadeRepository.remove(atividade);
+		
+		return atividade;
+	}
+
+	@Override
+	public Atividade findById(Long idAtividade) {
+		return atividadeRepository.findById(idAtividade);
+	}
+
+	@Override
+	public void editarUsuario(Atividade atividade) {
+		atividadeRepository.merge(atividade);
 	}
 }

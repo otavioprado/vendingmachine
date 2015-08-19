@@ -1,5 +1,6 @@
 package br.com.milenio.vendingmachine.managedbean;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,12 +10,14 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.primefaces.context.RequestContext;
@@ -33,6 +36,9 @@ import br.com.milenio.vendingmachine.service.UsuarioService;
 public class AtividadeMB implements Serializable {
 	private static final long serialVersionUID = -7422829646714382705L;
 	
+	@Inject
+	private Logger logger;
+	
 	@EJB
 	private UsuarioService usuarioService;
 	
@@ -41,6 +47,9 @@ public class AtividadeMB implements Serializable {
 	
 	@Inject
 	private FacesContext ctx;
+	
+	@Inject
+	private ExternalContext external;
 	
 	@Inject
 	private HttpServletRequest request;
@@ -53,10 +62,12 @@ public class AtividadeMB implements Serializable {
 	private Long perfilId;
 	private List<Atividade> lstAtividade;
 	private Date data;
+	private Long idAtividade;
 
 	private Calendar calendar = Calendar.getInstance();
 
 	private Atividade atividade = new Atividade();
+	private boolean carregarPagina = true;
 	
 	public void consultarUsuario() {
 		try {
@@ -131,6 +142,13 @@ public class AtividadeMB implements Serializable {
 		atividade = new Atividade();
 	}
 	
+	public void carregarDadosAtividadeParaEdicao() {
+		if(carregarPagina) {
+			atividade = atividadeService.findById(idAtividade);
+		}
+		carregarPagina = false;
+	}
+	
 	public void fecharDialog() {
 		login = null;
 		perfilId = null;
@@ -145,6 +163,11 @@ public class AtividadeMB implements Serializable {
 		context.execute("PF('dlgConsultaUsuario').show();");
 	}
 	
+	public void abrirDialogExcluir() {
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("PF('dlgExcluir').show();");
+	}
+	
 	public void solicitarAtividadesAgendadas() {
 		String login = Seguranca.getLoginUsuarioLogado();
 		
@@ -155,8 +178,60 @@ public class AtividadeMB implements Serializable {
 		}
 	}
 	
-	public void consultarAtividades() {
-		lstAtividade = atividadeService.buscarAtividadesComFiltro(login, perfilId, data);
+	public void editarAtividade() {
+		logger.debug("Tentando realizar alterações no agendamento " + atividade.getTitulo());
+		
+		atividadeService.editarUsuario(atividade);
+		
+		// Sucesso - Exibe mensagem de edição realizada com sucesso
+		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "As alterações no agendamento " + atividade.getTitulo() + " foram salvas com sucesso.", null));
+		logger.info("As alterações no agendamento " + atividade.getTitulo() + " foram salvas com sucesso.");
+		
+		// Processo de auditoria
+		Auditoria auditoria = new Auditoria();
+		auditoria.setDataAcao(new Date());
+		auditoria.setTitulo("Edição");
+		auditoria.setDescricao("Editou a atividade " + atividade.getTitulo());
+		auditoria.setUsuario(Seguranca.getUsuarioLogado());
+		auditoria.setIp(request.getRemoteAddr());
+		auditoriaService.cadastrarNovaAcao(auditoria);
+	}
+	
+	public void consultarAtividades(boolean exibirMensagem) {
+		try {
+			lstAtividade = atividadeService.buscarAtividadesComFiltro(login, perfilId, data);
+		} catch (CadastroInexistenteException e) {
+			if(lstAtividade != null && !lstAtividade.isEmpty()) {
+				lstAtividade.clear();
+			}
+			
+			if(exibirMensagem) {
+				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
+			}
+		}
+	}
+	
+	public void excluirAtividadePelaEdicao() {
+		Atividade atv = atividadeService.excluirAtividade(idAtividade);
+		
+		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Atividade " + atv.getTitulo() + " excluída com sucesso", null));
+		
+		try {
+			external.getFlash().setKeepMessages(true);
+			external.redirect(request.getContextPath() + "/admin/consultarAtividade.xhtml");
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.error("Erro ao tentar redirecionar para a página " + request.getContextPath() + "/consultarAtividade.xhtml");
+		}
+	}
+	
+	public void excluirAtividade() {
+		Atividade atv = atividadeService.excluirAtividade(idAtividade);
+		
+		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Atividade " + atv.getTitulo() + " excluída com sucesso", null));
+		
+		// Recarrega a listagem de atividades
+		consultarAtividades(false);
 	}
 	
 	public Date getTodayDate() {
@@ -221,5 +296,13 @@ public class AtividadeMB implements Serializable {
 
 	public void setData(Date data) {
 		this.data = data;
+	}
+	
+	public Long getIdAtividade() {
+		return idAtividade;
+	}
+
+	public void setIdAtividade(Long idAtividade) {
+		this.idAtividade = idAtividade;
 	}
 }

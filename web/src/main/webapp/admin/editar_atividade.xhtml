@@ -11,45 +11,19 @@
     xmlns:pe="http://primefaces.org/ui/extensions"
     template="layoutLogado.xhtml">
     
-    <ui:define name="script">
-    	<script>
-			PrimeFaces.locales['pt'] = {
-				    closeText: 'Fechar',
-				    prevText: 'Anterior',
-				    nextText: 'Próximo',
-				    currentText: 'Começo',
-				    monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
-				    monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun', 'Jul','Ago','Set','Out','Nov','Dez'],
-				    dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
-				    dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],
-				    dayNamesMin: ['D','S','T','Q','Q','S','S'],
-				    weekHeader: 'Semana',
-				    firstDay: 0,
-				    isRTL: false,
-				    showMonthAfterYear: false,
-				    yearSuffix: '',
-				    timeOnlyTitle: 'Só Horas',
-				    timeText: 'Tempo',
-				    hourText: 'Hora',
-				    minuteText: 'Minuto',
-				    secondText: 'Segundo',
-				    ampm: false,
-				    month: 'Mês',
-				    week: 'Semana',
-				    day: 'Dia',
-				    allDayText : 'Todo o Dia'
-				};
-		</script>
-	</ui:define>
+    <f:metadata>
+	    <f:viewParam name="idAtividade" value="#{atividadeMB.idAtividade}" />
+	    <f:event type="preRenderView" listener="#{atividadeMB.carregarDadosAtividadeParaEdicao}"/>
+	</f:metadata>
 
 	<ui:define name="conteudo">
-		<p:panel id="basic" header="Agendar atividade" style="margin-bottom:20px">
-			<h:form id="formPrincipal" prependId="false">
+		<h:form prependId="false">
+			<p:panel id="basic" header="Editar atividade" style="margin-bottom:20px">
 				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
 				<div class="row">
 					<div class="col-md-12">
 						<p:fieldset style="margin-bottom:20px" styleClass="">
-							<h:inputHidden id="idUsuario" value="#{atividadeMB.atividade.usuario.id}" />
+							<h:inputHidden id="idAtividade" value="#{atividadeMB.atividade.id}" />
 							<legend>Usuário</legend>
 							<div class="col-lg-3">
 								<div class="form-group">
@@ -100,7 +74,7 @@
 					<div class="col-md-6">
 						<p:fieldset style="margin-bottom:20px" styleClass="">
 							<div class="form-group">
-								<label for="login">Título *</label>
+								<label for="titulo">Título *</label>
 								<p:inputText id="titulo" name="titulo" type="text" class="form-control" placeholder="Título" value="#{atividadeMB.atividade.titulo}" required="true" maxlength="25" />
 								<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="titulo"/>
 							</div>
@@ -122,32 +96,73 @@
 		        			</div>
 	        			</p:fieldset>
         			</div>
-        			
-        			<div class="col-lg-12">
+				</div>
+				<div class="row">
+					<div class="col-lg-12">
 						<div class="form-group">
 							<div class="required">* Campos obrigatórios</div>
 						</div>
 					</div>
-				</div>
-	     		<div class="row">	
+					
 					<div class="col-md-3">
 						<div class="form-group">
-							<h:commandLink id="btn-signup" class="btn btn-primary" actionListener="#{atividadeMB.solicitarCadastroAtividade}" update="table-users, data" style="width: 100%; color:white;">
-								<i class="glyphicon glyphicon-saved"></i>&nbsp;Cadastrar agendamento&nbsp;
+							<h:commandLink id="btn-signup" class="btn btn-primary" action="#{atividadeMB.editarAtividade}" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-saved"></i>&nbsp;Salvar&nbsp;
 							</h:commandLink>
 						</div>
 					</div>
+					
 					<div class="col-md-3">
 						<div class="form-group">
-							<a id="btn-cancel" class="btn btn-warning" href="#{request.contextPath}/admin/tela_inicial.xhtml" style="width: 100%; color:white;">
+							<a id="btn-cancel" class="btn btn-warning" href="#{request.contextPath}/admin/consultarAtividade.xhtml" style="width: 100%; color:white;">
 								<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
 							</a>
 						</div>
 					</div>
+					
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandLink id="btn-excluir-ativ" class="btn btn-danger" actionListener="#{atividadeMB.abrirDialogExcluir}" style="width: 100%; color:white;" immediate="true">
+								<i class="glyphicon glyphicon-remove"></i>&nbsp;Excluir&nbsp;
+							</h:commandLink>
+						</div>
+					</div>
 				</div>
-			</h:form>
-		</p:panel>
+			</p:panel>
+		</h:form>
 		
+		<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_ATIVIDADE') eq true}">
+			<h:form prependId="false">
+				<p:dialog widgetVar="dlgExcluir" width="450" showHeader="false" resizable="false" modal="true">
+					<div class="form-group">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label for="nome">Tem certeza que deseja excluir esta atividade? Essa operação não poderá ser desfeita!</label>
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="form-group">
+									<h:commandLink id="btn-excluir" class="btn btn-primary" action="#{atividadeMB.excluirAtividadePelaEdicao}" style="width: 100%; color:white;">
+										<i class="glyphicon glyphicon-trash"></i>&nbsp;Excluir&nbsp;
+									</h:commandLink>
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="form-group">
+									<h:commandLink id="btn-excluir-cancel" class="btn btn-warning" onclick="PF('dlgExcluir').hide();" style="width: 100%; color:white;" type="button" 
+										immediate="true">
+										<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+									</h:commandLink>
+								</div>
+							</div>
+						</div>
+					</div>
+				</p:dialog>
+			</h:form>
+		</c:if>
 		
 		<p:dialog widgetVar="dlgConsultaUsuario" width="800" showHeader="false" resizable="false" modal="true">
 			<h:form prependId="false">
@@ -215,7 +230,6 @@
 				</div>
 			</h:form>
 		</p:dialog>
-		
 		
 	</ui:define>
 

@@ -14,5 +14,11 @@ public interface AtividadeService {
 
 	public List<Atividade> buscarAtividadesAgendadas(String login, Date data) throws CadastroInexistenteException;
 
-	public List<Atividade> buscarAtividadesComFiltro(String login, Long perfilId, Date data);
+	public List<Atividade> buscarAtividadesComFiltro(String login, Long perfilId, Date data) throws CadastroInexistenteException;
+
+	public Atividade excluirAtividade(Long idAtividade);
+
+	public Atividade findById(Long idAtividade);
+
+	public void editarUsuario(Atividade atividade);
 }
