@@ -71,6 +71,19 @@
 					<li class="#{view.viewId eq '/admin/auditoria.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/auditoria.xhtml"><span class="glyphicon glyphicon-eye-open"/>Auditoria</a></li>
 				</ul>
 			</c:if>
+			<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_CLIENTE') eq true}">
+				<ul class="nav navbar-nav">
+					<li class="dropdown #{view.viewId eq '/admin/cliente.xhtml' or view.viewId eq '/admin/consultaCliente.xhtml'? 'active' : ''}">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user"/>Cliente<span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_CLIENTE') eq true}">
+								<li class="#{view.viewId eq '/admin/cliente.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/cliente.xhtml"><span class="glyphicon glyphicon-user"/>Cadastrar</a></li>
+							</c:if>
+						</ul>
+					</li>
+				</ul>
+			</c:if>
+
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">

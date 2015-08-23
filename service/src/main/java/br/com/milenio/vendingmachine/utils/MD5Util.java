@@ -25,6 +25,10 @@ public class MD5Util {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(criptografar("gudiao"));
+		System.out.println("gudiao = " + criptografar("gudiao"));
+		System.out.println("administrador = " + criptografar("administrador"));
+		System.out.println("gestor = " + criptografar("gestor"));
+		System.out.println("gerente = " + criptografar("gerente"));
+		System.out.println("operador = " + criptografar("operador"));
 	}
 }

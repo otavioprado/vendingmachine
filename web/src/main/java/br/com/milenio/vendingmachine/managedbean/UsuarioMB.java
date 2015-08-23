@@ -61,7 +61,15 @@ public class UsuarioMB implements Serializable {
 	 * @return
 	 */
 	public String cadastrarUsuario() {
-		logger.debug("Tentando realizar o cadastro do usuï¿½rio " + usuario.getNome());
+		logger.debug("Tentando realizar o cadastro do usuário " + usuario.getNome());
+		
+		String login = usuario.getLogin() != null ? usuario.getLogin().trim() : "";
+		String nome = usuario.getNome() != null ? usuario.getNome().trim() : "";
+		
+		if(login.isEmpty() || nome.isEmpty()) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Os campos login e nome não podem conter apenas espaços em branco.", null));
+			return "";
+		}
 		
 		// Registra o usuario com a data atual
 		usuario.setDataCadastro(new Date());
@@ -94,6 +102,7 @@ public class UsuarioMB implements Serializable {
 			
 		} catch(ConteudoJaExistenteNoBancoDeDadosException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+			logger.info(e.getMessage());
 		}
 		
 		usuario = new UsuarioSistema();
@@ -104,6 +113,14 @@ public class UsuarioMB implements Serializable {
 	
 	public void editarUsuario() {
 		logger.debug("Tentando realizar alterações no cadastro do usuário " + usuario.getNome());
+		
+		String login = usuario.getLogin() != null ? usuario.getLogin().trim() : "";
+		String nome = usuario.getNome() != null ? usuario.getNome().trim() : "";
+		
+		if(login.isEmpty() || nome.isEmpty()) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Os campos login e nome não podem conter apenas espaços em branco.", null));
+			return;
+		}
 
 		EmailValidator validator = EmailValidator.getInstance();
 		if (!validator.isValid(usuario.getEmail())) {

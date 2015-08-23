@@ -102,8 +102,16 @@ public class AtividadeMB implements Serializable {
 	}
 	
 	public void solicitarCadastroAtividade() {
+		
+		String titulo = atividade.getTitulo() != null ? atividade.getTitulo().trim() : "";
+		String texto = atividade.getTexto() != null ? atividade.getTexto().trim() : "";
+		
+		if(texto.isEmpty() || titulo.isEmpty()) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Os campos título e descrição não podem conter apenas espaços em branco.", null));
+			return;
+		}
 
-		if(atividade.getTexto() != null & atividade.getTexto().length() > 350) {
+		if(texto != null & texto.length() > 350) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "A descrição da atividade não pode ser superior a 350 caracteres.", null));
 			return;
 		}
@@ -181,7 +189,20 @@ public class AtividadeMB implements Serializable {
 	public void editarAtividade() {
 		logger.debug("Tentando realizar alterações no agendamento " + atividade.getTitulo());
 		
-		atividadeService.editarUsuario(atividade);
+		String titulo = atividade.getTitulo() != null ? atividade.getTitulo().trim() : "";
+		String texto = atividade.getTexto() != null ? atividade.getTexto().trim() : "";
+		
+		if(texto.isEmpty() || titulo.isEmpty()) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Os campos título e descrição não podem conter apenas espaços em branco.", null));
+			return;
+		}
+		
+		try {
+			atividadeService.editarUsuario(atividade);
+		} catch (CadastroInexistenteException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+			return;
+		}
 		
 		// Sucesso - Exibe mensagem de edição realizada com sucesso
 		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "As alterações no agendamento " + atividade.getTitulo() + " foram salvas com sucesso.", null));

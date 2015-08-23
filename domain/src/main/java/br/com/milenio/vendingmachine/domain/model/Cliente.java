@@ -2,16 +2,13 @@ package br.com.milenio.vendingmachine.domain.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -19,52 +16,143 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "CLIENTE")
-class Cliente implements Serializable {
-	
+public class Cliente implements Serializable {
+	private static final long serialVersionUID = -1740798416648579794L;
+
 	@Id
 	@Column(name = "ID_CLIENTE")
 	@GeneratedValue
 	private Long idCliente;
 	
-	private String razaoSocial;
+	@Column(name = "CODIGO")
+	private String codigo;
 	
 	@Column(name = "NOME_FANTASIA")
 	private String nomeFantasia;
 	
-	@Column(name = "CPF_CNPJ")
-	private String cpfCnpj;
+	@Column(name = "TELEFONE_FIXO")
+	private String telefoneFixo;
 	
-	@Column(name = "ATIVIDADE")
-	private String atividade;
-	
-	@Column(name = "CONTATO")
-	private String contato;
-	
-	@Column(name = "TELEFONE")
-	private String telefone;
-	
-	@Column(name = "CELULAR")
-	private String celular;
+	@NotNull
+	@Column(name= "CLIENTE_DESDE")
+	@Temporal(value=TemporalType.DATE)
+	private Date clienteDesde;
 	
 	@Column(name = "EMAIL")
 	private String email;
 	
-	@Column(name = "STATUS")
-	private String status;
+	@Column(name = "CPF_CNPJ")
+	private String cpfCnpj;
 	
-	@Column(name = "CLIENTE_DESDE")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date clienteDesde;
-	
-	@Column(name = "DETALHES_INFORMATIVOS")
-	private String detalhesInformativos;
+	@Column(name = "FISICA_JURIDICA")
+	private String fisicaJuridica;
 	
 	@Column(name = "SITE")
 	private String site;
 	
-	@Column(name = "REPRESENTANTE_COMERCIAL")
-	private String representanteComercial;
+	@Column(name = "NOME_CONTATO")
+	private String nomeContato;
 	
+	@Column(name = "CELULAR")
+	private String celular;
 	
+	@ManyToOne
+	@JoinColumn(name= "ENDERECO_ID")
+	private Endereco endereco = new Endereco();
+	
+	public Long getIdCliente() {
+		return idCliente;
+	}
 
+	public void setIdCliente(Long idCliente) {
+		this.idCliente = idCliente;
+	}
+
+	public String getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+	}
+
+	public String getNomeFantasia() {
+		return nomeFantasia;
+	}
+
+	public void setNomeFantasia(String nomeFantasia) {
+		this.nomeFantasia = nomeFantasia;
+	}
+
+	public String getTelefoneFixo() {
+		return telefoneFixo;
+	}
+
+	public void setTelefoneFixo(String telefoneFixo) {
+		this.telefoneFixo = telefoneFixo;
+	}
+
+	public Date getClienteDesde() {
+		return clienteDesde;
+	}
+
+	public void setClienteDesde(Date clienteDesde) {
+		this.clienteDesde = clienteDesde;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getCpfCnpj() {
+		return cpfCnpj;
+	}
+
+	public void setCpfCnpj(String cpfCnpj) {
+		this.cpfCnpj = cpfCnpj;
+	}
+
+	public String getFisicaJuridica() {
+		return fisicaJuridica;
+	}
+
+	public void setFisicaJuridica(String fisicaJuridica) {
+		this.fisicaJuridica = fisicaJuridica;
+	}
+
+	public String getSite() {
+		return site;
+	}
+
+	public void setSite(String site) {
+		this.site = site;
+	}
+
+	public String getNomeContato() {
+		return nomeContato;
+	}
+
+	public void setNomeContato(String nomeContato) {
+		this.nomeContato = nomeContato;
+	}
+
+	public String getCelular() {
+		return celular;
+	}
+
+	public void setCelular(String celular) {
+		this.celular = celular;
+	}
+
+	public Endereco getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+	}
 }

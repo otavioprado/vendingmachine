@@ -20,5 +20,5 @@ public interface AtividadeService {
 
 	public Atividade findById(Long idAtividade);
 
-	public void editarUsuario(Atividade atividade);
+	public void editarUsuario(Atividade atividade) throws CadastroInexistenteException;
 }

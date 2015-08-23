@@ -74,6 +74,7 @@
 		<security:intercept-url pattern="/admin/agendar_atividade.xhtml" access="hasRole('ROLE_CAD_ATIVIDADE')"/>
 		<security:intercept-url pattern="/admin/auditoria.xhtml" access="hasRole('ROLE_CONS_AUDITORIA')"/>
 		<security:intercept-url pattern="/admin/permissoes.xhtml" access="hasRole('ROLE_EDT_PERMISSOES')"/>
+		<security:intercept-url pattern="/admin/cliente.xhtml" access="hasRole('ROLE_CAD_CLIENTE')"/>
 		<security:intercept-url pattern="/**" access="hasRole('ROLE_USUARIO_LOGADO_PAINEL_ADMIN')"/>
 			 
 		<security:logout logout-url="/j_spring_security_logout"
