@@ -169,7 +169,6 @@ public class UsuarioMB implements Serializable {
 			return;
 		}
 		
-		
 		if (motivoBloqueio != null && motivoBloqueio.length() < 10) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "O campo motivo bloqueio deve conter pelo menos 10 caracteres.", null));
 			return;

@@ -156,6 +156,7 @@ public class UsuarioServiceBean implements UsuarioService {
 	public boolean desbloquearUsuario(Long id) {
 		UsuarioSistema usuario = usuarioSistemaRepository.findById(id);
 		usuario.setIndAtivo(true);
+		usuario.setMotivoBloqueio(null);
 		usuario.setQtdTentativasAcessoInvalido(0);
 		usuarioSistemaRepository.persist(usuario);
 		

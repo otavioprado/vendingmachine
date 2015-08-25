@@ -5,6 +5,9 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 
+import com.uaihebert.uaicriteria.UaiCriteria;
+import com.uaihebert.uaicriteria.UaiCriteriaFactory;
+
 import br.com.milenio.vendingmachine.domain.AbstractVendingMachineRepositoryBean;
 import br.com.milenio.vendingmachine.domain.model.Cliente;
 
@@ -37,5 +40,44 @@ public class ClienteRepositoryBean extends AbstractVendingMachineRepositoryBean<
 		}
 		
 		return null;
+	}
+	
+	public List<Cliente> buscarClientesComFiltro(Cliente cliente) {
+		String codigo = cliente.getCodigo();
+		String fisicaJuridica = cliente.getFisicaJuridica();
+		String cpfCnpj = cliente.getCpfCnpj();
+		String nomeFantasia = cliente.getNomeFantasia();
+		Boolean indAtivo = cliente.getIndAtivo();
+		String email = cliente.getEmail();
+		
+		UaiCriteria<Cliente> uaiCriteria = UaiCriteriaFactory.createQueryCriteria(getEntityManager(), Cliente.class);
+		
+		if(codigo != null && !codigo.isEmpty()) {
+			uaiCriteria.andEquals("codigo", codigo);
+		}
+		
+		if(fisicaJuridica != null && !fisicaJuridica.isEmpty()) {
+			uaiCriteria.andEquals("fisicaJuridica", fisicaJuridica);
+		}
+		
+		if(cpfCnpj != null && !cpfCnpj.isEmpty()) {
+			uaiCriteria.andEquals("cpfCnpj", cpfCnpj);
+		}
+		
+		if(nomeFantasia != null && !nomeFantasia.isEmpty()) {
+			uaiCriteria.andEquals("nomeFantasia", nomeFantasia);
+		}
+		
+		if(indAtivo != null) {
+			uaiCriteria.andEquals("indAtivo", indAtivo);
+		}
+		
+		if(email != null && !email.isEmpty()) {
+			uaiCriteria.andEquals("email", email);
+		}
+		
+		List<Cliente> usuarios = (List<Cliente>) uaiCriteria.getResultList();
+		
+		return usuarios;
 	}
 }

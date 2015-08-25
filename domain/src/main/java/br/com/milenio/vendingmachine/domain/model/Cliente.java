@@ -20,10 +20,10 @@ public class Cliente implements Serializable {
 	private static final long serialVersionUID = -1740798416648579794L;
 
 	@Id
-	@Column(name = "ID_CLIENTE")
+	@Column(name = "ID")
 	@GeneratedValue
-	private Long idCliente;
-	
+	private Long id;
+
 	@Column(name = "CODIGO")
 	private String codigo;
 	
@@ -60,12 +60,18 @@ public class Cliente implements Serializable {
 	@JoinColumn(name= "ENDERECO_ID")
 	private Endereco endereco = new Endereco();
 	
-	public Long getIdCliente() {
-		return idCliente;
+	@Column(name = "IND_ATIVO")
+	private Boolean indAtivo;
+	
+	@Column(name = "MOTIVO_BLOQUEIO")
+	private String motivoBloqueio;
+	
+	public Long getId() {
+		return id;
 	}
 
-	public void setIdCliente(Long idCliente) {
-		this.idCliente = idCliente;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getCodigo() {
@@ -154,5 +160,21 @@ public class Cliente implements Serializable {
 
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
+	}
+
+	public Boolean getIndAtivo() {
+		return indAtivo;
+	}
+
+	public void setIndAtivo(Boolean indAtivo) {
+		this.indAtivo = indAtivo;
+	}
+
+	public String getMotivoBloqueio() {
+		return motivoBloqueio;
+	}
+
+	public void setMotivoBloqueio(String motivoBloqueio) {
+		this.motivoBloqueio = motivoBloqueio;
 	}
 }

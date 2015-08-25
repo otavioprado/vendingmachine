@@ -22,7 +22,7 @@
 				$("#celular").mask("(99) 99999-9999")
 				$("#cep").mask("99999-999")
 				
-				if($("#cpfCnpj").val() == '' &amp;&amp; $("#fisicaJuridica").val() == 0) {
+				if($("#cpfCnpj").val() == '' &amp;&amp; $("#fisicaJuridica").val() == '') {
 					$("#cpfCnpj").prop("readonly", true);
 				}
 			});
@@ -38,7 +38,7 @@
 					$("#cpfCnpj").val('');
 					$("#cpfCnpj").prop("readonly", false);
 					$("#cpfCnpj").mask("99.999.999/9999-99");
-				} else if($("#fisicaJuridica").val() == 0) {
+				} else if($("#fisicaJuridica").val() == '') {
 					$("#cpfCnpj").attr('placeholder', 'CPF/CNPJ')
 					$("#cpfCnpj").prop("readonly", true);
 					$("#cpfCnpj").val('');
@@ -115,7 +115,7 @@
 							<label for="perfil">Física/Jurídica *</label>
 							<h:selectOneMenu id="fisicaJuridica" value="#{clienteMB.cliente.fisicaJuridica}" styleClass="form-control" required="true"
 								onchange="mask()" requiredMessage="O campo física/jurídica é obrigatório">
-				                <f:selectItem itemLabel="[Selecione]" itemValue="0" noSelectionOption="true" />
+				                <f:selectItem itemLabel="[Selecione]" itemValue="" noSelectionOption="true" />
 				                <f:selectItem itemLabel="Pessoa física" itemValue="PF" noSelectionOption="false" />
 				                <f:selectItem itemLabel="Pessoa jurídica" itemValue="PJ" noSelectionOption="false" />
 			            	</h:selectOneMenu>

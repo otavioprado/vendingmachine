@@ -14,9 +14,9 @@ public class Endereco implements Serializable {
 	private static final long serialVersionUID = -6971492763759754776L;
 
 	@Id
-	@Column(name = "ID_ENDERECO")
+	@Column(name = "ID")
 	@GeneratedValue
-	private Long idEndereco;
+	private Long id;
 	
 	@Column(name = "LOGRADOURO")
 	private String logradouro;
@@ -38,13 +38,13 @@ public class Endereco implements Serializable {
 	
 	@Column(name = "BAIRRO")
 	private String bairro;
-
-	public Long getIdEndereco() {
-		return idEndereco;
+	
+	public Long getId() {
+		return id;
 	}
 
-	public void setIdEndereco(Long idEndereco) {
-		this.idEndereco = idEndereco;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getLogradouro() {
