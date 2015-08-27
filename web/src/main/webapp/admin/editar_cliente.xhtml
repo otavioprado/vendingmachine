@@ -9,7 +9,13 @@
     xmlns:jsf="http://xmlns.jcp.org/jsf"
     xmlns:pe="http://primefaces.org/ui/extensions"
     xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:c="http://java.sun.com/jstl/core"
     template="layoutLogado.xhtml">
+    
+	<f:metadata>
+	    <f:viewParam name="clienteId" value="#{clienteMB.cliente.id}" />
+	    <f:event type="preRenderView" listener="#{clienteMB.carregarDadosClienteParaEdicao}"/>
+	</f:metadata>
 
    	<ui:define name="script">
 		<h:outputScript name="js/datepicker-pt-BR.js" />
@@ -55,14 +61,14 @@
 
 	<ui:define name="conteudo">
 		<h:form prependId="false">
-			<p:panel id="basic" header="Cadastrar cliente" style="margin-bottom:20px">
+			<p:panel id="basic" header="Editar cliente" style="margin-bottom:20px">
 				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
 				<div class="row">
 					<div class="col-lg-4">
 						<div class="form-group">
-							<label for="codigo">Código *</label>
+							<label for="codigo">Código</label>
 							<h:inputText id="codigo" name="codigo" pt:placeholder="Código"  styleClass="form-control" value="#{clienteMB.cliente.codigo}" 
-								required="true" maxlength="10" requiredMessage="O campo código é obrigatório"/>
+								required="true" maxlength="10" requiredMessage="O campo código é obrigatório" readonly="true"/>
 							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigo"/>
 						</div>
 					</div>
@@ -128,6 +134,41 @@
 			            	</h:selectOneMenu>
 		            	</div>
 		            </div>
+	            </div>
+		            
+	            <div class="row">
+		            <div class="col-lg-4">
+			            <div class="form-group">
+							<label for="status">Status</label>
+							<h:selectOneMenu id="status" value="#{clienteMB.cliente.indAtivo}" styleClass="form-control" required="true" disabled="true" >
+				                <f:selectItem itemLabel="Ativo" itemValue="true" />
+				                <f:selectItem itemLabel="Bloqueado" itemValue="false" />
+			            	</h:selectOneMenu>
+						</div>
+					</div>
+							
+					<div class="col-lg-4" jsf:rendered="#{clienteMB.cliente.indAtivo eq false? true : false}">
+		            	<div class="form-group">
+							<label for="mtvBloqeio">Motivo bloqueio: </label>
+							<input id="mtvBloqeio" name="mtvBloqeio" type="text" class="form-control" jsf:value="#{clienteMB.cliente.motivoBloqueio}" disabled="disabled"/>
+		            	</div>
+		            </div>
+					
+					<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_BLOQ_CLIENTE') eq true}">
+			            <div class="col-lg-4">
+							<div class="form-group">
+								<label>&nbsp;</label>
+								<button id="btn-bloq" onclick="PF('dlgBloq').show();" class="btn btn-warning" type="button" style="width: 100%; color:white;"
+									jsf:rendered="#{clienteMB.cliente.indAtivo eq true? true : false}">
+									<i class="glyphicon glyphicon-lock"/>&nbsp;Bloquear&nbsp;
+								</button>
+								<h:commandLink id="btn-desbloq" class="btn btn-success" actionListener="#{clienteMB.desbloquearCliente}" style="width: 100%; color:white;" 
+									rendered="#{clienteMB.cliente.indAtivo eq false? true : false}" immediate="true" type="button">
+									<i class="glyphicon glyphicon-check"/>&nbsp;Desbloquear&nbsp;
+								</h:commandLink>
+							</div>
+						</div>
+					</c:if>
 					
 					<div class="col-lg-12">
 						<p:fieldset style="margin-bottom:20px" styleClass="">
@@ -241,8 +282,8 @@
 					
 					<div class="col-md-3">
 						<div class="form-group">
-							<h:commandLink id="btn-signup" class="btn btn-primary" action="#{clienteMB.cadastrar}" style="width: 100%; color:white;">
-								<i class="glyphicon glyphicon-hand-right"></i>&nbsp;Cadastrar&nbsp;
+							<h:commandLink id="btn-signup" class="btn btn-primary" action="#{clienteMB.editar}" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-hand-right"></i>&nbsp;Salvar&nbsp;
 							</h:commandLink>
 						</div>
 					</div>
@@ -254,10 +295,50 @@
 							</a>
 						</div>
 					</div>
-					
 				</div>
 			</p:panel>
 		</h:form>
+		
+		<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_BLOQ_CLIENTE') eq true}">
+			<h:form prependId="false">
+				<p:dialog widgetVar="dlgBloq" width="450" showHeader="false" resizable="false" modal="true">
+					<div class="form-group">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label for="nome">Digite o motivo do bloqueio: *</label>
+									<input id="motivo-bloqueio" name="motivo-bloqueio" type="text" class="form-control" placeholder="Motivo Bloqueio" jsf:value="#{clienteMB.cliente.motivoBloqueio}" jsf:required="true" maxlength="100" />
+									<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="motivo-bloqueio"/>
+								</div>
+							</div>
+							
+							<div class="col-lg-12">
+								<div class="form-group">
+									<div class="required">* Campo obrigatório</div>
+								</div>
+							</div>
+								
+							<div class="col-md-6">
+								<div class="form-group">
+									<h:commandLink id="btn-bloquear" class="btn btn-primary" action="#{clienteMB.bloquearCliente}" style="width: 100%; color:white;">
+										<i class="glyphicon glyphicon-lock"></i>&nbsp;Bloquear&nbsp;
+									</h:commandLink>
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="form-group">
+									<h:commandLink id="btn-bloq-cancel" class="btn btn-warning" onclick="PF('dlgBloq').hide();" style="width: 100%; color:white;" type="button" immediate="true">
+										<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+									</h:commandLink>
+								</div>
+							</div>
+						</div>
+					</div>
+				</p:dialog>
+			</h:form>
+		</c:if>
+		
 	</ui:define>
 
 </ui:composition>

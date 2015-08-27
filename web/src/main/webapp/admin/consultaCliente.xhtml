@@ -20,14 +20,15 @@
 					<div class="col-lg-4">	
 						<div class="form-group">
 							<label for="codigo">Código</label>
-							<input id="codigo" name="codigo" type="text" class="form-control" placeholder="Código" jsf:value="#{clienteMB.cliente.codigo}" />	 
+							<input id="codigo" name="codigo" type="text" class="form-control" placeholder="Código" jsf:value="#{clienteMB.cliConsParam.codigo}" />
+							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigo"/>
 						</div>
 					</div>
 					
 					<div class="col-lg-4">	
 						<div class="form-group">
 							<label for="perfil">Física/Jurídica</label>
-							<h:selectOneMenu id="perfil" value="#{clienteMB.cliente.fisicaJuridica}" styleClass="form-control">
+							<h:selectOneMenu id="perfil" value="#{clienteMB.cliConsParam.fisicaJuridica}" styleClass="form-control">
 				                <f:selectItem itemLabel="[Selecione]" itemValue="" noSelectionOption="true" />
 				                <f:selectItem itemLabel="Pessoa física" itemValue="PF" noSelectionOption="false" />
 				                <f:selectItem itemLabel="Pessoa jurídica" itemValue="PJ" noSelectionOption="false" />
@@ -38,21 +39,23 @@
 					<div class="col-lg-4">
 						<div class="form-group">
 							<label for="cpfCnpj">CPF/CNPJ</label>
-							<input id="cpfCnpj" name="cpfCnpj" type="text" class="form-control" placeholder="CPF/CNPJ" jsf:value="#{clienteMB.cliente.cpfCnpj}" />	 
+							<input id="cpfCnpj" name="cpfCnpj" type="text" class="form-control" placeholder="CPF/CNPJ" jsf:value="#{clienteMB.cliConsParam.cpfCnpj}" />
+							<pe:keyFilter regEx="/[0-9-/]/i" for="cpfCnpj"/>
 						</div>
 					</div>
 					
 					<div class="col-lg-4">	
 						<div class="form-group">
 							<label for="nomeFantasia">Nome fantasia</label>
-							<input id="nomeFantasia" name="nomeFantasia" type="text" class="form-control" placeholder="Nome fantasia" jsf:value="#{clienteMB.cliente.nomeFantasia}" />	 
+							<input id="nomeFantasia" name="nomeFantasia" type="text" class="form-control" placeholder="Nome fantasia" jsf:value="#{clienteMB.cliConsParam.nomeFantasia}" />
+							<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="nomeFantasia"/>
 						</div>
 					</div>
 					
 					<div class="col-lg-4">
 						<div class="form-group">
 							<label for="status">Status</label>
-							<h:selectOneMenu id="status" value="#{clienteMB.cliente.indAtivo}" styleClass="form-control">
+							<h:selectOneMenu id="status" value="#{clienteMB.cliConsParam.indAtivo}" styleClass="form-control">
 				                <f:selectItem itemLabel="[Selecione]" itemValue="" noSelectionOption="true" />
 				                <f:selectItem itemLabel="Ativo" itemValue="true" noSelectionOption="false" />
 				                <f:selectItem itemLabel="Bloqueado" itemValue="false" noSelectionOption="false" />
@@ -63,7 +66,8 @@
 					<div class="col-lg-4">	
 						<div class="form-group">
 							<label for="email">E-mail</label>
-							<input id="email" name="email" type="text" class="form-control" placeholder="E-mail" jsf:value="#{clienteMB.cliente.email}" />	 
+							<input id="email" name="email" type="text" class="form-control" placeholder="E-mail" jsf:value="#{clienteMB.cliConsParam.email}" />
+							<pe:keyFilter regEx="/[a-z0-9_\.\-@]/i" for="email"/>
 						</div>
 					</div>
 					
@@ -104,7 +108,7 @@
 							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EDT_CLIENTE') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_BLOQ_CLIENTE') eq true}">
 								<p:column style="width:128px; text-align: center" headerText="Ações">
 						            <c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EDT_CLIENTE') eq true}">
-							            <p:button icon="ui-icon-pencil" title="Editar" outcome="editar_usuario.xhtml">
+							            <p:button icon="ui-icon-pencil" title="Editar" outcome="editar_cliente.xhtml">
 											<f:param name="clienteId" value="#{cliente.id}" />
 										</p:button>
 									</c:if>

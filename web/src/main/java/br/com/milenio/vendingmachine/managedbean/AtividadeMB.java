@@ -26,6 +26,7 @@ import br.com.milenio.vendingmachine.domain.model.Atividade;
 import br.com.milenio.vendingmachine.domain.model.Auditoria;
 import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
+import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
 import br.com.milenio.vendingmachine.security.Seguranca;
 import br.com.milenio.vendingmachine.service.AtividadeService;
 import br.com.milenio.vendingmachine.service.AuditoriaService;
@@ -233,7 +234,14 @@ public class AtividadeMB implements Serializable {
 	}
 	
 	public void excluirAtividadePelaEdicao() {
-		Atividade atv = atividadeService.excluirAtividade(idAtividade);
+		Atividade atv;
+		
+		try {
+			atv = atividadeService.excluirAtividade(idAtividade);
+		} catch (InconsistenciaException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
+			return;
+		}
 		
 		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Atividade " + atv.getTitulo() + " excluída com sucesso", null));
 		
@@ -247,7 +255,13 @@ public class AtividadeMB implements Serializable {
 	}
 	
 	public void excluirAtividade() {
-		Atividade atv = atividadeService.excluirAtividade(idAtividade);
+		Atividade atv;
+		try {
+			atv = atividadeService.excluirAtividade(idAtividade);
+		} catch (InconsistenciaException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
+			return;
+		}
 		
 		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Atividade " + atv.getTitulo() + " excluída com sucesso", null));
 		

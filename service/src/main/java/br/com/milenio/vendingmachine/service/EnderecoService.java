@@ -10,4 +10,6 @@ public interface EnderecoService {
 	public Endereco consultarCepWebService(String cep) throws InconsistenciaException;
 	
 	public void cadastrar(Endereco endereco);
+	
+	public void editar(Endereco endereco);
 }

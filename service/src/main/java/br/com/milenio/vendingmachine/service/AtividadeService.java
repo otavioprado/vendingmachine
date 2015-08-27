@@ -7,6 +7,7 @@ import javax.ejb.Local;
 
 import br.com.milenio.vendingmachine.domain.model.Atividade;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
+import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
 
 @Local
 public interface AtividadeService {
@@ -16,7 +17,7 @@ public interface AtividadeService {
 
 	public List<Atividade> buscarAtividadesComFiltro(String login, Long perfilId, Date data) throws CadastroInexistenteException;
 
-	public Atividade excluirAtividade(Long idAtividade);
+	public Atividade excluirAtividade(Long idAtividade) throws InconsistenciaException;
 
 	public Atividade findById(Long idAtividade);
 

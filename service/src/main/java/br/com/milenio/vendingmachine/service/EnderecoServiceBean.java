@@ -77,4 +77,9 @@ public class EnderecoServiceBean implements EnderecoService {
 	public void cadastrar(Endereco endereco) {
 		enderecoRepository.persist(endereco);
 	}
+
+	@Override
+	public void editar(Endereco endereco) {
+		enderecoRepository.merge(endereco);
+	}
 }

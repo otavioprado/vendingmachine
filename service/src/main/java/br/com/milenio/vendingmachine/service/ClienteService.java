@@ -17,4 +17,8 @@ public interface ClienteService {
 	public boolean bloquearUsuario(Long id, String motivoBloqueio);
 
 	public boolean desbloquearUsuario(Long id);
+
+	public Cliente findById(Long id);
+
+	public void editar(Cliente cliente);
 }

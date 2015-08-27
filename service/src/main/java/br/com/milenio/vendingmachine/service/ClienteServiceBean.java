@@ -53,7 +53,7 @@ public class ClienteServiceBean implements ClienteService {
 		}
 		
 		enderecoService.cadastrar(cliente.getEndereco());
-
+		cliente.setIndAtivo(true);
 		clienteRepository.persist(cliente);
 	}
 
@@ -118,4 +118,18 @@ public class ClienteServiceBean implements ClienteService {
 		
 		return true;
 	}
+
+	@Override
+	public Cliente findById(Long id) {
+		Cliente cliente = clienteRepository.findById(id);
+		return cliente;
+	}
+
+	@Override
+	public void editar(Cliente cliente) {
+		enderecoService.editar(cliente.getEndereco());
+		clienteRepository.merge(cliente);
+	}
+
+
 }

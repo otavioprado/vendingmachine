@@ -10,6 +10,7 @@ import br.com.milenio.vendingmachine.domain.model.Atividade;
 import br.com.milenio.vendingmachine.domain.model.Perfil;
 import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
+import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
 import br.com.milenio.vendingmachine.repository.AtividadeRepository;
 import br.com.milenio.vendingmachine.repository.PerfilRepository;
 import br.com.milenio.vendingmachine.repository.UsuarioSistemaRepository;
@@ -79,8 +80,12 @@ public class AtividadeServiceBean implements AtividadeService {
 	}
 
 	@Override
-	public Atividade excluirAtividade(Long idAtividade) {
+	public Atividade excluirAtividade(Long idAtividade) throws InconsistenciaException {
 		Atividade atividade = atividadeRepository.findById(idAtividade);
+		
+		if(atividade.getDataAgendamento().compareTo(new Date()) < 0) {
+			throw new InconsistenciaException("Apenas atividades passadas podem ser excluídas.");
+		}
 		
 		atividadeRepository.remove(atividade);
 		
