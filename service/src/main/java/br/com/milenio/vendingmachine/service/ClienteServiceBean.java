@@ -53,6 +53,7 @@ public class ClienteServiceBean implements ClienteService {
 		}
 		
 		enderecoService.cadastrar(cliente.getEndereco());
+		cliente.setId(null);
 		cliente.setIndAtivo(true);
 		clienteRepository.persist(cliente);
 	}

@@ -76,6 +76,9 @@
 		<security:intercept-url pattern="/admin/permissoes.xhtml" access="hasRole('ROLE_EDT_PERMISSOES')"/>
 		<security:intercept-url pattern="/admin/cliente.xhtml" access="hasRole('ROLE_CAD_CLIENTE')"/>
 		<security:intercept-url pattern="/admin/consultaCliente.xhtml" access="hasRole('ROLE_CONS_CLIENTE')"/>
+		<security:intercept-url pattern="/admin/contrato.xhtml" access="hasRole('ROLE_CAD_CONTRATO')"/>
+		<security:intercept-url pattern="/admin/consultaContrato.xhtml" access="hasRole('ROLE_CONS_CONTRATO')"/>
+		
 		<security:intercept-url pattern="/**" access="hasRole('ROLE_USUARIO_LOGADO_PAINEL_ADMIN')"/>
 			 
 		<security:logout logout-url="/j_spring_security_logout"

@@ -1,5 +1,6 @@
 package br.com.milenio.vendingmachine.managedbean;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.html.HtmlInputText;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -48,6 +50,9 @@ public class ClienteMB implements Serializable {
 	
 	@Inject
 	private HttpServletRequest request;
+	
+	@Inject
+	private ExternalContext external;
 	
 	@Inject
 	private FacesContext ctx;
@@ -124,7 +129,6 @@ public class ClienteMB implements Serializable {
 	
 	public void consultarCEP() {
 		try {
-			indManual = false;
 			String cep = (String) inputTextCep.getSubmittedValue();
 			
 			Endereco endereco = enderecoService.consultarCepWebService(cep);
@@ -135,8 +139,9 @@ public class ClienteMB implements Serializable {
 				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Impossível consultar o CEP, favor informe os dados de endereço manualmente", null));
 				return;
 			}
-			
+
 			cliente.setEndereco(endereco);
+			
 		} catch (InconsistenciaException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
 		}

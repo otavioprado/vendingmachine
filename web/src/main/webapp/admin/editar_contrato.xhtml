@@ -1,0 +1,182 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;"> 
+]>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:c="http://java.sun.com/jstl/core"
+    template="layoutLogado.xhtml">
+
+	<ui:define name="script">
+		<h:outputScript name="js/datepicker-pt-BR.js" />
+
+		<script>
+			$(function() {				
+				if($("#modContrato").val() == '') {
+					$("#valAluguel").prop("readonly", true);
+					$("#valPorcent").prop("readonly", true);
+				} 
+				
+				if($("#modContrato").val() == 'ALUGUEL') {
+					$("#valAluguel").prop("readonly", false);
+					$("#valPorcent").prop("readonly", true);
+				} else if($("#modContrato").val() == 'PORCENTAGEM') {
+					$("#valPorcent").prop("readonly", false);
+					$("#valAluguel").prop("readonly", true);
+				}
+			});
+			
+			function mask() {
+				if($("#modContrato").val() == 'ALUGUEL') {
+					$("#valAluguel").attr('placeholder', 'Aluguel')
+					$("#valPorcent").val('');
+					$("#valAluguel").val('');
+					$("#valAluguel").prop("readonly", false);
+					$("#valAluguel").mask("R$ 9999,99");
+					$("#valPorcent").prop("readonly", true);
+				} else if($("#modContrato").val() == 'PORCENTAGEM') {
+					$("#valPorcent").attr('placeholder', 'Porcentagem')
+					$("#valPorcent").val('');
+					$("#valAluguel").val('');
+					$("#valPorcent").prop("readonly", false);
+					$("#valPorcent").mask("99,9%");
+					$("#valAluguel").prop("readonly", true);
+				} else if($("#modContrato").val() == '') {
+					$("#valPorcent").prop("readonly", true);
+					$("#valPorcent").val('');
+					$("#valAluguel").val('');
+					$("#valAluguel").prop("readonly", true);
+				}
+			}
+		</script>
+	</ui:define>
+	
+	<f:metadata>
+	    <f:viewParam name="contratoId" value="#{contratoMB.contrato.id}" />
+	    <f:event type="preRenderView" listener="#{contratoMB.carregarDadosContratoParaEdicao}"/>
+	</f:metadata>
+
+	<ui:define name="conteudo">
+		<h:form prependId="false">
+			<p:panel id="basic" header="Editar contrato" style="margin-bottom:20px">
+				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="row">
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="codigo">Código *</label>
+							<h:inputText id="codigo" name="codigo" pt:placeholder="Código"  styleClass="form-control" value="#{contratoMB.contrato.codigo}" 
+								required="true" maxlength="10" requiredMessage="O campo código é obrigatório" readonly="true"/>
+							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigo"/>
+						</div>
+					</div>
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="codigo">Descrição *</label>
+							<h:inputText id="descricao" name="codigo" pt:placeholder="Descrição"  styleClass="form-control" value="#{contratoMB.contrato.descricao}" 
+								required="true" maxlength="30" requiredMessage="O campo descrição é obrigatório"/>
+							<pe:keyFilter regEx="/[a-zA-Z0-9 ]+/i" for="descricao"/>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="perfil">Modalidade do contrato *</label>
+							<h:selectOneMenu id="modContrato" value="#{contratoMB.contrato.modalidade}" styleClass="form-control" required="true" 
+								requiredMessage="O campo modalidade do contrato é obrigatório" onchange="mask()">
+				                <f:selectItem itemLabel="[Selecione]" itemValue="" noSelectionOption="true" />
+				                <f:selectItem itemLabel="Aluguel" itemValue="ALUGUEL" noSelectionOption="false" />
+				                <f:selectItem itemLabel="Porcentagem sob as vendas" itemValue="PORCENTAGEM" noSelectionOption="false" />
+			            	</h:selectOneMenu>
+		            	</div>
+		            </div>
+		            <div class="col-lg-4">
+						<div class="form-group">
+							<label for="codigo">Valor do aluguel *</label>
+							<h:inputText id="valAluguel" name="valAluguel" pt:placeholder="Valor do aluguel"  styleClass="form-control" value="#{contratoMB.valorAluguel}" 
+								maxlength="10" requiredMessage="O campo valor do aluguel é obrigatório"/>
+							<pe:keyFilter regEx="/[0-9]+/" for="valAluguel, valPorcent"/>
+						</div>
+					</div>
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="valPorcent">Porcentagem sob as vendas *</label>
+							<h:inputText id="valPorcent" name="valPorcent" pt:placeholder="Porcentagem"  styleClass="form-control" value="#{contratoMB.valorPorcentagem}" 
+								maxlength="2" requiredMessage="O campo porcentagem sob as vendas é obrigatório"/>
+						</div>
+					</div>
+					
+					<div class="col-lg-12">
+						<div class="form-group">
+							<div class="required">* Campos obrigatórios</div>
+						</div>
+					</div>
+					
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandLink id="btn-signup" class="btn btn-primary" action="#{contratoMB.editar}" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-hand-right"></i>&nbsp;Salvar&nbsp;
+							</h:commandLink>
+						</div>
+					</div>
+					
+					<div class="col-md-3">
+						<div class="form-group">
+							<a id="btn-cancel" class="btn btn-warning" href="#{request.contextPath}/admin/tela_inicial.xhtml" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+							</a>
+						</div>
+					</div>
+					
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandLink id="btn-excluir-ativ" class="btn btn-danger" actionListener="#{atividadeMB.abrirDialogExcluir}" style="width: 100%; color:white;" immediate="true">
+								<i class="glyphicon glyphicon-remove"></i>&nbsp;Excluir&nbsp;
+							</h:commandLink>
+						</div>
+					</div>
+					
+				</div>
+			</p:panel>
+		</h:form>
+		
+		<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_CONTRATO') eq true}">
+			<h:form prependId="false">
+				<p:dialog widgetVar="dlgExcluir" width="450" showHeader="false" resizable="false" modal="true">
+					<div class="form-group">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label for="nome">Tem certeza que deseja excluir este contrato? Essa operação não poderá ser desfeita!</label>
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="form-group">
+									<h:commandLink id="btn-excluir" class="btn btn-primary" action="#{contratoMB.excluirContratoPelaEdicao}" 
+										style="width: 100%; color:white;" update="table-atividades">
+										<i class="glyphicon glyphicon-trash"></i>&nbsp;Excluir&nbsp;
+									</h:commandLink>
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="form-group">
+									<h:commandLink id="btn-excluir-cancel" class="btn btn-warning" onclick="PF('dlgExcluir').hide();" style="width: 100%; color:white;" type="button" immediate="true">
+										<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+									</h:commandLink>
+								</div>
+							</div>
+						</div>
+					</div>
+				</p:dialog>
+			</h:form>
+		</c:if>
+	</ui:define>
+
+</ui:composition>

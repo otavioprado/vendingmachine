@@ -75,6 +75,7 @@ public class EnderecoServiceBean implements EnderecoService {
 
 	@Override
 	public void cadastrar(Endereco endereco) {
+		endereco.setId(null);
 		enderecoRepository.persist(endereco);
 	}
 
