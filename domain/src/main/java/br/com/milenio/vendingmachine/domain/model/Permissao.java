@@ -20,8 +20,8 @@ public class Permissao implements Serializable {
 	private static final long serialVersionUID = 2158027208658254637L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@NotNull

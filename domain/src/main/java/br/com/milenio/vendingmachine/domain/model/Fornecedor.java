@@ -1,7 +1,6 @@
 package br.com.milenio.vendingmachine.domain.model;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,13 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "CLIENTE")
-public class Cliente implements Serializable {
+@Table(name = "FORNECEDOR")
+public class Fornecedor implements Serializable {
 	private static final long serialVersionUID = -1740798416648579794L;
 
 	@Id
@@ -33,11 +29,6 @@ public class Cliente implements Serializable {
 	
 	@Column(name = "TELEFONE_FIXO")
 	private String telefoneFixo;
-	
-	@NotNull
-	@Column(name= "CLIENTE_DESDE")
-	@Temporal(value=TemporalType.DATE)
-	private Date clienteDesde;
 	
 	@Column(name = "EMAIL")
 	private String email;
@@ -60,9 +51,6 @@ public class Cliente implements Serializable {
 	@ManyToOne
 	@JoinColumn(name= "ENDERECO_ID")
 	private Endereco endereco = new Endereco();
-	
-	@Column(name = "IND_ATIVO")
-	private Boolean indAtivo;
 	
 	@Column(name = "MOTIVO_BLOQUEIO")
 	private String motivoBloqueio;
@@ -97,14 +85,6 @@ public class Cliente implements Serializable {
 
 	public void setTelefoneFixo(String telefoneFixo) {
 		this.telefoneFixo = telefoneFixo;
-	}
-
-	public Date getClienteDesde() {
-		return clienteDesde;
-	}
-
-	public void setClienteDesde(Date clienteDesde) {
-		this.clienteDesde = clienteDesde;
 	}
 
 	public String getEmail() {
@@ -161,14 +141,6 @@ public class Cliente implements Serializable {
 
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
-	}
-
-	public Boolean getIndAtivo() {
-		return indAtivo;
-	}
-
-	public void setIndAtivo(Boolean indAtivo) {
-		this.indAtivo = indAtivo;
 	}
 
 	public String getMotivoBloqueio() {

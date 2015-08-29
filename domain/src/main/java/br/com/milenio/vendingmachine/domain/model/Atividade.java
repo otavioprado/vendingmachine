@@ -22,8 +22,8 @@ public class Atividade implements Serializable {
 	private static final long serialVersionUID = -2417211373479105720L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 		
 	@NotNull

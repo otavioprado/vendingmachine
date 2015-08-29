@@ -86,6 +86,21 @@
 					</li>
 				</ul>
 			</c:if>
+			<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_FORNECEDOR') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_CONS_FORNECEDOR') eq true}">
+				<ul class="nav navbar-nav">
+					<li class="dropdown #{view.viewId eq '/admin/fornecedor.xhtml' or view.viewId eq '/admin/consultaFornecedor.xhtml'? 'active' : ''}">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user"/>Fornecedor<span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_FORNECEDOR') eq true}">
+								<li class="#{view.viewId eq '/admin/fornecedor.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/fornecedor.xhtml">Cadastrar</a></li>
+							</c:if>
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CONS_FORNECEDOR') eq true}">
+								<li class="#{view.viewId eq '/admin/consultaFornecedor.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/consultaFornecedor.xhtml">Consultar</a></li>
+							</c:if>
+						</ul>
+					</li>
+				</ul>
+			</c:if>
 			
 			<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_CONTRATO') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_CONS_CONTRATO') eq true}">
 				<ul class="nav navbar-nav">
