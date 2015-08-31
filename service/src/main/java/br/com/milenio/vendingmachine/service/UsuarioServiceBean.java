@@ -82,7 +82,9 @@ public class UsuarioServiceBean implements UsuarioService {
 			// Verifica se já existe um usuário com o mesmo login cadastrado no banco de dados do sistema
 			usuario = usuarioSistemaRepository.findUsuarioByLogin(usuarioEditado.getLogin());
 			
-		} else if(!usuarioAtual.getEmail().equalsIgnoreCase(usuarioEditado.getEmail())) {
+		} 
+		
+		if(!usuarioAtual.getEmail().equalsIgnoreCase(usuarioEditado.getEmail())) {
 			// Se houve mudança no email, é necessário validar se o novo email já não existe no sistema
 			
 			// Verifica se já existe um usuário com o mesmo e-mail cadastrado no banco de dados do sistema

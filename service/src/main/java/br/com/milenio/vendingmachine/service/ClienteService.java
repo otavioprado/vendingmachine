@@ -20,5 +20,5 @@ public interface ClienteService {
 
 	public Cliente findById(Long id);
 
-	public void editar(Cliente cliente);
+	public void editar(Cliente cliente) throws ConteudoJaExistenteNoBancoDeDadosException;
 }

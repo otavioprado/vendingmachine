@@ -24,9 +24,11 @@
 				if($("#modContrato").val() == 'ALUGUEL') {
 					$("#valAluguel").prop("readonly", false);
 					$("#valPorcent").prop("readonly", true);
+					$("#valAluguel").mask("R$ 9999,99");
 				} else if($("#modContrato").val() == 'PORCENTAGEM') {
 					$("#valPorcent").prop("readonly", false);
 					$("#valAluguel").prop("readonly", true);
+					$("#valPorcent").mask("99,9%");
 				}
 			});
 			
@@ -72,7 +74,7 @@
 						<div class="form-group">
 							<label for="codigo">Descrição *</label>
 							<h:inputText id="descricao" name="codigo" pt:placeholder="Descrição"  styleClass="form-control" value="#{contratoMB.contrato.descricao}" 
-								required="true" maxlength="30" requiredMessage="O campo descrição é obrigatório"/>
+								required="true" maxlength="25" requiredMessage="O campo descrição é obrigatório"/>
 							<pe:keyFilter regEx="/[a-zA-Z0-9 ]+/i" for="descricao"/>
 						</div>
 					</div>
@@ -93,7 +95,7 @@
 						<div class="form-group">
 							<label for="codigo">Valor do aluguel *</label>
 							<h:inputText id="valAluguel" name="valAluguel" pt:placeholder="Valor do aluguel"  styleClass="form-control" value="#{contratoMB.valorAluguel}" 
-								maxlength="10" requiredMessage="O campo valor do aluguel é obrigatório"/>
+								maxlength="6" requiredMessage="O campo valor do aluguel é obrigatório"/>
 							<pe:keyFilter regEx="/[0-9]+/" for="valAluguel, valPorcent"/>
 						</div>
 					</div>

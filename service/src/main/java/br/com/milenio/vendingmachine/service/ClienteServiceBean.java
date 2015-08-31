@@ -9,7 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import br.com.milenio.vendingmachine.domain.model.Cliente;
-import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.exceptions.ConteudoJaExistenteNoBancoDeDadosException;
 import br.com.milenio.vendingmachine.repository.ClienteRepository;
@@ -127,9 +126,36 @@ public class ClienteServiceBean implements ClienteService {
 	}
 
 	@Override
-	public void editar(Cliente cliente) {
-		enderecoService.editar(cliente.getEndereco());
-		clienteRepository.merge(cliente);
+	public void editar(Cliente clienteEditado) throws ConteudoJaExistenteNoBancoDeDadosException {
+		// Carrega um objeto com os dados atuais do cliente sendo editado
+		Cliente clienteAtual = clienteRepository.findById(clienteEditado.getId());
+		
+		Cliente resultado = null;
+		// Se houve mudança no e-mail ou no CPF/CNPJ, é necessário validar se o novo e-mail ou CPF/CNPJ já não existe no sistema
+		if(!clienteAtual.getEmail().equalsIgnoreCase(clienteEditado.getEmail())) {
+			// Se entrou aqui, então houve alteração no e-mail do cliente
+			// Verifica se já existe um cliente com o mesmo e-mail cadastrado no banco de dados do sistema
+			resultado = clienteRepository.findClienteByEmail(clienteEditado.getEmail());
+			
+			if(resultado != null && resultado.getEmail().equalsIgnoreCase(clienteEditado.getEmail())) {
+				LOGGER.info("Já existe um cliente com e-mail " + clienteEditado.getEmail() + " cadastrado no banco de dados.");
+				throw new ConteudoJaExistenteNoBancoDeDadosException("Já existe um cliente com o e-mail " + clienteEditado.getEmail() + " cadastrado no sistema.");
+			}
+		}
+		
+		if(!clienteAtual.getCpfCnpj().equalsIgnoreCase(clienteEditado.getCpfCnpj())) {
+			// Se entrou aqui, então houve alteração no CPF/CNPJ do cliente
+			// Verifica se já existe um cliente com o mesmo CPF/CNPJ cadastrado no banco de dados do sistema
+			resultado = clienteRepository.findClienteByCpfCnpj(clienteEditado.getCpfCnpj());
+			
+			if(resultado != null && resultado.getCpfCnpj().equalsIgnoreCase(clienteEditado.getCpfCnpj())) {
+				LOGGER.info("Já existe um cliente com CPF/CNPJ " + clienteEditado.getCpfCnpj() + " cadastrado no banco de dados.");
+				throw new ConteudoJaExistenteNoBancoDeDadosException("Já existe um cliente com o CPF/CNPJ " + clienteEditado.getCpfCnpj() + " cadastrado no sistema.");
+			}
+		}
+		
+		enderecoService.editar(clienteEditado.getEndereco());
+		clienteRepository.merge(clienteEditado);
 	}
 
 

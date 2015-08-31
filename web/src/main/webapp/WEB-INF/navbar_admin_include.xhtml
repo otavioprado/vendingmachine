@@ -49,7 +49,7 @@
 					<li class="#{view.viewId eq '/admin/permissoes.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/permissoes.xhtml"><span class="glyphicon glyphicon-list-alt"></span>Permissões</a></li>
 				</ul>
 			</c:if>
-			<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_ATIVIDADE') eq true}">
+			<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_ATIVIDADE') eq true and seguranca.perfilUsuarioLogado eq 'ADMINISTRADOR'}">
 				<ul class="nav navbar-nav">
 					<li class="dropdown #{view.viewId eq '/admin/agendar_atividade.xhtml'? 'active' : ''}">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-book"/>Atividade<span class="caret"></span></a>
@@ -112,6 +112,22 @@
 							</c:if>
 							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CONS_CONTRATO') eq true}">
 								<li class="#{view.viewId eq '/admin/consultaContrato.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/consultaContrato.xhtml">Consultar</a></li>
+							</c:if>
+						</ul>
+					</li>
+				</ul>
+			</c:if>
+			
+			<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_PRODUTO') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_CONS_PRODUTO') eq true}">
+				<ul class="nav navbar-nav">
+					<li class="dropdown #{view.viewId eq '/admin/produto.xhtml' or view.viewId eq '/admin/consultaProduto.xhtml'? 'active' : ''}">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-gift"/>Produto<span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_PRODUTO') eq true}">
+								<li class="#{view.viewId eq '/admin/produto.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/produto.xhtml">Cadastrar</a></li>
+							</c:if>
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CONS_PRODUTO') eq true}">
+								<li class="#{view.viewId eq '/admin/consultaProduto.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/consultaProduto.xhtml">Consultar</a></li>
 							</c:if>
 						</ul>
 					</li>

@@ -9,7 +9,6 @@ import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.html.HtmlInputText;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -49,9 +48,6 @@ public class ClienteMB implements Serializable {
 	
 	@Inject
 	private HttpServletRequest request;
-	
-	@Inject
-	private ExternalContext external;
 	
 	@Inject
 	private FacesContext ctx;
@@ -210,20 +206,24 @@ public class ClienteMB implements Serializable {
 			return;
 		}
 		
-		clienteService.editar(cliente);
+		try {
+			clienteService.editar(cliente);
 		
-		// Sucesso - Exibe mensagem de edição realizado com sucesso
-		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Cliente " + cliente.getNomeFantasia() + " editado com sucesso.", null));
-		logger.info("Cliente " + cliente.getNomeFantasia() + " foi editado no sistema com sucesso.");
-		
-		// Processo de auditoria de cadastro de usuário
-		Auditoria auditoria = new Auditoria();
-		auditoria.setDataAcao(new Date());
-		auditoria.setTitulo("Edição");
-		auditoria.setDescricao("Editou o cliente " + cliente.getNomeFantasia());
-		auditoria.setUsuario(Seguranca.getUsuarioLogado());
-		auditoria.setIp(request.getRemoteAddr());
-		auditoriaService.cadastrarNovaAcao(auditoria);
+			// Sucesso - Exibe mensagem de edição realizado com sucesso
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Cliente " + cliente.getNomeFantasia() + " editado com sucesso.", null));
+			logger.info("Cliente " + cliente.getNomeFantasia() + " foi editado no sistema com sucesso.");
+			
+			// Processo de auditoria de cadastro de usuário
+			Auditoria auditoria = new Auditoria();
+			auditoria.setDataAcao(new Date());
+			auditoria.setTitulo("Edição");
+			auditoria.setDescricao("Editou o cliente " + cliente.getNomeFantasia());
+			auditoria.setUsuario(Seguranca.getUsuarioLogado());
+			auditoria.setIp(request.getRemoteAddr());
+			auditoriaService.cadastrarNovaAcao(auditoria);
+		} catch(ConteudoJaExistenteNoBancoDeDadosException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+		}
 	}
 	
 	public void carregarDadosClienteParaEdicao() {

@@ -17,7 +17,9 @@ public interface FornecedorService {
 
 	public Fornecedor findById(Long id);
 
-	public void editar(Fornecedor fornecedor);
+	public void editar(Fornecedor fornecedorEditado) throws ConteudoJaExistenteNoBancoDeDadosException;
 
 	public Fornecedor excluir(Long id) throws InconsistenciaException;
+
+	public Fornecedor findByCodigo(String codigo);
 }

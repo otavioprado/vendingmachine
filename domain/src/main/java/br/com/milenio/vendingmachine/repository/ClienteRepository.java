@@ -13,4 +13,8 @@ public interface ClienteRepository extends Repository<Cliente, Long> {
 	public Cliente findClienteByCodigoEmailCpfCnpj(Cliente cliente);
 	
 	public List<Cliente> buscarClientesComFiltro(Cliente cliente);
+
+	public Cliente findClienteByEmail(String email);
+
+	public Cliente findClienteByCpfCnpj(String cpfCnpj);
 }

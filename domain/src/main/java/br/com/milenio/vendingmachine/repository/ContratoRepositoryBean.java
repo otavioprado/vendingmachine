@@ -10,7 +10,6 @@ import com.uaihebert.uaicriteria.UaiCriteriaFactory;
 
 import br.com.milenio.vendingmachine.domain.AbstractVendingMachineRepositoryBean;
 import br.com.milenio.vendingmachine.domain.model.Contrato;
-import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 
 @Stateless(name = "ContratoRepository")
 public class ContratoRepositoryBean extends AbstractVendingMachineRepositoryBean<Contrato, Long> 

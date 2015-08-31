@@ -21,7 +21,6 @@ import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
 
-import br.com.milenio.vendingmachine.domain.model.Atividade;
 import br.com.milenio.vendingmachine.domain.model.Auditoria;
 import br.com.milenio.vendingmachine.domain.model.Endereco;
 import br.com.milenio.vendingmachine.domain.model.Fornecedor;
@@ -206,20 +205,24 @@ public class FornecedorMB implements Serializable {
 			return;
 		}
 		
-		fornecedorService.editar(fornecedor);
+		try {
+			fornecedorService.editar(fornecedor);
 		
-		// Sucesso - Exibe mensagem de edição realizado com sucesso
-		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Fornecedor " + fornecedor.getNomeFantasia() + " editado com sucesso.", null));
-		logger.info("Fornecedor " + fornecedor.getNomeFantasia() + " foi editado no sistema com sucesso.");
-		
-		// Processo de auditoria de cadastro de usuário
-		Auditoria auditoria = new Auditoria();
-		auditoria.setDataAcao(new Date());
-		auditoria.setTitulo("Edição");
-		auditoria.setDescricao("Editou o fornecedor " + fornecedor.getNomeFantasia());
-		auditoria.setUsuario(Seguranca.getUsuarioLogado());
-		auditoria.setIp(request.getRemoteAddr());
-		auditoriaService.cadastrarNovaAcao(auditoria);
+			// Sucesso - Exibe mensagem de edição realizado com sucesso
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Fornecedor " + fornecedor.getNomeFantasia() + " editado com sucesso.", null));
+			logger.info("Fornecedor " + fornecedor.getNomeFantasia() + " foi editado no sistema com sucesso.");
+			
+			// Processo de auditoria de cadastro de usuário
+			Auditoria auditoria = new Auditoria();
+			auditoria.setDataAcao(new Date());
+			auditoria.setTitulo("Edição");
+			auditoria.setDescricao("Editou o fornecedor " + fornecedor.getNomeFantasia());
+			auditoria.setUsuario(Seguranca.getUsuarioLogado());
+			auditoria.setIp(request.getRemoteAddr());
+			auditoriaService.cadastrarNovaAcao(auditoria);
+		} catch (ConteudoJaExistenteNoBancoDeDadosException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+		}
 	}
 	
 	public void carregarDadosFornecedorParaEdicao() {

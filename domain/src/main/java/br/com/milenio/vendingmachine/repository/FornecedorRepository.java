@@ -13,4 +13,10 @@ public interface FornecedorRepository extends Repository<Fornecedor, Long> {
 	public Fornecedor findFornecedorByCodigoEmailCpfCnpj(Fornecedor fornecedor);
 	
 	public List<Fornecedor> buscarFornecedoresComFiltro(Fornecedor fornecedor);
+
+	public Fornecedor findByCodigo(String codigo);
+
+	public Fornecedor findFornecedorByEmail(String email);
+
+	public Fornecedor findFornecedorByCpfCnpj(String cpfCnpj);
 }

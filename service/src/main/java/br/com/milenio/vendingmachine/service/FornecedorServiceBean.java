@@ -8,7 +8,6 @@ import javax.ejb.Stateless;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import br.com.milenio.vendingmachine.domain.model.Contrato;
 import br.com.milenio.vendingmachine.domain.model.Fornecedor;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.exceptions.ConteudoJaExistenteNoBancoDeDadosException;
@@ -106,9 +105,36 @@ public class FornecedorServiceBean implements FornecedorService {
 	}
 
 	@Override
-	public void editar(Fornecedor fornecedor) {
-		enderecoService.editar(fornecedor.getEndereco());
-		fornecedorRepository.merge(fornecedor);
+	public void editar(Fornecedor fornecedorEditado) throws ConteudoJaExistenteNoBancoDeDadosException {
+		// Carrega um objeto com os dados atuais do fornecedor sendo editado
+		Fornecedor fornecedorAtual = fornecedorRepository.findById(fornecedorEditado.getId());
+		
+		Fornecedor resultado = null;
+		// Se houve mudança no e-mail ou no CPF/CNPJ, é necessário validar se o novo e-mail ou CPF/CNPJ já não existe no sistema
+		if(!fornecedorAtual.getEmail().equalsIgnoreCase(fornecedorEditado.getEmail())) {
+			// Se entrou aqui, então houve alteração no e-mail do fornecedor
+			// Verifica se já existe um fornecedor com o mesmo e-mail cadastrado no banco de dados do sistema
+			resultado = fornecedorRepository.findFornecedorByEmail(fornecedorEditado.getEmail());
+			
+			if(resultado != null && resultado.getEmail().equalsIgnoreCase(fornecedorEditado.getEmail())) {
+				LOGGER.info("Já existe um fornecedor com e-mail " + fornecedorEditado.getEmail() + " cadastrado no banco de dados.");
+				throw new ConteudoJaExistenteNoBancoDeDadosException("Já existe um fornecedor com o e-mail " + fornecedorEditado.getEmail() + " cadastrado no sistema.");
+			}
+		}
+		
+		if(!fornecedorAtual.getCpfCnpj().equalsIgnoreCase(fornecedorEditado.getCpfCnpj())) {
+			// Se entrou aqui, então houve alteração no CPF/CNPJ do fornecedor
+			// Verifica se já existe um fornecedor com o mesmo CPF/CNPJ cadastrado no banco de dados do sistema
+			resultado = fornecedorRepository.findFornecedorByCpfCnpj(fornecedorEditado.getCpfCnpj());
+			
+			if(resultado != null && resultado.getCpfCnpj().equalsIgnoreCase(fornecedorEditado.getCpfCnpj())) {
+				LOGGER.info("Já existe um fornecedor com CPF/CNPJ " + fornecedorEditado.getCpfCnpj() + " cadastrado no banco de dados.");
+				throw new ConteudoJaExistenteNoBancoDeDadosException("Já existe um fornecedor com o CPF/CNPJ " + fornecedorEditado.getCpfCnpj() + " cadastrado no sistema.");
+			}
+		}
+		
+		enderecoService.editar(fornecedorEditado.getEndereco());
+		fornecedorRepository.merge(fornecedorEditado);
 	}
 
 	@Override
@@ -117,12 +143,17 @@ public class FornecedorServiceBean implements FornecedorService {
 		Fornecedor fornecedor = fornecedorRepository.findById(id);
 		
 		/*if(fornecedor.getIndDisponivel() == false) {
-			throw new InconsistenciaException("Apenas fornecedores que não tenham sido atribuídos a nenhum cliente podem ser excluídos.");
+			throw new InconsistenciaException("Apenas fornecedores que não tenham sido atribuídos a nenhum fornecedor podem ser excluídos.");
 		}*/
 		
 		fornecedorRepository.remove(fornecedor);
 		
 		return fornecedor;
+	}
+
+	@Override
+	public Fornecedor findByCodigo(String codigo) {
+		return fornecedorRepository.findByCodigo(codigo);
 	}
 
 
