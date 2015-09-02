@@ -11,6 +11,11 @@
     xmlns:pe="http://primefaces.org/ui/extensions"
     template="layoutLogado.xhtml">
     
+       <f:metadata>
+	    <f:viewParam name="produtoId" value="#{produtoMB.produto.id}" />
+	    <f:event type="preRenderView" listener="#{produtoMB.carregarDadosProdutoParaEdicao}"/>
+	</f:metadata>
+    
     <ui:define name="script">
 		<script>
 			$(function() {
@@ -21,7 +26,7 @@
 	</ui:define>
     
 	<ui:define name="conteudo">
-		<p:panel id="basic" header="Cadastrar produto" style="margin-bottom:20px">
+		<p:panel id="basic" header="Editar produto" style="margin-bottom:20px">
 			<h:form id="formPrincipal" prependId="false">
 				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
 				<div class="row">
@@ -29,7 +34,8 @@
 					<div class="col-lg-4">
 						<div class="form-group">
 							<label for="codigo">Código *</label>
-							<h:inputText id="codigo" name="codigo" type="text" class="form-control" placeholder="Código" value="#{produtoMB.produto.codigo}" required="true" maxlength="25"/>
+							<h:inputText id="codigo" name="codigo" type="text" class="form-control" placeholder="Código" value="#{produtoMB.produto.codigo}" required="true" maxlength="25" readonly="true"
+								requiredMessage="O campo código do fornecedor é obrigatório"/>
 							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigo, codigoFornecedor"/>
 						</div>
 					</div>
@@ -64,7 +70,7 @@
 							<h:selectOneMenu id="perecivel" value="#{produtoMB.produto.indPerecivel}" styleClass="form-control" required="true"
 								requiredMessage="O campo perecível é obrigatório">
 				                <f:selectItem itemLabel="[Selecione]" itemValue="#{null}" noSelectionOption="true" />
-								<f:selectItem itemLabel="Sim" itemValue="true" />
+				                <f:selectItem itemLabel="Sim" itemValue="true" />
 				                <f:selectItem itemLabel="Não" itemValue="false" />
 			            	</h:selectOneMenu>
 		            	</div>
@@ -76,10 +82,9 @@
 							<div class="col-lg-3">
 								<div class="form-group">
 									<label for="codigoFornecedor">Código *</label>
-									<h:inputText id="codigoFornecedor" name="codigo" type="text" class="form-control" placeholder="Código" value="#{produtoMB.produto.fornecedor.codigo}" required="true" maxlength="25"
-										requiredMessage="O campo código do fornecedor é obrigatório">
+									<p:inputText id="codigoFornecedor" name="codigo" type="text" class="form-control" placeholder="Código" value="#{produtoMB.produto.fornecedor.codigo}" required="true" maxlength="25">
 										 <f:ajax event="blur" listener="#{produtoMB.selecionarFornecedor(produtoMB.produto.fornecedor.codigo)}" render="codigoFornecedor nomeFantasia tipoPessoa cpfCnpj site telefone email"/>
-									</h:inputText>
+									</p:inputText>
 								</div>
 							</div>
 							
@@ -118,7 +123,7 @@
 								</div>
 							</div>
 							
-							<div class="col-lg-3">
+							<div class="col-lg-3">		
 								<div class="form-group">
 									<label for="email">E-mail</label>
 									<input id="email" name="email" type="text" class="form-control" placeholder="E-mail" jsf:value="#{produtoMB.produto.fornecedor.email}" disabled="disabled" readonly="readonly"/>				 
@@ -145,8 +150,8 @@
 	     		<div class="row">	
 					<div class="col-md-3">
 						<div class="form-group">
-							<h:commandLink id="btn-signup" class="btn btn-primary" actionListener="#{produtoMB.cadastrar}" style="width: 100%; color:white;">
-								<i class="glyphicon glyphicon-saved"></i>&nbsp;Cadastrar&nbsp;
+							<h:commandLink id="btn-signup" class="btn btn-primary" actionListener="#{produtoMB.editar}" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-saved"></i>&nbsp;Salvar&nbsp;
 							</h:commandLink>
 						</div>
 					</div>
@@ -157,9 +162,49 @@
 							</a>
 						</div>
 					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandLink id="btn-excluir-produto" class="btn btn-danger" actionListener="#{produtoMB.abrirDialogExcluir}" style="width: 100%; color:white;" immediate="true">
+								<i class="glyphicon glyphicon-remove"></i>&nbsp;Excluir&nbsp;
+							</h:commandLink>
+						</div>
+					</div>
 				</div>
 			</h:form>
 		</p:panel>
+		
+		<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_PRODUTO') eq true}">
+			<h:form prependId="false">
+				<p:dialog widgetVar="dlgExcluir" width="450" showHeader="false" resizable="false" modal="true">
+					<div class="form-group">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label for="nome">Tem certeza que deseja excluir este produto? Essa operação não poderá ser desfeita!</label>
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="form-group">
+									<h:commandLink id="btn-excluir" class="btn btn-primary" action="#{produtoMB.excluirPelaEdicao}" style="width: 100%; color:white;">
+										<i class="glyphicon glyphicon-trash"></i>&nbsp;Excluir&nbsp;
+									</h:commandLink>
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="form-group">
+									<h:commandLink id="btn-excluir-cancel" class="btn btn-warning" onclick="PF('dlgExcluir').hide();" style="width: 100%; color:white;" type="button" 
+										immediate="true">
+										<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+									</h:commandLink>
+								</div>
+							</div>
+						</div>
+					</div>
+				</p:dialog>
+			</h:form>
+		</c:if>
 		
 		<p:dialog widgetVar="dlgConsultaFornecedor" width="800" showHeader="false" resizable="false" modal="true">
 			<h:form prependId="false">

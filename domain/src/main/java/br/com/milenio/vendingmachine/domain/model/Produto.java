@@ -40,6 +40,9 @@ public class Produto implements Serializable {
 	@JoinColumn(name= "FORNECEDOR_ID")
 	private Fornecedor fornecedor = new Fornecedor();
 
+	private String valUnitAux;
+	private String valVendaAux;
+	
 	public Long getId() {
 		return id;
 	}
@@ -94,5 +97,21 @@ public class Produto implements Serializable {
 
 	public void setFornecedor(Fornecedor fornecedor) {
 		this.fornecedor = fornecedor;
+	}
+
+	public String getValUnitAux() {
+		return valUnitAux;
+	}
+
+	public void setValUnitAux(String valUnitAux) {
+		this.valUnitAux = valUnitAux;
+	}
+
+	public String getValVendaAux() {
+		return valVendaAux;
+	}
+
+	public void setValVendaAux(String valVendaAux) {
+		this.valVendaAux = valVendaAux;
 	}
 }

@@ -5,7 +5,11 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 
+import com.uaihebert.uaicriteria.UaiCriteria;
+import com.uaihebert.uaicriteria.UaiCriteriaFactory;
+
 import br.com.milenio.vendingmachine.domain.AbstractVendingMachineRepositoryBean;
+import br.com.milenio.vendingmachine.domain.model.Fornecedor;
 import br.com.milenio.vendingmachine.domain.model.Produto;
 
 @Stateless(name = "ProdutoRepository")
@@ -32,5 +36,36 @@ public class ProdutoRepositoryBean extends AbstractVendingMachineRepositoryBean<
 		}
 		
 		return null;
+	}
+
+	@Override
+	public List<Produto> buscarComFiltro(Produto produto) {
+		String codigo = produto.getCodigo();
+		String descricao = produto.getDescricao();
+		Boolean indPerecivel = produto.getIndPerecivel();
+		String nomeFantasia = produto.getFornecedor().getNomeFantasia();
+		
+		UaiCriteria<Produto> uaiCriteria = UaiCriteriaFactory.createQueryCriteria(getEntityManager(), Produto.class);
+		
+		if(codigo != null && !codigo.isEmpty()) {
+			uaiCriteria.andEquals("codigo", codigo);
+		}
+		
+		if(descricao != null && !descricao.isEmpty()) {
+			uaiCriteria.andEquals("descricao", descricao);
+		}
+		
+		if(indPerecivel != null) {
+			uaiCriteria.andEquals("indPerecivel", indPerecivel);
+		}
+		
+		if(nomeFantasia != null && !nomeFantasia.isEmpty()) {
+			uaiCriteria.innerJoin("fornecedor");
+			uaiCriteria.andEquals("fornecedor.nomeFantasia", nomeFantasia);
+		}
+		
+		List<Produto> produtos = (List<Produto>) uaiCriteria.getResultList();
+		
+		return produtos;
 	}
 }

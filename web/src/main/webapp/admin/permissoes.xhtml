@@ -23,7 +23,6 @@
 							<h:selectOneMenu id="perfil" value="#{permissoesMB.idPerfilSelecionado}" styleClass="form-control" >
 								<p:ajax listener="#{permissoesMB.carregarPermissoesPerfil}" update="tablePermissoes" />
 				                <f:selectItem itemLabel="[Selecione]" itemValue="0" noSelectionOption="true" />
-				                <f:selectItem itemLabel="Administrador" itemValue="1" noSelectionOption="false" />
 				                <f:selectItem itemLabel="Gestor" itemValue="2" noSelectionOption="false" />
 				                <f:selectItem itemLabel="Gerente" itemValue="3" noSelectionOption="false" />
 				                <f:selectItem itemLabel="Operador" itemValue="4" noSelectionOption="false" />
