@@ -83,6 +83,9 @@ public class PermissoesMB implements Serializable {
 			permissoesSelecionadas.addAll(permissaoRepository.getPermissoesAdministrativasRestritas());
 		}
 		
+		Permissao permissaoLogin = permissaoRepository.findById(1L);
+		permissoesSelecionadas.add(permissaoLogin);
+		
 		perfilSelecionado.setPermissoes(permissoesSelecionadas);
 		perfilRepository.merge(perfilSelecionado);
 		

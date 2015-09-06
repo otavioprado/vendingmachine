@@ -28,10 +28,11 @@ public class Contrato implements Serializable {
 	@Column(name = "MODALIDADE")
 	private String modalidade;
 	
-	@Column(name = "VALOR")
-	private Double valor;
+	@Column(name = "VALOR_ALUGUEL")
+	private Double valorAluguel;
 	
-	private String valorAux;
+	@Column(name = "PORCENTAGEM")
+	private Double valorPorcentagem;
 	
 	@Column(name = "IND_DISPONIVEL")
 	private Boolean indDisponivel;
@@ -68,14 +69,6 @@ public class Contrato implements Serializable {
 		this.modalidade = modalidade;
 	}
 
-	public Double getValor() {
-		return valor;
-	}
-
-	public void setValor(Double valor) {
-		this.valor = valor;
-	}
-
 	public Boolean getIndDisponivel() {
 		return indDisponivel;
 	}
@@ -84,11 +77,19 @@ public class Contrato implements Serializable {
 		this.indDisponivel = indDisponivel;
 	}
 
-	public String getValorAux() {
-		return valorAux;
+	public Double getValorAluguel() {
+		return valorAluguel;
 	}
 
-	public void setValorAux(String valorAux) {
-		this.valorAux = valorAux;
+	public void setValorAluguel(Double valorAluguel) {
+		this.valorAluguel = valorAluguel;
+	}
+
+	public Double getValorPorcentagem() {
+		return valorPorcentagem;
+	}
+
+	public void setValorPorcentagem(Double valorPorcentagem) {
+		this.valorPorcentagem = valorPorcentagem;
 	}
 }

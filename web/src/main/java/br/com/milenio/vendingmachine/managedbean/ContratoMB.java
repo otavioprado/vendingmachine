@@ -50,9 +50,6 @@ public class ContratoMB implements Serializable {
 	
 	private Contrato contrato = new Contrato();
 	private Contrato contratoConsParam = new Contrato();
-	
-	private String valorAluguel;
-	private String valorPorcentagem;
 
 	private List<Contrato> listContratos;
 	
@@ -71,30 +68,15 @@ public class ContratoMB implements Serializable {
 		
 		String modalidade = contrato.getModalidade();
 		
-		if((valorAluguel == null || valorAluguel.isEmpty()) && (valorPorcentagem == null || valorPorcentagem.isEmpty())) {
-			if("PORCENTAGEM".equals(modalidade)) {
-				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "O campo porcentagem é obrigatório", null));
-				return;
-			} else if("ALUGUEL".equals(modalidade)) {
-				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "O campo aluguel é obrigatório", null));
-				return;
-			}
-		}
-		
-		Double value = null;
-		
-		if("PORCENTAGEM".equals(modalidade)) {
-			valorPorcentagem = valorPorcentagem.replace("%", "").trim();
-			valorPorcentagem = valorPorcentagem.replace(",", ".");
-			value = Double.parseDouble(valorPorcentagem);
-		} else if("ALUGUEL".equals(modalidade)) {
-			valorAluguel = valorAluguel.replace("R$", "").trim();
-			valorAluguel = valorAluguel.replace(",", ".");
-			value = Double.parseDouble(valorAluguel);
+		if("PORCENTAGEM".equals(modalidade) && contrato.getValorPorcentagem() == null) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "O campo porcentagem é obrigatório", null));
+			return;
+		} else if("ALUGUEL".equals(modalidade) && contrato.getValorAluguel() == null) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "O campo aluguel é obrigatório", null));
+			return;
 		}
 		
 		try{
-			contrato.setValor(value);
 			contrato.setIndDisponivel(true);
 			contratoService.cadastrar(contrato);
 			
@@ -117,8 +99,6 @@ public class ContratoMB implements Serializable {
 		}
 		
 		contrato = new Contrato();
-		valorAluguel = "";
-		valorPorcentagem = "";
 	}
 	
 	public void excluir() {
@@ -178,29 +158,14 @@ public class ContratoMB implements Serializable {
 		
 		String modalidade = contrato.getModalidade();
 		
-		if((valorAluguel == null || valorAluguel.isEmpty()) && (valorPorcentagem == null || valorPorcentagem.isEmpty())) {
-			if("PORCENTAGEM".equals(modalidade)) {
-				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "O campo porcentagem é obrigatório", null));
-				return;
-			} else if("ALUGUEL".equals(modalidade)) {
-				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "O campo aluguel é obrigatório", null));
-				return;
-			}
+		if("PORCENTAGEM".equals(modalidade) && contrato.getValorPorcentagem() == null) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "O campo porcentagem é obrigatório", null));
+			return;
+		} else if("ALUGUEL".equals(modalidade) && contrato.getValorAluguel() == null) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "O campo aluguel é obrigatório", null));
+			return;
 		}
-		
-		Double value = null;
-		
-		if("PORCENTAGEM".equals(modalidade)) {
-			valorPorcentagem = valorPorcentagem.replace("%", "").trim();
-			valorPorcentagem = valorPorcentagem.replace(",", ".");
-			value = Double.parseDouble(valorPorcentagem);
-		} else if("ALUGUEL".equals(modalidade)) {
-			valorAluguel = valorAluguel.replace("R$", "").trim();
-			valorAluguel = valorAluguel.replace(",", ".");
-			value = Double.parseDouble(valorAluguel);
-		}
-		
-		contrato.setValor(value);
+
 		try {
 			contratoService.editar(contrato);
 		} catch (InconsistenciaException e) {
@@ -244,14 +209,6 @@ public class ContratoMB implements Serializable {
 	public void carregarDadosContratoParaEdicao() {
 		if(carregarPagina) {
 			contrato = contratoService.findById(contrato.getId());
-			
-			String modalidade = contrato.getModalidade();
-			
-			if("PORCENTAGEM".equalsIgnoreCase(modalidade)) {
-				valorPorcentagem = contrato.getValor().toString() + "%";
-			} else if("ALUGUEL".equalsIgnoreCase(modalidade)) {
-				valorAluguel = "R$" + contrato.getValor().toString();
-			}
 		}
 		
 		carregarPagina = false;
@@ -263,22 +220,6 @@ public class ContratoMB implements Serializable {
 
 	public void setContrato(Contrato contrato) {
 		this.contrato = contrato;
-	}
-
-	public String getValorAluguel() {
-		return valorAluguel;
-	}
-
-	public void setValorAluguel(String valorAluguel) {
-		this.valorAluguel = valorAluguel;
-	}
-
-	public String getValorPorcentagem() {
-		return valorPorcentagem;
-	}
-
-	public void setValorPorcentagem(String valorPorcentagem) {
-		this.valorPorcentagem = valorPorcentagem;
 	}
 
 	public Contrato getContratoConsParam() {

@@ -234,15 +234,8 @@ public class AtividadeMB implements Serializable {
 	}
 	
 	public void excluirAtividadePelaEdicao() {
-		Atividade atv;
-		
-		try {
-			atv = atividadeService.excluirAtividade(idAtividade);
-		} catch (InconsistenciaException e) {
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
-			return;
-		}
-		
+		Atividade atv = atividadeService.excluirAtividade(idAtividade);
+
 		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Atividade " + atv.getTitulo() + " excluída com sucesso", null));
 		
 		try {
@@ -255,14 +248,8 @@ public class AtividadeMB implements Serializable {
 	}
 	
 	public void excluirAtividade() {
-		Atividade atv;
-		try {
-			atv = atividadeService.excluirAtividade(idAtividade);
-		} catch (InconsistenciaException e) {
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
-			return;
-		}
-		
+		Atividade atv = atividadeService.excluirAtividade(idAtividade);
+
 		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Atividade " + atv.getTitulo() + " excluída com sucesso", null));
 		
 		// Recarrega a listagem de atividades

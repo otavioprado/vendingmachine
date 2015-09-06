@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.ejb.EJBTransactionRolledbackException;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.context.ExternalContext;
@@ -156,6 +157,10 @@ public class FornecedorMB implements Serializable {
 		} catch (InconsistenciaException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
 			return;
+		} catch(EJBTransactionRolledbackException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Esse fornecedor não pode ser excluído em quanto estiver vinculado à máquinas e/ou produtos.", null));
+			logger.warn("Tentativa de excluir um fornecedor vinculado à máquinas e/ou produtos.");
+			return;
 		}
 		
 		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Fornecedor " + fornec.getNomeFantasia() + " excluído com sucesso", null));
@@ -180,6 +185,10 @@ public class FornecedorMB implements Serializable {
 			fornec = fornecedorService.excluir(fornecedor.getId());
 		} catch (InconsistenciaException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
+			return;
+		} catch(EJBTransactionRolledbackException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Esse fornecedor não pode ser excluído em quanto estiver vinculado à máquinas e/ou produtos.", null));
+			logger.warn("Tentativa de excluir um fornecedor vinculado à máquinas e/ou produtos.");
 			return;
 		}
 		

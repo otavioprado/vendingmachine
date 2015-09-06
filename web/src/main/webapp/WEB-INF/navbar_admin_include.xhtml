@@ -49,7 +49,7 @@
 					<li class="#{view.viewId eq '/admin/permissoes.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/permissoes.xhtml"><span class="glyphicon glyphicon-list-alt"></span>Permissões</a></li>
 				</ul>
 			</c:if>
-			<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_ATIVIDADE') eq true and seguranca.perfilUsuarioLogado eq 'ADMINISTRADOR'}">
+			<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_ATIVIDADE') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_CONS_ATIVIDADE')}">
 				<ul class="nav navbar-nav">
 					<li class="dropdown #{view.viewId eq '/admin/agendar_atividade.xhtml'? 'active' : ''}">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-book"/>Atividade<span class="caret"></span></a>
@@ -162,11 +162,13 @@
 										<div class="col-md-6">
 											<a href="#" class="btn btn-default" style="width:100%;">&nbsp;Alterar senha&nbsp;</a>
 										</div>
-										<div class="col-md-6">
-											<a href="#{request.contextPath}/j_spring_security_logout" class="btn btn-default pull-right" style="width:100%;">
-												<i class="glyphicon glyphicon-off"></i>&nbsp;Sair&nbsp;
-											</a>
-										</div>
+										<h:form>
+											<div class="col-md-6">
+												<h:commandLink id="btn-logout" actionListener="#{loginMB.efetuarLogout()}" class="btn btn-default pull-right" style="width: 100%;" type="button" immediate="true">
+													<i class="glyphicon glyphicon-off"></i>&nbsp;Sair&nbsp;
+												</h:commandLink>
+											</div>
+										</h:form>
 									</div>
 								</div>
 							</div>

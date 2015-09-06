@@ -139,15 +139,10 @@ public class FornecedorServiceBean implements FornecedorService {
 
 	@Override
 	public Fornecedor excluir(Long id) throws InconsistenciaException {
-
 		Fornecedor fornecedor = fornecedorRepository.findById(id);
-		
-		/*if(fornecedor.getIndDisponivel() == false) {
-			throw new InconsistenciaException("Apenas fornecedores que não tenham sido atribuídos a nenhum fornecedor podem ser excluídos.");
-		}*/
-		
+
 		fornecedorRepository.remove(fornecedor);
-		
+
 		return fornecedor;
 	}
 

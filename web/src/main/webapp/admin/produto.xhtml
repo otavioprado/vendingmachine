@@ -12,10 +12,12 @@
     template="layoutLogado.xhtml">
     
     <ui:define name="script">
+    	<h:outputScript name="js/jquery.maskMoney.min.js" />
+    
 		<script>
 			$(function() {
-				$("#valUnit").mask("R$ 999.99")
-				$("#precoVenda").mask("R$ 999.99")
+				$("#valUnit").maskMoney({prefix:'R$ ', allowNegative: false, thousands:'.', decimal:',', affixesStay: true});
+				$("#precoVenda").maskMoney({prefix:'R$ ', allowNegative: false, thousands:'.', decimal:',', affixesStay: true});
 			});
 		</script>
 	</ui:define>
@@ -30,7 +32,7 @@
 						<div class="form-group">
 							<label for="codigo">Código *</label>
 							<h:inputText id="codigo" name="codigo" type="text" class="form-control" placeholder="Código" value="#{produtoMB.produto.codigo}" required="true" maxlength="25"/>
-							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigo, codigoFornecedor"/>
+							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigo"/>
 						</div>
 					</div>
 					
@@ -45,16 +47,20 @@
 					<div class="col-lg-4">
 						<div class="form-group">
 							<label for="valUnit">Valor unitário *</label>
-							<h:inputText id="valUnit" name="valUnit" type="text" class="form-control" placeholder="Valor unitário]" value="#{produtoMB.valorUnitario}" required="true" maxlength="25"
-								requiredMessage="O campo valor unitário é obrigatório"/>
+							<h:inputText id="valUnit" name="valUnit" type="text" class="form-control" placeholder="Valor unitário]" value="#{produtoMB.produto.valorUnitario}" required="true" maxlength="25"
+								requiredMessage="O campo valor unitário é obrigatório">
+								<f:convertNumber type="currency" currencySymbol="R$"/>
+							</h:inputText>
 						</div>
 					</div>
 					
 					<div class="col-lg-4">
 						<div class="form-group">
 							<label for="precoVenda">Preço de venda *</label>
-							<h:inputText id="precoVenda" name="precoVenda" type="text" class="form-control" placeholder="Preço de venda" value="#{produtoMB.precoVenda}" required="true" maxlength="25"
-								requiredMessage="O campo preço de venda é obrigatório"/>
+							<h:inputText id="precoVenda" name="precoVenda" type="text" class="form-control" placeholder="Preço de venda" value="#{produtoMB.produto.precoVenda}" required="true" maxlength="25"
+								requiredMessage="O campo preço de venda é obrigatório">
+								<f:convertNumber type="currency" currencySymbol="R$"/>
+							</h:inputText>
 						</div>
 					</div>
 					
@@ -78,8 +84,9 @@
 									<label for="codigoFornecedor">Código *</label>
 									<h:inputText id="codigoFornecedor" name="codigo" type="text" class="form-control" placeholder="Código" value="#{produtoMB.produto.fornecedor.codigo}" required="true" maxlength="25"
 										requiredMessage="O campo código do fornecedor é obrigatório">
-										 <f:ajax event="blur" listener="#{produtoMB.selecionarFornecedor(produtoMB.produto.fornecedor.codigo)}" render="codigoFornecedor nomeFantasia tipoPessoa cpfCnpj site telefone email"/>
+										<f:ajax event="blur" listener="#{produtoMB.selecionarFornecedor(produtoMB.produto.fornecedor.codigo)}" render="codigoFornecedor nomeFantasia tipoPessoa cpfCnpj site telefone email"/>
 									</h:inputText>
+									<pe:keyFilter id="validarCodigoForn" regEx="/[A-Z0-9]+/" for="codigoFornecedor"/>
 								</div>
 							</div>
 							
@@ -170,6 +177,7 @@
 							<div class="form-group">
 								<label for="dlgCodigo">Código:</label>
 								<input id="dlgCodigo" name="dlgCodigo" type="text" class="form-control" placeholder="Código" jsf:value="#{produtoMB.fornecedor.codigo}" maxlength="25" />
+								<pe:keyFilter regEx="/[A-Z0-9]+/" for="dlgCodigo"/>
 							</div>
 						</div>
 						<div class="col-md-4">

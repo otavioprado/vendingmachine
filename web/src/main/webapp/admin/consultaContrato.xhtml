@@ -76,8 +76,16 @@
 								<h:outputText id="modalidadeContrato" value="#{contrato.modalidade}" />
 							</p:column>
 							
-							<p:column headerText="Valor">
-								<h:outputText id="valorContrato" value="#{contrato.valorAux}" />
+							<p:column headerText="Valor aluguel">
+								<h:outputText id="valorAlug" value="#{contrato.valorAluguel != null ? contrato.valorAluguel : '-'}">
+									<f:convertNumber type="currency" currencySymbol="R$" />
+								</h:outputText>
+							</p:column>
+							
+							<p:column headerText="Valor porcentagem">
+								<h:outputText id="valorPorcent" value="#{contrato.valorPorcentagem != null ? contrato.valorPorcentagem : '-'}">
+									<f:convertNumber type="percent" locale="pt-BR" integerOnly="false" maxFractionDigits="1" minFractionDigits="1"/>
+								</h:outputText>
 							</p:column>
 							
 							<p:column headerText="Status">

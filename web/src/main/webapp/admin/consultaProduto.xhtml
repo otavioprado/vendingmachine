@@ -11,6 +11,17 @@
     xmlns:pe="http://primefaces.org/ui/extensions"
     template="layoutLogado.xhtml">
     
+    <ui:define name="script">
+    	<h:outputScript name="js/jquery.maskMoney.min.js" />
+    
+		<script>
+			$(function() {
+				$("#valUnit").maskMoney({prefix:'R$ ', allowNegative: false, thousands:'.', decimal:',', affixesStay: true});
+				$("#precoVenda").maskMoney({prefix:'R$ ', allowNegative: false, thousands:'.', decimal:',', affixesStay: true});
+			});
+		</script>
+	</ui:define>
+    
 	<ui:define name="conteudo">
 		<p:panel id="basic" header="Filtro de pesquisa de produtos" style="margin-bottom:20px">
 			<h:form prependId="false">
@@ -77,11 +88,15 @@
 							</p:column>
 							
 							<p:column headerText="Valor unitário">
-								<h:outputText id="produtoValUnit" value="#{produto.valUnitAux}" />
+								<h:outputText id="produtoValUnit" value="#{produto.valorUnitario}">
+									<f:convertNumber type="currency" currencySymbol="R$"/>
+								</h:outputText>
 							</p:column>
 							
 							<p:column headerText="Valor venda">
-								<h:outputText id="produtoValVenda" value="#{produto.valVendaAux}" />
+								<h:outputText id="produtoValVenda" value="#{produto.precoVenda}">
+									<f:convertNumber type="currency" currencySymbol="R$"/>
+								</h:outputText>
 							</p:column>
 							
 							<p:column headerText="Perecível">

@@ -13,6 +13,7 @@
 
 	<ui:define name="script">
 		<h:outputScript name="js/datepicker-pt-BR.js" />
+		<h:outputScript name="js/jquery.maskMoney.min.js" />
 
 		<script>
 			$(function() {				
@@ -24,11 +25,11 @@
 				if($("#modContrato").val() == 'ALUGUEL') {
 					$("#valAluguel").prop("readonly", false);
 					$("#valPorcent").prop("readonly", true);
-					$("#valAluguel").mask("R$ 9999,99");
+					$("#valAluguel").maskMoney({prefix:'R$ ', allowNegative: false, thousands:'.', decimal:',', affixesStay: true});
 				} else if($("#modContrato").val() == 'PORCENTAGEM') {
 					$("#valPorcent").prop("readonly", false);
 					$("#valAluguel").prop("readonly", true);
-					$("#valPorcent").mask("99,9%");
+					$("#valPorcent").maskMoney({suffix:'%', allowNegative: false, thousands:'.', decimal:',', affixesStay: true, precision: 1});
 				}
 			});
 			
@@ -38,14 +39,14 @@
 					$("#valPorcent").val('');
 					$("#valAluguel").val('');
 					$("#valAluguel").prop("readonly", false);
-					$("#valAluguel").mask("R$ 9999,99");
+					$("#valAluguel").maskMoney({prefix:'R$ ', allowNegative: false, thousands:'.', decimal:',', affixesStay: true});
 					$("#valPorcent").prop("readonly", true);
 				} else if($("#modContrato").val() == 'PORCENTAGEM') {
 					$("#valPorcent").attr('placeholder', 'Porcentagem')
 					$("#valPorcent").val('');
 					$("#valAluguel").val('');
 					$("#valPorcent").prop("readonly", false);
-					$("#valPorcent").mask("99,9%");
+					$("#valPorcent").maskMoney({suffix:'%', allowNegative: false, thousands:'.', decimal:',', affixesStay: true, precision: 1});
 					$("#valAluguel").prop("readonly", true);
 				} else if($("#modContrato").val() == '') {
 					$("#valPorcent").prop("readonly", true);
@@ -94,16 +95,21 @@
 		            <div class="col-lg-4">
 						<div class="form-group">
 							<label for="codigo">Valor do aluguel *</label>
-							<h:inputText id="valAluguel" name="valAluguel" pt:placeholder="Valor do aluguel"  styleClass="form-control" value="#{contratoMB.valorAluguel}" 
-								maxlength="6" requiredMessage="O campo valor do aluguel é obrigatório"/>
-							<pe:keyFilter regEx="/[0-9]+/" for="valAluguel, valPorcent"/>
+							<h:inputText id="valAluguel" name="valAluguel" pt:placeholder="Valor do aluguel"  styleClass="form-control" value="#{contratoMB.contrato.valorAluguel}" 
+								maxlength="10" requiredMessage="O campo valor do aluguel é obrigatório">
+								<f:convertNumber type="currency" currencySymbol="R$"/>
+							</h:inputText>
+							<pe:keyFilter regEx="/[0-9]+/" for="valAluguel"/>
 						</div>
 					</div>
 					<div class="col-lg-4">
 						<div class="form-group">
 							<label for="valPorcent">Porcentagem sob as vendas *</label>
-							<h:inputText id="valPorcent" name="valPorcent" pt:placeholder="Porcentagem"  styleClass="form-control" value="#{contratoMB.valorPorcentagem}" 
-								maxlength="2" requiredMessage="O campo porcentagem sob as vendas é obrigatório"/>
+							<h:inputText id="valPorcent" name="valPorcent" pt:placeholder="Porcentagem"  styleClass="form-control" value="#{contratoMB.contrato.valorPorcentagem}" 
+								maxlength="5" requiredMessage="O campo porcentagem sob as vendas é obrigatório">
+								<f:convertNumber type="percent" locale="pt-BR" integerOnly="false" maxFractionDigits="1" minFractionDigits="1"/>
+							</h:inputText>
+							<pe:keyFilter regEx="/[0-9.,%]+/" for="valPorcent"/>
 						</div>
 					</div>
 					

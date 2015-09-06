@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
 
-import br.com.milenio.vendingmachine.domain.model.Atividade;
 import br.com.milenio.vendingmachine.domain.model.Auditoria;
 import br.com.milenio.vendingmachine.domain.model.Fornecedor;
 import br.com.milenio.vendingmachine.domain.model.Produto;
@@ -60,9 +59,6 @@ public class ProdutoMB implements Serializable {
 	private Fornecedor fornecedor = new Fornecedor();
 	private List<Produto> listProdutos;
 	
-	private String precoVenda;
-	private String valorUnitario;
-	
 	private List<Fornecedor> listFornecedores = new ArrayList<Fornecedor>();
 	
 	private boolean carregarPagina = true;
@@ -77,13 +73,6 @@ public class ProdutoMB implements Serializable {
 		}
 		
 		try {
-			// Retira a máscara R$ dos valores
-			precoVenda = precoVenda.replace("R$", "").trim();
-			produto.setPrecoVenda(Double.parseDouble(precoVenda));
-			
-			valorUnitario = valorUnitario.replace("R$", "").trim();
-			produto.setValorUnitario(Double.parseDouble(valorUnitario));
-			
 			produtoService.cadastrar(produto);
 			
 			// Sucesso - Exibe mensagem de cadastro realizado com sucesso
@@ -98,14 +87,12 @@ public class ProdutoMB implements Serializable {
 			auditoria.setUsuario(Seguranca.getUsuarioLogado());
 			auditoria.setIp(request.getRemoteAddr());
 			auditoriaService.cadastrarNovaAcao(auditoria);
-		} catch(ConteudoJaExistenteNoBancoDeDadosException e) {
+		} catch(ConteudoJaExistenteNoBancoDeDadosException | InconsistenciaException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
 			logger.info(e.getMessage());
 		}
 		
 		produto = new Produto();
-		precoVenda = null;
-		valorUnitario = null;
 	}
 	
 	public void selecionarFornecedor(String codigo) {
@@ -173,8 +160,6 @@ public class ProdutoMB implements Serializable {
 	public void carregarDadosProdutoParaEdicao() {
 		if(carregarPagina) {
 			produto = produtoService.findById(produto.getId());
-			valorUnitario = produto.getValorUnitario().toString();
-			precoVenda = produto.getPrecoVenda().toString();
 		}
 		
 		carregarPagina = false;
@@ -190,28 +175,26 @@ public class ProdutoMB implements Serializable {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Os campos código e descrição não podem conter apenas espaços em branco.", null));
 			return;
 		}
-		
-		// Retira a máscara R$ dos valores
-		precoVenda = precoVenda.replace("R$", "").trim();
-		produto.setPrecoVenda(Double.parseDouble(precoVenda));
-		
-		valorUnitario = valorUnitario.replace("R$", "").trim();
-		produto.setValorUnitario(Double.parseDouble(valorUnitario));
 
-		produtoService.editar(produto);
+		try {
+			produtoService.editar(produto);
 
-		// Sucesso - Exibe mensagem de edição realizada com sucesso
-		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Produto " + produto.getDescricao() + " editado com sucesso.", null));
-		logger.info("Produto " + produto.getDescricao() + " foi editado com sucesso.");
-		
-		// Processo de auditoria de cadastro de usuário
-		Auditoria auditoria = new Auditoria();
-		auditoria.setDataAcao(new Date());
-		auditoria.setTitulo("Edição");
-		auditoria.setDescricao("Editou o produto " + produto.getDescricao());
-		auditoria.setUsuario(Seguranca.getUsuarioLogado());
-		auditoria.setIp(request.getRemoteAddr());
-		auditoriaService.cadastrarNovaAcao(auditoria);
+			// Sucesso - Exibe mensagem de edição realizada com sucesso
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Produto " + produto.getDescricao() + " editado com sucesso.", null));
+			logger.info("Produto " + produto.getDescricao() + " foi editado com sucesso.");
+			
+			// Processo de auditoria de cadastro de usuário
+			Auditoria auditoria = new Auditoria();
+			auditoria.setDataAcao(new Date());
+			auditoria.setTitulo("Edição");
+			auditoria.setDescricao("Editou o produto " + produto.getDescricao());
+			auditoria.setUsuario(Seguranca.getUsuarioLogado());
+			auditoria.setIp(request.getRemoteAddr());
+			auditoriaService.cadastrarNovaAcao(auditoria);
+		} catch (InconsistenciaException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+			logger.info(e.getMessage());
+		}
 	}
 	
 	public void excluirPelaEdicao() {
@@ -278,22 +261,6 @@ public class ProdutoMB implements Serializable {
 
 	public void setListFornecedores(List<Fornecedor> listFornecedores) {
 		this.listFornecedores = listFornecedores;
-	}
-
-	public String getPrecoVenda() {
-		return precoVenda;
-	}
-
-	public void setPrecoVenda(String precoVenda) {
-		this.precoVenda = precoVenda;
-	}
-
-	public String getValorUnitario() {
-		return valorUnitario;
-	}
-
-	public void setValorUnitario(String valorUnitario) {
-		this.valorUnitario = valorUnitario;
 	}
 
 	public List<Produto> getListProdutos() {

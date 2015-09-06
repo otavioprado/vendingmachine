@@ -21,6 +21,7 @@ import br.com.milenio.vendingmachine.domain.model.Auditoria;
 import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 import br.com.milenio.vendingmachine.exceptions.UsuarioBloqueadoNoSistemaException;
 import br.com.milenio.vendingmachine.exceptions.UsuarioInexistenteNoSistemaException;
+import br.com.milenio.vendingmachine.security.Seguranca;
 import br.com.milenio.vendingmachine.service.AuditoriaService;
 import br.com.milenio.vendingmachine.service.UsuarioService;
 
@@ -76,6 +77,22 @@ public class LoginMB {
 		auditoria.setUsuario(usuarioValidado);
 		auditoria.setIp(request.getRemoteAddr());
 		auditoriaService.cadastrarNovaAcao(auditoria);
+	}
+	
+	public void efetuarLogout() throws ServletException, IOException {
+		// Processo de auditoria de Logout
+		Auditoria auditoria = new Auditoria();
+		auditoria.setDataAcao(new Date());
+		auditoria.setTitulo("Logout");
+		auditoria.setDescricao("Saiu do sistema");
+		auditoria.setUsuario(Seguranca.getUsuarioLogado());
+		auditoria.setIp(request.getRemoteAddr());
+		auditoriaService.cadastrarNovaAcao(auditoria);
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/j_spring_security_logout");
+		dispatcher.forward(request, response);
+		
+		ctx.responseComplete();
 	}
 	
 	public void preRender() {

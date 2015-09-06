@@ -9,7 +9,6 @@ import com.uaihebert.uaicriteria.UaiCriteria;
 import com.uaihebert.uaicriteria.UaiCriteriaFactory;
 
 import br.com.milenio.vendingmachine.domain.AbstractVendingMachineRepositoryBean;
-import br.com.milenio.vendingmachine.domain.model.Cliente;
 import br.com.milenio.vendingmachine.domain.model.Fornecedor;
 
 @Stateless(name = "FornecedorRepository")
@@ -134,6 +133,4 @@ public class FornecedorRepositoryBean extends AbstractVendingMachineRepositoryBe
 		
 		return null;
 	}
-	
-	
 }

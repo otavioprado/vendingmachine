@@ -58,8 +58,6 @@ public class ContratoServiceBean implements ContratoService {
 			if(listContratos.isEmpty()) {
 				throw new CadastroInexistenteException("Não existem contratos cadastrados no sistema");
 			}
-			
-			maskValorByModalidade(listContratos);
 
 			return listContratos;
 		} else {
@@ -69,24 +67,7 @@ public class ContratoServiceBean implements ContratoService {
 				throw new CadastroInexistenteException("Não existe nenhum cadastro de contrato para o filtro informado.");
 			}
 			
-			maskValorByModalidade(listContratos);
-			
 			return listContratos;
-		}
-	}
-	
-	private void maskValorByModalidade(List<Contrato> lstContratos) {
-		
-		for(Contrato c : lstContratos) {
-			String modalidade = c.getModalidade();
-			Double valor = c.getValor();
-			
-			if("PORCENTAGEM".equalsIgnoreCase(modalidade)) {
-				c.setValorAux(valor.toString() + "%");
-				
-			} else if("ALUGUEL".equalsIgnoreCase(modalidade)) {
-				c.setValorAux("R$ " + valor.toString());
-			}
 		}
 	}
 

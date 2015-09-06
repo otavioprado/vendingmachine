@@ -8,9 +8,11 @@ import javax.ejb.Stateless;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import br.com.milenio.vendingmachine.domain.model.Fornecedor;
 import br.com.milenio.vendingmachine.domain.model.Produto;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.exceptions.ConteudoJaExistenteNoBancoDeDadosException;
+import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
 import br.com.milenio.vendingmachine.repository.FornecedorRepository;
 import br.com.milenio.vendingmachine.repository.ProdutoRepository;
 
@@ -26,7 +28,23 @@ public class ProdutoServiceBean implements ProdutoService {
 	private static final Logger LOGGER = LogManager.getLogger(ProdutoServiceBean.class);
 	
 	@Override
-	public void cadastrar(Produto novoProduto) throws ConteudoJaExistenteNoBancoDeDadosException {
+	public void cadastrar(Produto novoProduto) throws ConteudoJaExistenteNoBancoDeDadosException, InconsistenciaException {
+		
+		if(novoProduto.getValorUnitario() >= novoProduto.getPrecoVenda()) {
+			throw new InconsistenciaException("O preço de venda deve ser maior que o valor unitário!");
+		}
+		
+		String codigoFornecedor = novoProduto.getFornecedor().getCodigo();
+		if(codigoFornecedor == null || codigoFornecedor.isEmpty()) {
+			throw new InconsistenciaException("O código do fornecedor é inválido");
+		} else {
+			Fornecedor fornecedor = fornecedorRepository.findByCodigo(codigoFornecedor);
+			
+			if(fornecedor == null) {
+				throw new InconsistenciaException("O código do fornecedor é inválido");
+			}
+		}
+		
 		// Verifica se já existe um produto com o mesmo código cadastrado no banco de dados do sistema
 		Produto produto = produtoRepository.findByCodigo(novoProduto.getCodigo());
 		
@@ -70,15 +88,6 @@ public class ProdutoServiceBean implements ProdutoService {
 			}
 		}
 		
-		// Coloca a máscara de R$ no campo auxiliar utilizado pela view
-		for(Produto p : produtos) {
-			Double valorUnitario = p.getValorUnitario();
-			Double precoVenda = p.getPrecoVenda();
-			
-			p.setValUnitAux("R$" + valorUnitario);
-			p.setValVendaAux("R$" + precoVenda);
-		}
-		
 		return produtos;
 	}
 
@@ -101,7 +110,12 @@ public class ProdutoServiceBean implements ProdutoService {
 	}
 
 	@Override
-	public void editar(Produto produto) {
+	public void editar(Produto produto) throws InconsistenciaException {
+		
+		if(produto.getValorUnitario() >= produto.getPrecoVenda()) {
+			throw new InconsistenciaException("O preço de venda deve ser maior que o valor unitário!");
+		}
+		
 		produtoRepository.merge(produto);
 	}
 	
