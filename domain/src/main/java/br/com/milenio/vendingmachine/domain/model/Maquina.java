@@ -11,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -52,7 +54,8 @@ public class Maquina implements Serializable {
 	@JoinColumn(name= "FORNECEDOR_ID")
 	private Fornecedor fornecedor = new Fornecedor();
 	
-	@OneToMany
+	@ManyToMany
+	@JoinTable(name="MAQUINA_PRODUTO", joinColumns={@JoinColumn(name="MAQUINA_ID", referencedColumnName="id")}, inverseJoinColumns={@JoinColumn(name="PRODUTO_ID", referencedColumnName="id")})
 	private List<Produto> produtos = new ArrayList<Produto>();
 
 	public Long getId() {

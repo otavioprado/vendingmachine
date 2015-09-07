@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.ejb.EJBTransactionRolledbackException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -140,7 +141,13 @@ public class ProdutoMB implements Serializable {
 	public void excluir() {
 		Produto prod;
 		
-		prod = produtoService.excluir(produto.getId());
+		try{
+			prod = produtoService.excluir(produto.getId());
+		} catch(EJBTransactionRolledbackException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Esse produto não pode ser excluído em quanto estiver vinculado à máquinas.", null));
+			logger.warn("Tentativa de excluir um produto vinculado a alguma máquina.");
+			return;
+		}
 
 		// Processo de auditoria de exclusão de contratos
 		Auditoria auditoria = new Auditoria();
@@ -200,7 +207,13 @@ public class ProdutoMB implements Serializable {
 	public void excluirPelaEdicao() {
 		Produto prod;
 		
-		prod = produtoService.excluir(produto.getId());
+		try {
+			prod = produtoService.excluir(produto.getId());
+		} catch(EJBTransactionRolledbackException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Esse produto não pode ser excluído em quanto estiver vinculado à máquinas.", null));
+			logger.warn("Tentativa de excluir um produto vinculado a alguma máquina.");
+			return;
+		}
 
 		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Produto " + prod.getDescricao() + " excluído com sucesso", null));
 		

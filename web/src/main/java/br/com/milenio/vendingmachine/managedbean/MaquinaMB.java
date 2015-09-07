@@ -2,6 +2,7 @@ package br.com.milenio.vendingmachine.managedbean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -9,14 +10,23 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 
+import org.apache.logging.log4j.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.primefaces.context.RequestContext;
 
+import br.com.milenio.vendingmachine.domain.model.Auditoria;
 import br.com.milenio.vendingmachine.domain.model.Fornecedor;
 import br.com.milenio.vendingmachine.domain.model.Maquina;
 import br.com.milenio.vendingmachine.domain.model.Produto;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
+import br.com.milenio.vendingmachine.exceptions.ConteudoJaExistenteNoBancoDeDadosException;
+import br.com.milenio.vendingmachine.security.Seguranca;
+import br.com.milenio.vendingmachine.service.AuditoriaService;
 import br.com.milenio.vendingmachine.service.FornecedorService;
+import br.com.milenio.vendingmachine.service.MaquinaService;
 import br.com.milenio.vendingmachine.service.ProdutoService;
 
 @Named
@@ -28,7 +38,19 @@ public class MaquinaMB implements Serializable {
 	private FornecedorService fornecedorService;
 	
 	@Inject
+	private Logger logger;
+	
+	@Inject
 	private ProdutoService produtoService;
+	
+	@Inject
+	private AuditoriaService auditoriaService;
+	
+	@Inject
+	private MaquinaService maquinaService;
+	
+	@Inject
+	private HttpServletRequest request;
 	
 	@Inject
 	private FacesContext ctx;
@@ -43,7 +65,50 @@ public class MaquinaMB implements Serializable {
 	private String custoAquisicao;
 	
 	public void cadastrar() {
+		logger.debug("Tentando realizar o cadastro da máquina " + maquina.getCodigo());
 		
+		String codigo = maquina.getCodigo() != null ? maquina.getCodigo().trim() : "";
+		String modelo = maquina.getModelo() != null ? maquina.getModelo().trim() : "";
+		
+		if(codigo.isEmpty() || modelo.isEmpty()) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Os campos código e modelo não podem conter apenas espaços em branco.", null));
+			return;
+		}
+		
+		// Valida se a data informada não é menor que a data atual
+		DateTime hoje = new DateTime(new Date());
+		DateTime dataInformada = new DateTime(maquina.getDataAquisicao());
+		Days daysBetween = Days.daysBetween(hoje, dataInformada);
+		
+		if(daysBetween.getDays() > 0) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Apenas datas de aquisição passadas podem ser informadas.", null));
+			return;
+		}
+		
+		// TODO: Setar o status da máquina para "em estoque"
+
+		try{
+			maquinaService.cadastrar(maquina);
+			
+			// Sucesso - Exibe mensagem de cadastro realizado com sucesso
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Máquina " + maquina.getCodigo() + " cadastrada com sucesso.", null));
+			logger.info("Máquina " + maquina.getCodigo() + " cadastrada no sistema com sucesso.");
+			
+			// Processo de auditoria de cadastro de usuário
+			Auditoria auditoria = new Auditoria();
+			auditoria.setDataAcao(new Date());
+			auditoria.setTitulo("Cadastro");
+			auditoria.setDescricao("Cadastrou a máquina " + maquina.getCodigo());
+			auditoria.setUsuario(Seguranca.getUsuarioLogado());
+			auditoria.setIp(request.getRemoteAddr());
+			auditoriaService.cadastrarNovaAcao(auditoria);
+			
+		} catch(ConteudoJaExistenteNoBancoDeDadosException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+			logger.info(e.getMessage());
+		}
+		
+		maquina = new Maquina();
 	}
 	
 	public void consultarFornecedor() {
@@ -73,17 +138,36 @@ public class MaquinaMB implements Serializable {
 	}
 	
 	public void adicionarProduto(Long id) {
+		
+		if(maquina.getQtdMaxTipoProdutos() <= maquina.getProdutos().size()) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "O limite máximo de produtos já foi atingido.", null));
+			RequestContext context = RequestContext.getCurrentInstance();
+			context.execute("PF('dlgAdicionarProduto').hide();");
+			return;
+		}
+		
 		Produto newProduto = produtoService.findById(id);
 		
 		if(newProduto != null) {
+			List<Produto> produtos = maquina.getProdutos();
+			
+			if(produtos.contains(newProduto)) {
+				ctx.addMessage("Message3", new FacesMessage(FacesMessage.SEVERITY_WARN, "O produto " + newProduto.getCodigo() + " já foi adicionado.", null));
+				return;
+			}
+			
 			maquina.getProdutos().add(newProduto);
+			
+			ctx.addMessage("Message3", new FacesMessage(FacesMessage.SEVERITY_INFO, "Produto " + newProduto.getCodigo() + " adicionado com sucesso.", null));
+			return;
 		} else{
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Código inválido: O código " + produto.getCodigo() + " informado não corresponde a nenhum produto cadastrado no sistema.", null));
 			return;
 		}
-		
-		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("PF('dlgAdicionarProduto').hide();");
+	}
+	
+	public void excluirProduto() {
+		maquina.getProdutos().remove(produtoSelecionado);
 	}
 	
 	public void selecionarFornecedor(String codigo) {
@@ -179,5 +263,9 @@ public class MaquinaMB implements Serializable {
 
 	public void setListProdutos(List<Produto> listProdutos) {
 		this.listProdutos = listProdutos;
+	}
+	
+	public Date getTodayDate() {
+		return new Date();
 	}
 }

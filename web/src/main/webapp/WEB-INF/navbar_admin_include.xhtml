@@ -133,6 +133,22 @@
 					</li>
 				</ul>
 			</c:if>
+			
+			<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_MAQUINA') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_CONS_MAQUINA') eq true}">
+				<ul class="nav navbar-nav">
+					<li class="dropdown #{view.viewId eq '/admin/maquina.xhtml' or view.viewId eq '/admin/consultaMaquina.xhtml'? 'active' : ''}">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-modal-window"/>Máquina<span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_MAQUINA') eq true}">
+								<li class="#{view.viewId eq '/admin/maquina.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/maquina.xhtml">Cadastrar</a></li>
+							</c:if>
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CONS_MAQUINA') eq true}">
+								<li class="#{view.viewId eq '/admin/consultaMaquina.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/consultaMaquina.xhtml">Consultar</a></li>
+							</c:if>
+						</ul>
+					</li>
+				</ul>
+			</c:if>
 
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">

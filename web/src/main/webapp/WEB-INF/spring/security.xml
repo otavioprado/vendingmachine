@@ -76,6 +76,8 @@
 		<security:intercept-url pattern="/admin/consultarAtividade.xhtml" access="hasRole('ROLE_CONS_ATIVIDADE')"/>
 		<security:intercept-url pattern="/admin/editar_atividade.xhtml" access="hasRole('ROLE_EDT_ATIVIDADE')"/>
 		
+		<security:intercept-url pattern="/admin/maquina.xhtml" access="hasRole('ROLE_CAD_MAQUINA')"/>
+		
 		<security:intercept-url pattern="/admin/auditoria.xhtml" access="hasRole('ROLE_CONS_AUDITORIA')"/>
 		<security:intercept-url pattern="/admin/permissoes.xhtml" access="hasRole('ROLE_EDT_PERMISSOES')"/>
 		<security:intercept-url pattern="/admin/cliente.xhtml" access="hasRole('ROLE_CAD_CLIENTE')"/>
