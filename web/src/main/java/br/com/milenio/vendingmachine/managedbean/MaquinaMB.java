@@ -20,9 +20,12 @@ import org.primefaces.context.RequestContext;
 import br.com.milenio.vendingmachine.domain.model.Auditoria;
 import br.com.milenio.vendingmachine.domain.model.Fornecedor;
 import br.com.milenio.vendingmachine.domain.model.Maquina;
+import br.com.milenio.vendingmachine.domain.model.MaquinaStatus;
 import br.com.milenio.vendingmachine.domain.model.Produto;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.exceptions.ConteudoJaExistenteNoBancoDeDadosException;
+import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
+import br.com.milenio.vendingmachine.repository.MaquinaStatusRepository;
 import br.com.milenio.vendingmachine.security.Seguranca;
 import br.com.milenio.vendingmachine.service.AuditoriaService;
 import br.com.milenio.vendingmachine.service.FornecedorService;
@@ -44,6 +47,9 @@ public class MaquinaMB implements Serializable {
 	private ProdutoService produtoService;
 	
 	@Inject
+	private MaquinaStatusRepository maquinaStatusRepository;
+	
+	@Inject
 	private AuditoriaService auditoriaService;
 	
 	@Inject
@@ -55,14 +61,16 @@ public class MaquinaMB implements Serializable {
 	@Inject
 	private FacesContext ctx;
 	
+	private List<Maquina> listMaquinas = new ArrayList<Maquina>();
 	private Maquina maquina = new Maquina();
 	private List<Fornecedor> listFornecedores = new ArrayList<Fornecedor>();
 	private List<Produto> listProdutos = new ArrayList<Produto>();
 	private Fornecedor fornecedor = new Fornecedor();
 	private Produto produtoSelecionado = new Produto();
 	private Produto produto = new Produto();
-	
 	private String custoAquisicao;
+	private Maquina maqConsParam = new Maquina();
+	private boolean carregarPagina = true;
 	
 	public void cadastrar() {
 		logger.debug("Tentando realizar o cadastro da máquina " + maquina.getCodigo());
@@ -85,8 +93,6 @@ public class MaquinaMB implements Serializable {
 			return;
 		}
 		
-		// TODO: Setar o status da máquina para "em estoque"
-
 		try{
 			maquinaService.cadastrar(maquina);
 			
@@ -109,6 +115,103 @@ public class MaquinaMB implements Serializable {
 		}
 		
 		maquina = new Maquina();
+	}
+	
+	public List<String> getStatus() {
+		List<MaquinaStatus> allStatus = maquinaStatusRepository.getAll();
+		
+		List<String> status = new ArrayList<String>();
+		
+		for(MaquinaStatus ms : allStatus) {
+			status.add(ms.getDescricao());
+		}
+		
+		return status;
+	}
+	
+	public void editar() {
+		String codigo = maquina.getCodigo() != null ? maquina.getCodigo().trim() : "";
+		String modelo = maquina.getModelo() != null ? maquina.getModelo().trim() : "";
+		
+		if(codigo.isEmpty() || modelo.isEmpty()) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Os campos código e modelo não podem conter apenas espaços em branco.", null));
+			return;
+		}
+		
+		// Valida se a data informada não é menor que a data atual
+		DateTime hoje = new DateTime(new Date());
+		DateTime dataInformada = new DateTime(maquina.getDataAquisicao());
+		Days daysBetween = Days.daysBetween(hoje, dataInformada);
+		
+		if(daysBetween.getDays() > 0) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Apenas datas de aquisição passadas podem ser informadas.", null));
+			return;
+		}
+
+		try {
+			maquinaService.editar(maquina);
+		} catch (ConteudoJaExistenteNoBancoDeDadosException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
+			return;
+		}
+		
+		// Sucesso - Exibe mensagem de cadastro realizado com sucesso
+		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Máquina " + maquina.getCodigo() + " editada com sucesso.", null));
+		logger.info("Máquina " + maquina.getCodigo() + " foi editada com sucesso.");
+		
+		// Processo de auditoria de cadastro de usuário
+		Auditoria auditoria = new Auditoria();
+		auditoria.setDataAcao(new Date());
+		auditoria.setTitulo("Edição");
+		auditoria.setDescricao("Editou a máquina " + maquina.getCodigo());
+		auditoria.setUsuario(Seguranca.getUsuarioLogado());
+		auditoria.setIp(request.getRemoteAddr());
+		auditoriaService.cadastrarNovaAcao(auditoria);
+	}
+	
+	public void carregarDadosParaEdicao() {
+		if(carregarPagina) {
+			maquina = maquinaService.findById(maquina.getId());
+		}
+		
+		carregarPagina = false;
+	}
+	
+	public void inativar() {
+		try {
+			maquina = maquinaService.inativar(maquina.getId());
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Máquina " + maquina.getCodigo() + " inativada com sucesso.", null));
+			
+			// Após inativação, carrega a lista de máquinas para atualizar na view de consulta
+			consultar(true);
+			
+			// Processo de auditoria
+			Auditoria auditoria = new Auditoria();
+			auditoria.setDataAcao(new Date());
+			auditoria.setTitulo("Inativação");
+			auditoria.setDescricao("Inativou a máquina " + maquina.getCodigo());
+			auditoria.setUsuario(Seguranca.getUsuarioLogado());
+			auditoria.setIp(request.getRemoteAddr());
+			auditoriaService.cadastrarNovaAcao(auditoria);
+		} catch (InconsistenciaException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
+			return;
+		}
+	}
+	
+	public void consultar(boolean exibirMensagem) {
+		try {
+			listMaquinas = maquinaService.buscarComFiltro(maqConsParam);
+		} catch (CadastroInexistenteException e) {
+			if(listMaquinas != null && !listMaquinas.isEmpty()) {
+				listMaquinas.clear();
+			}
+			
+			if(exibirMensagem) {
+				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
+			}
+		}
+	
 	}
 	
 	public void consultarFornecedor() {
@@ -267,5 +370,21 @@ public class MaquinaMB implements Serializable {
 	
 	public Date getTodayDate() {
 		return new Date();
+	}
+
+	public List<Maquina> getListMaquinas() {
+		return listMaquinas;
+	}
+
+	public void setListMaquinas(List<Maquina> listMaquinas) {
+		this.listMaquinas = listMaquinas;
+	}
+
+	public Maquina getMaqConsParam() {
+		return maqConsParam;
+	}
+
+	public void setMaqConsParam(Maquina maqConsParam) {
+		this.maqConsParam = maqConsParam;
 	}
 }

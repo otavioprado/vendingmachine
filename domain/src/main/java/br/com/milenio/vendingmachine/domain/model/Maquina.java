@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,11 +15,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "MAQUINA")
@@ -45,7 +44,6 @@ public class Maquina implements Serializable {
 	@Column(name = "GARANTIA")
 	private Integer garantia;
 	
-	@NotNull
 	@Column(name= "DATA_AQUISICAO")
 	@Temporal(value=TemporalType.DATE)
 	private Date dataAquisicao;
@@ -54,7 +52,11 @@ public class Maquina implements Serializable {
 	@JoinColumn(name= "FORNECEDOR_ID")
 	private Fornecedor fornecedor = new Fornecedor();
 	
-	@ManyToMany
+	@ManyToOne
+	@JoinColumn(name= "MAQUINA_STATUS_ID")
+	private MaquinaStatus maquinaStatus = new MaquinaStatus();
+	
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name="MAQUINA_PRODUTO", joinColumns={@JoinColumn(name="MAQUINA_ID", referencedColumnName="id")}, inverseJoinColumns={@JoinColumn(name="PRODUTO_ID", referencedColumnName="id")})
 	private List<Produto> produtos = new ArrayList<Produto>();
 
@@ -129,5 +131,12 @@ public class Maquina implements Serializable {
 	public void setProdutos(List<Produto> produtos) {
 		this.produtos = produtos;
 	}
-	
+
+	public MaquinaStatus getMaquinaStatus() {
+		return maquinaStatus;
+	}
+
+	public void setMaquinaStatus(MaquinaStatus maquinaStatus) {
+		this.maquinaStatus = maquinaStatus;
+	}
 }

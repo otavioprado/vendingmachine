@@ -12,7 +12,6 @@ import com.uaihebert.uaicriteria.UaiCriteriaFactory;
 import br.com.milenio.vendingmachine.domain.AbstractVendingMachineRepositoryBean;
 import br.com.milenio.vendingmachine.domain.model.Atividade;
 import br.com.milenio.vendingmachine.domain.model.Perfil;
-import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 
 @Stateless(name = "AtividadeRepository")
 public class AtividadeRepositoryBean extends AbstractVendingMachineRepositoryBean<Atividade, Long> 
