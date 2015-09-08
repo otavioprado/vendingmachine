@@ -1,0 +1,259 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;"> 
+]>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:c="http://java.sun.com/jstl/core"
+    template="layoutLogado.xhtml">
+
+   	<ui:define name="script">
+		<h:outputScript name="js/datepicker-pt-BR.js" />
+
+		<script>
+			$(function() {
+				$("#dataCliente").datepicker($.datepicker.regional["pt-BR"]);
+				$("#dataCliente").mask("99/99/9999")
+				$("#telefoneFixo").mask("(99) 9999-9999")
+				$("#celular").mask("(99) 99999-9999")
+				$("#cep").mask("99999-999")
+				
+				if($("#cpfCnpj").val() == '' &amp;&amp; $("#fisicaJuridica").val() == '') {
+					$("#cpfCnpj").prop("readonly", true);
+				} 
+				
+				if($("#fisicaJuridica").val() == 'PF') {
+					$("#cpfCnpj").mask("999.999.999-99");
+				} else if($("#fisicaJuridica").val() == 'PJ') {
+					$("#cpfCnpj").mask("99.999.999/9999-99");
+				}
+			});
+			
+			function mask() {
+				if($("#fisicaJuridica").val() == 'PF') {
+					$("#cpfCnpj").attr('placeholder', 'CPF')
+					$("#cpfCnpj").val('');
+					$("#cpfCnpj").prop("readonly", false);
+					$("#cpfCnpj").mask("999.999.999-99");
+				} else if($("#fisicaJuridica").val() == 'PJ') {
+					$("#cpfCnpj").attr('placeholder', 'CNPJ')
+					$("#cpfCnpj").val('');
+					$("#cpfCnpj").prop("readonly", false);
+					$("#cpfCnpj").mask("99.999.999/9999-99");
+				} else if($("#fisicaJuridica").val() == '') {
+					$("#cpfCnpj").attr('placeholder', 'CPF/CNPJ')
+					$("#cpfCnpj").prop("readonly", true);
+					$("#cpfCnpj").val('');
+				}
+			}
+		</script>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form prependId="false">
+			<p:panel id="basic" header="Cadastrar fornecedor" style="margin-bottom:20px">
+				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="row">
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="codigo">Código *</label>
+							<h:inputText id="codigo" name="codigo" pt:placeholder="Código"  styleClass="form-control" value="#{fornecedorMB.fornecedor.codigo}" 
+								required="true" maxlength="10" requiredMessage="O campo código é obrigatório"/>
+							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigo"/>
+						</div>
+					</div>
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="nomeFantasia">Nome fantasia *</label>
+							<h:inputText id="nomeFantasia" name="nomeFantasia" styleClass="form-control" pt:placeholder="Nome fantasia" 
+								value="#{fornecedorMB.fornecedor.nomeFantasia}" required="true" maxlength="25" requiredMessage="O campo nome fantasia é obrigatório"/>
+							<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="nomeFantasia, nomeContato, logradouro, cidade, complemento, bairro"/>
+						</div>
+					</div>
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="nomeFantasia">Telefone fixo *</label>
+							<h:inputText id="telefoneFixo" name="telefoneFixo" styleClass="form-control" pt:placeholder="Telefone fixo" value="#{fornecedorMB.fornecedor.telefoneFixo}" 
+								required="true" maxlength="25" requiredMessage="O campo telefone fixo é obrigatório"/>
+							<pe:keyFilter regEx="/[0-9]/i" for="telefoneFixo, celular, numero"/>
+						</div>
+					</div>
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="email">E-mail *</label>
+							<h:inputText id="email" name="email" styleClass="form-control" pt:placeholder="E-mail" value="#{fornecedorMB.fornecedor.email}" required="true" 
+								maxlength="35" requiredMessage="O campo e-mail é obrigatório"/>
+							<pe:keyFilter regEx="/[a-z0-9_\.\-@]/i" for="email"/>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="perfil">Física/Jurídica *</label>
+							<h:selectOneMenu id="fisicaJuridica" value="#{fornecedorMB.fornecedor.fisicaJuridica}" styleClass="form-control" required="true"
+								onchange="mask()" requiredMessage="O campo física/jurídica é obrigatório">
+				                <f:selectItem itemLabel="[Selecione]" itemValue="" noSelectionOption="true" />
+				                <f:selectItem itemLabel="Pessoa física" itemValue="PF" noSelectionOption="false" />
+				                <f:selectItem itemLabel="Pessoa jurídica" itemValue="PJ" noSelectionOption="false" />
+			            	</h:selectOneMenu>
+		            	</div>
+		            </div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="email">CPF/CNPJ *</label>
+							<h:inputText id="cpfCnpj" name="cpfCnpj" styleClass="form-control" pt:placeholder="CPF/CNPJ" value="#{fornecedorMB.fornecedor.cpfCnpj}"
+								required="true" maxlength="25" requiredMessage="O campo CPF/CNPJ é obrigatório">
+							</h:inputText>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="site">Site</label>
+							<h:inputText id="site" name="site" styleClass="form-control" pt:placeholder="Site" value="#{fornecedorMB.fornecedor.site}"
+								maxlength="25" requiredMessage="O campo site é obrigatório"/>
+							<pe:keyFilter regEx="/[a-z0-9.-]+/i" for="site"/>
+						</div>
+					</div>
+					
+					<div class="col-lg-12">
+						<p:fieldset style="margin-bottom:20px" styleClass="">
+							<legend>Contato</legend>
+							
+							<div class="row">
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label for="nomeContato">Nome do contato</label>
+										<h:inputText id="nomeContato" name="nomeContato" styleClass="form-control" pt:placeholder="Nome do contato" 
+											value="#{fornecedorMB.fornecedor.nomeContato}" maxlength="25" requiredMessage="O campo nome do contato é obrigatório"/>
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label for="celular">Celular</label>
+										<h:inputText id="celular" name="celular" styleClass="form-control" pt:placeholder="Celular do contato" 
+											value="#{fornecedorMB.fornecedor.celular}" maxlength="25" requiredMessage="O campo celular é obrigatório"/>
+									</div>
+								</div>
+							</div>
+						</p:fieldset>
+					</div>
+					
+					
+					<div class="col-lg-12">
+						<p:fieldset id="fieldEndereco" style="margin-bottom:20px" styleClass="">
+							<legend>Endereço</legend>
+							
+							<div class="row">
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label for="cep">CEP *</label>
+										<h:inputText id="cep" name="cep" styleClass="form-control" pt:placeholder="CEP" 
+											value="#{fornecedorMB.fornecedor.endereco.cep}" required="true" maxlength="9" 
+											requiredMessage="O campo CEP é obrigatório" binding="#{fornecedorMB.inputTextCep}"/>
+									</div>
+								</div>
+								
+								<c:if test="#{fornecedorMB.indManual eq true ? false : true}">
+									<div class="col-md-2">
+										<div class="form-group">
+											<label>&nbsp;</label>
+											<h:commandLink id="btn-buscar" immediate="true" styleClass="btn btn-primary" action="#{fornecedorMB.consultarCEP}" style="width: 100%; 
+												color:white;" rendered="#{fornecedorMB.indManual eq true ? false : true}">
+												<i class="glyphicon glyphicon-search"></i>&nbsp;Buscar&nbsp;
+											</h:commandLink>
+										</div>
+									</div>
+								</c:if>
+							</div>
+							<div class="row">
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label for="logradouro">Logradouro *</label>
+										<h:inputText id="logradouro" name="logradouro" styleClass="form-control" pt:placeholder="Logradouro" 
+											value="#{fornecedorMB.fornecedor.endereco.logradouro}" required="true" maxlength="25" 
+											requiredMessage="O campo logradouro é obrigatório" readonly="#{fornecedorMB.indManual eq true ? false : true}"/>
+									</div>
+								</div>
+								
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label for="numero">Número *</label>
+										<h:inputText id="numero" name="numero" class="form-control" pt:placeholder="Número" 
+											value="#{fornecedorMB.fornecedor.endereco.numero}" required="true" maxlength="5" 
+											requiredMessage="O campo número é obrigatório" />
+									</div>
+								</div>
+								
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label for="complemento">Complemento</label>
+										<h:inputText id="complemento" name="complemento" class="form-control" pt:placeholder="Complemento" 
+											value="#{fornecedorMB.fornecedor.endereco.complemento}" maxlength="20" />
+									</div>
+								</div>
+								
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label for="bairro">Bairro *</label>
+										<h:inputText id="bairro" name="bairro" class="form-control" pt:placeholder="Bairro" 
+											value="#{fornecedorMB.fornecedor.endereco.bairro}" required="true" maxlength="20" 
+											requiredMessage="O campo bairro é obrigatório" readonly="#{fornecedorMB.indManual eq true ? false : true}"/>
+									</div>
+								</div>
+								
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label for="cidade">Cidade *</label>
+										<h:inputText id="cidade" name="cidade" class="form-control" pt:placeholder="Cidade" 
+											value="#{fornecedorMB.fornecedor.endereco.cidade}" required="true" maxlength="20" 
+											requiredMessage="O campo cidade é obrigatório" readonly="#{fornecedorMB.indManual eq true ? false : true}"/>
+									</div>
+								</div>
+								
+								<div class="col-lg-4">
+									<div class="form-group">
+										<label for="estado">Estado *</label>
+										<h:inputText id="estado" name="estado" class="form-control" pt:placeholder="Estado" 
+											value="#{fornecedorMB.fornecedor.endereco.estado}" required="true" maxlength="2" 
+											requiredMessage="O campo estado é obrigatório" readonly="#{fornecedorMB.indManual eq true ? false : true}"/>
+									</div>
+								</div>
+							</div>
+						</p:fieldset>
+					</div>
+					
+					<div class="col-lg-12">
+						<div class="form-group">
+							<div class="required">* Campos obrigatórios</div>
+						</div>
+					</div>
+					
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandLink id="btn-signup" class="btn btn-primary" action="#{fornecedorMB.cadastrar}" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-hand-right"></i>&nbsp;Cadastrar&nbsp;
+							</h:commandLink>
+						</div>
+					</div>
+					
+					<div class="col-md-3">
+						<div class="form-group">
+							<a id="btn-cancel" class="btn btn-warning" href="#{request.contextPath}/admin/tela_inicial.xhtml" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+							</a>
+						</div>
+					</div>
+					
+				</div>
+			</p:panel>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

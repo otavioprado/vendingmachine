@@ -1,0 +1,376 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;"> 
+]>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+    template="layoutLogado.xhtml">
+    
+	<f:metadata>
+	    <f:viewParam name="idMaquina" value="#{maquinaMB.maquina.id}" />
+	    <f:event type="preRenderView" listener="#{maquinaMB.carregarDadosParaEdicao}"/>
+	</f:metadata>
+    
+    <ui:define name="script">
+    	<h:outputScript name="js/datepicker-pt-BR.js" />
+    	<h:outputScript name="js/jquery.maskMoney.min.js" />
+    
+		<script>
+			$(function() {
+				$("#custoAquisicao").maskMoney({prefix:'R$ ', allowNegative: false, thousands:'.', decimal:',', affixesStay: true});
+				$("#dataAquisicao").datepicker($.datepicker.regional["pt-BR"]);
+				$("#dataAquisicao").datepicker("option", "maxDate", 0 );
+			});
+		</script>
+	</ui:define>
+    
+	<ui:define name="conteudo">
+		<p:panel id="basic" header="Cadastrar máquina" style="margin-bottom:20px">
+			<h:form id="formPrincipal" prependId="false">
+				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="row">
+					<div class="col-md-12">
+						<p:fieldset style="margin-bottom:20px" styleClass="">
+							<legend>Fornecedor da máquina</legend>
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="codigoFornecedor">Código *</label>
+									<h:inputText id="codigoFornecedor" name="codigo" type="text" class="form-control" pt:placeholder="Código" value="#{maquinaMB.maquina.fornecedor.codigo}" required="true" maxlength="25"
+										requiredMessage="O campo código do fornecedor é obrigatório">
+										 <f:ajax event="blur" listener="#{maquinaMB.selecionarFornecedor(maquinaMB.maquina.fornecedor.codigo)}" render="codigoFornecedor nomeFantasia cpfCnpj" />
+									</h:inputText>
+								</div>
+							</div>
+							
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="nomeFantasia">Nome Fantasia</label>
+									<input id="nomeFantasia" name="nomeFantasia" type="text" class="form-control" placeholder="Nome fantasia" jsf:value="#{maquinaMB.maquina.fornecedor.nomeFantasia}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="cpfCnpj">CPF/CNPJ</label>
+									<input id="cpfCnpj" name="cpfCnpj" type="text" class="form-control" placeholder="CPF/CNPJ" jsf:value="#{maquinaMB.maquina.fornecedor.cpfCnpj}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="email">&nbsp;</label>
+									<h:commandLink id="btn-fornecedores" class="btn btn-primary" actionListener="#{maquinaMB.abrirDialog}" style="width: 100%; color:white;" immediate="true">
+										<i class="glyphicon glyphicon-search"></i>&nbsp;Fornecedores&nbsp;
+									</h:commandLink>
+								</div>
+							</div>
+						</p:fieldset>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="codigo">Código *</label>
+							<h:inputText id="codigo" name="codigo" type="text" class="form-control" pt:placeholder="Código" value="#{maquinaMB.maquina.codigo}" required="true" 
+								maxlength="10" requiredMessage="O campo código é obrigatório" readonly="true"/>
+							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigo, codigoFornecedor"/>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="modelo">Modelo *</label>
+							<h:inputText id="modelo" name="modelo" type="text" styleClass="form-control" pt:placeholder="Modelo" value="#{maquinaMB.maquina.modelo}" required="true" 
+								maxlength="25" requiredMessage="O campo modelo é obrigatório"/>
+							<pe:keyFilter regEx="/[a-zA-Z0-9 ]+/i" for="modelo" />
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="qtdMaxProdutos">Qtde máxima de tipos de produtos *</label>
+							<input type="number" id="qtdMaxProdutos" name="qtdMaxProdutos" jsf:value="#{maquinaMB.maquina.qtdMaxTipoProdutos}" class="form-control" jsf:required="true" max="20" min="1" maxlength="2"
+								jsf:requiredMessage="O campo quantidade máxima de tipos de produtos é obrigatório" />
+							<pe:keyFilter regEx="/[0-9]{0,2}i/" for="qtdMaxProdutos"/>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="custoAquisicao">Custo de aquisição *</label>
+							<h:inputText id="custoAquisicao" name="custoAquisicao" type="text" class="form-control" pt:placeholder="Custo de aquisição" value="#{maquinaMB.maquina.custoAquisicao}" required="true"
+								maxlength="10" requiredMessage="O campo custo de aquisição é obrigatório">
+								<f:convertNumber type="currency" currencySymbol="R$"/>
+							</h:inputText>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="garantia">Garantia (em meses) </label>
+							<input type="number" id="garantia" name="garantia" jsf:value="#{maquinaMB.maquina.garantia}" class="form-control" max="12" min="1" 
+								maxlength="2" jsf:requiredMessage="O campo garantia é obrigatório"/>
+							<pe:keyFilter regEx="/[0-9]{0,2}i/" for="garantia"/>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="dataAquisicao">Data de aquisição *</label>
+							<h:inputText id="dataAquisicao" name="dataAquisicao" value="#{maquinaMB.maquina.dataAquisicao}"
+								required="true" styleClass="form-control" maxlength="10" requiredMessage="O campo data de aquisição é obrigatório" >
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+							</h:inputText>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+		            	<div class="form-group">
+							<label for="status">Status</label>
+							<h:inputText id="status" name="status" type="text" styleClass="form-control" pt:placeholder="Status" value="#{maquinaMB.maquina.maquinaStatus.descricao}" 
+								required="true" requiredMessage="O campo status é obrigatório" readonly="true"/>
+		            	</div>
+					</div>
+
+					<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_INATIVAR_MAQUINA') eq true}">
+			            <div class="col-lg-3">
+							<div class="form-group">
+								<label>&nbsp;</label>
+								<button id="btn-bloq" onclick="PF('dlgInativar').show();" class="btn btn-warning" type="button" style="width: 100%; color:white;"
+									jsf:rendered="#{maquinaMB.maquina.maquinaStatus.descricao eq 'EM ESTOQUE'? true : false}">
+									<i class="glyphicon glyphicon-lock"/>&nbsp;Inativar&nbsp;
+								</button>
+							</div>
+						</div>
+					</c:if>
+					
+					<div class="col-lg-12">
+						<p:fieldset style="margin-bottom:20px" styleClass="">
+							<legend>Produtos que podem ser alocados à máquina</legend>
+							
+							<div class="col-lg-9">
+								<div class="form-group">
+									<label>&nbsp;</label>
+								</div>
+							</div>
+							
+							<div class="col-lg-3">
+								<div class="form-group">
+									<h:commandLink id="btn-add-produto" class="btn btn-primary" actionListener="#{maquinaMB.abrirDialogAdicionarProduto}" style="width: 100%; color:white;" immediate="false">
+										<i class="glyphicon glyphicon-plus"></i>&nbsp;Adicionar produto&nbsp;
+									</h:commandLink>
+								</div>
+							</div>
+							
+							<div class="col-lg-12">
+								<div class="form-group">
+									<p:dataTable tableStyleClass="table-hover" id="table-produtos" var="produto" value="#{maquinaMB.maquina.produtos}" rows="5" paginator="true"
+										 paginatorPosition="bottom" paginatorAlwaysVisible="false" rowsPerPageTemplate="5,10">
+										<p:column headerText="Código">
+											<h:outputText id="produtoCodigo" value="#{produto.codigo}" />
+										</p:column>
+										
+										<p:column headerText="Descrição">
+											<h:outputText id="produtoDescricao" value="#{produto.descricao}" />
+						            	</p:column>
+						            	
+						            	<p:column style="width:64px;text-align: center">
+											<p:commandButton action="#{maquinaMB.excluirProduto}" update="table-produtos" icon="ui-icon-trash" title="Remover" >
+								                <f:setPropertyActionListener value="#{produto}" target="#{maquinaMB.produtoSelecionado}" />
+								            </p:commandButton>
+								        </p:column>
+									</p:dataTable>
+								</div>
+							</div>
+							
+						</p:fieldset>
+					</div>
+        			
+        			<div class="col-lg-12">
+						<div class="form-group">
+							<div class="required">* Campos obrigatórios</div>
+						</div>
+					</div>
+				</div>
+	     		<div class="row">	
+					<div class="col-lg-3">
+						<div class="form-group">
+							<h:commandLink id="btn-signup" class="btn btn-primary" actionListener="#{maquinaMB.editar}" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-saved"></i>&nbsp;Salvar&nbsp;
+							</h:commandLink>
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="form-group">
+							<a id="btn-cancel" class="btn btn-warning" href="#{request.contextPath}/admin/consultaMaquina.xhtml" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+							</a>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:panel>
+		
+		<p:dialog widgetVar="dlgConsultaFornecedor" width="800" showHeader="false" resizable="false" modal="true">
+			<h:form prependId="false">
+				<p:messages id="dlgMessagesFornecedor" for="Message2" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="form-group">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="dlgCodigo">Código:</label>
+								<input id="dlgCodigo" name="dlgCodigo" type="text" class="form-control" placeholder="Código" jsf:value="#{maquinaMB.fornecedor.codigo}" maxlength="25" />
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="dlgNomeFantasia">Nome fantasia:</label>
+								<input id="dlgNomeFantasia" name="dlgNomeFantasia" type="text" class="form-control" placeholder="Nome fantasia" jsf:value="#{maquinaMB.fornecedor.nomeFantasia}" maxlength="25" />
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>&nbsp;</label>
+								<h:commandLink id="btn-pesquisar-fornecedor" class="btn btn-primary" actionListener="#{maquinaMB.consultarFornecedor}" update="table-fornecedores" style="width: 100%; color:white;" immediate="true">
+									<i class="glyphicon glyphicon-search"></i>&nbsp;Pesquisar&nbsp;
+								</h:commandLink>
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<p:dataTable tableStyleClass="table-hover" id="table-fornecedores" var="fornecedor" value="#{maquinaMB.listFornecedores}" rows="5" paginator="true" paginatorPosition="bottom"
+									paginatorAlwaysVisible="false" rowsPerPageTemplate="5,10" >
+									<p:column style="width:64px; text-align: center" headerText="">
+										<p:commandButton icon="ui-icon-arrowthick-1-e" title="Selecionar" actionListener="#{maquinaMB.selecionarFornecedor(fornecedor.codigo)}" update="codigoFornecedor nomeFantasia cpfCnpj" />
+									</p:column>
+									<p:column headerText="Código">
+										<h:outputText id="fornCodigo" value="#{fornecedor.codigo}" />
+									</p:column>
+									
+									<p:column headerText="Descrição">
+										<h:outputText id="fornDescricao" value="#{fornecedor.nomeFantasia}" />
+					            	</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+		
+						<div class="col-md-9">
+							<div class="form-group">
+							</div>
+						</div>
+							
+						<div class="col-md-3">
+							<div class="form-group">
+								<h:commandLink id="btn-cancel-fornecedor" class="btn btn-warning" actionListener="#{maquinaMB.fecharDialog}" update="table-fornecedores" style="width: 100%; color:white;" immediate="false">
+									<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+								</h:commandLink>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+		
+		<p:dialog widgetVar="dlgAdicionarProduto" width="800" showHeader="false" resizable="false" modal="true">
+			<h:form prependId="false">
+				<p:messages id="dlgMessagesProduto" for="Message3" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="form-group">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="dlgCodigoProduto">Código:</label>
+								<input id="dlgCodigoProduto" name="dlgCodigoProduto" type="text" class="form-control" placeholder="Código" jsf:value="#{maquinaMB.produto.codigo}" maxlength="25" />
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="dlgProdutoDescricao">Descrição:</label>
+								<input id="dlgProdutoDescricao" name="dlgProdutoDescricao" type="text" class="form-control" placeholder="Descrição" jsf:value="#{maquinaMB.produto.descricao}" maxlength="25" />
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>&nbsp;</label>
+								<h:commandLink id="btn-pesquisar-produto" class="btn btn-primary" actionListener="#{maquinaMB.consultarProduto}" update="table-dialog-produtos" style="width: 100%; color:white;" immediate="false">
+									<i class="glyphicon glyphicon-search"></i>&nbsp;Pesquisar&nbsp;
+								</h:commandLink>
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<p:dataTable tableStyleClass="table-hover" id="table-dialog-produtos" var="produto" value="#{maquinaMB.listProdutos}" rows="5" paginator="true" paginatorPosition="bottom"
+									paginatorAlwaysVisible="false" rowsPerPageTemplate="5,10" >
+									<p:column style="width:64px; text-align: center" headerText="">
+										<p:commandButton icon="ui-icon-arrowthick-1-e" title="Adicionar" actionListener="#{maquinaMB.adicionarProduto(produto.id)}" update="table-produtos" />
+									</p:column>
+									<p:column headerText="Código">
+										<h:outputText id="prodCodigo" value="#{produto.codigo}" />
+									</p:column>
+									
+									<p:column headerText="Descrição">
+										<h:outputText id="prodDescricao" value="#{produto.descricao}" />
+					            	</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+		
+						<div class="col-md-9">
+							<div class="form-group">
+							</div>
+						</div>
+							
+						<div class="col-md-3">
+							<div class="form-group">
+								<h:commandLink id="btn-return-produto" class="btn btn-warning" actionListener="#{maquinaMB.fecharDialogAdicionarProduto}" update="table-fornecedores" style="width: 100%; color:white;" immediate="false">
+									<i class="glyphicon glyphicon-share-alt"></i>&nbsp;Voltar&nbsp;
+								</h:commandLink>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+		
+		<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_INATIVAR_MAQUINA') eq true}">
+				<h:form prependId="false">
+					<p:dialog widgetVar="dlgInativar" width="450" showHeader="false" resizable="false" modal="true">
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<label for="nome">Tem certeza que deseja inativar esta máquina? Essa operação não poderá ser desfeita!</label>
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<div class="form-group">
+										<h:commandLink id="btn-inativar" class="btn btn-primary" action="#{maquinaMB.inativar}" 
+											style="width: 100%; color:white;" update="table-atividades">
+											<i class="glyphicon glyphicon-minus"></i>&nbsp;Inativar&nbsp;
+										</h:commandLink>
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<div class="form-group">
+										<h:commandLink id="btn-inativar-cancel" class="btn btn-warning" onclick="PF('dlgInativar').hide();" style="width: 100%; color:white;" type="button" immediate="true">
+											<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+										</h:commandLink>
+									</div>
+								</div>
+							</div>
+						</div>
+					</p:dialog>
+				</h:form>
+			</c:if>
+		
+	</ui:define>
+
+</ui:composition>

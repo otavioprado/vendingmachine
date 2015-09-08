@@ -1,0 +1,235 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;"> 
+]>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    template="layoutLogado.xhtml">
+    
+    <ui:define name="script">
+    	<h:outputScript name="js/jquery.maskMoney.min.js" />
+    
+		<script>
+			$(function() {
+				$("#valUnit").maskMoney({prefix:'R$ ', allowNegative: false, thousands:'.', decimal:',', affixesStay: true});
+				$("#precoVenda").maskMoney({prefix:'R$ ', allowNegative: false, thousands:'.', decimal:',', affixesStay: true});
+			});
+		</script>
+	</ui:define>
+    
+	<ui:define name="conteudo">
+		<p:panel id="basic" header="Cadastrar produto" style="margin-bottom:20px">
+			<h:form id="formPrincipal" prependId="false">
+				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="row">
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="codigo">Código *</label>
+							<h:inputText id="codigo" name="codigo" type="text" class="form-control" placeholder="Código" value="#{produtoMB.produto.codigo}" required="true" maxlength="25"/>
+							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigo"/>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="descricao">Descrição *</label>
+							<h:inputText id="descricao" name="descricao" type="text" class="form-control" placeholder="Descrição" value="#{produtoMB.produto.descricao}" required="true" maxlength="25"/>
+							<pe:keyFilter regEx="/[a-zA-Z0-9 ]+/i" for="descricao" />
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="valUnit">Valor unitário *</label>
+							<h:inputText id="valUnit" name="valUnit" type="text" class="form-control" placeholder="Valor unitário]" value="#{produtoMB.produto.valorUnitario}" required="true" maxlength="25"
+								requiredMessage="O campo valor unitário é obrigatório">
+								<f:convertNumber type="currency" currencySymbol="R$"/>
+							</h:inputText>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="precoVenda">Preço de venda *</label>
+							<h:inputText id="precoVenda" name="precoVenda" type="text" class="form-control" placeholder="Preço de venda" value="#{produtoMB.produto.precoVenda}" required="true" maxlength="25"
+								requiredMessage="O campo preço de venda é obrigatório">
+								<f:convertNumber type="currency" currencySymbol="R$"/>
+							</h:inputText>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="perecivel">Perecível *</label>
+							<h:selectOneMenu id="perecivel" value="#{produtoMB.produto.indPerecivel}" styleClass="form-control" required="true"
+								requiredMessage="O campo perecível é obrigatório">
+				                <f:selectItem itemLabel="[Selecione]" itemValue="#{null}" noSelectionOption="true" />
+								<f:selectItem itemLabel="Sim" itemValue="true" />
+				                <f:selectItem itemLabel="Não" itemValue="false" />
+			            	</h:selectOneMenu>
+		            	</div>
+		            </div>
+				
+					<div class="col-md-12">
+						<p:fieldset style="margin-bottom:20px" styleClass="">
+							<legend>Fornecedor</legend>
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="codigoFornecedor">Código *</label>
+									<h:inputText id="codigoFornecedor" name="codigo" type="text" class="form-control" placeholder="Código" value="#{produtoMB.produto.fornecedor.codigo}" required="true" maxlength="25"
+										requiredMessage="O campo código do fornecedor é obrigatório">
+										<f:ajax event="blur" listener="#{produtoMB.selecionarFornecedor(produtoMB.produto.fornecedor.codigo)}" render="codigoFornecedor nomeFantasia tipoPessoa cpfCnpj site telefone email"/>
+									</h:inputText>
+									<pe:keyFilter id="validarCodigoForn" regEx="/[A-Z0-9]+/" for="codigoFornecedor"/>
+								</div>
+							</div>
+							
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="nomeFantasia">Nome Fantasia</label>
+									<input id="nomeFantasia" name="nomeFantasia" type="text" class="form-control" placeholder="Nome fantasia" jsf:value="#{produtoMB.produto.fornecedor.nomeFantasia}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="tipoPessoa">Tipo Pessoa</label>
+									<input id="tipoPessoa" name="tipoPessoa" type="text" class="form-control" placeholder="Tipo pessoa" jsf:value="#{produtoMB.produto.fornecedor.fisicaJuridica}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="cpfCnpj">CPF/CNPJ</label>
+									<input id="cpfCnpj" name="cpfCnpj" type="text" class="form-control" placeholder="CPF/CNPJ" jsf:value="#{produtoMB.produto.fornecedor.cpfCnpj}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="site">Site</label>
+									<input id="site" name="site" type="text" class="form-control" placeholder="Site" jsf:value="#{produtoMB.produto.fornecedor.site}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="telefone">Telefone</label>
+									<input id="telefone" name="telefone" type="text" class="form-control" placeholder="Telefone" jsf:value="#{produtoMB.produto.fornecedor.telefoneFixo}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="email">E-mail</label>
+									<input id="email" name="email" type="text" class="form-control" placeholder="E-mail" jsf:value="#{produtoMB.produto.fornecedor.email}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="email">&nbsp;</label>
+									<h:commandLink id="btn-usuarios" class="btn btn-primary" actionListener="#{produtoMB.abrirDialog}" style="width: 100%; color:white;" immediate="true">
+										<i class="glyphicon glyphicon-search"></i>&nbsp;Fornecedores&nbsp;
+									</h:commandLink>
+								</div>
+							</div>
+						</p:fieldset>
+					</div>
+        			
+        			<div class="col-lg-12">
+						<div class="form-group">
+							<div class="required">* Campos obrigatórios</div>
+						</div>
+					</div>
+				</div>
+	     		<div class="row">	
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandLink id="btn-signup" class="btn btn-primary" actionListener="#{produtoMB.cadastrar}" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-saved"></i>&nbsp;Cadastrar&nbsp;
+							</h:commandLink>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<a id="btn-cancel" class="btn btn-warning" href="#{request.contextPath}/admin/tela_inicial.xhtml" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+							</a>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:panel>
+		
+		<p:dialog widgetVar="dlgConsultaFornecedor" width="800" showHeader="false" resizable="false" modal="true">
+			<h:form prependId="false">
+				<p:messages id="dlgMessages" for="Message2" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="form-group">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="dlgCodigo">Código:</label>
+								<input id="dlgCodigo" name="dlgCodigo" type="text" class="form-control" placeholder="Código" jsf:value="#{produtoMB.fornecedor.codigo}" maxlength="25" />
+								<pe:keyFilter regEx="/[A-Z0-9]+/" for="dlgCodigo"/>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="dlgNomeFantasia">Nome fantasia:</label>
+								<input id="dlgNomeFantasia" name="dlgNomeFantasia" type="text" class="form-control" placeholder="Nome fantasia" jsf:value="#{produtoMB.fornecedor.nomeFantasia}" maxlength="25" />
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>&nbsp;</label>
+								<h:commandLink id="btn-pesquisar" class="btn btn-primary" actionListener="#{produtoMB.consultarFornecedor}" update="table-fornecedores" style="width: 100%; color:white;" immediate="false">
+									<i class="glyphicon glyphicon-search"></i>&nbsp;Pesquisar&nbsp;
+								</h:commandLink>
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<p:dataTable tableStyleClass="table-hover" id="table-fornecedores" var="fornecedor" value="#{produtoMB.listFornecedores}" rows="5" paginator="true" paginatorPosition="bottom"
+									paginatorAlwaysVisible="false" rowsPerPageTemplate="5,10" >
+									<p:column style="width:64px; text-align: center" headerText="">
+										<p:commandButton icon="ui-icon-arrowthick-1-e" title="Selecionar" actionListener="#{produtoMB.selecionarFornecedor(fornecedor.codigo)}" update="codigoFornecedor nomeFantasia tipoPessoa cpfCnpj site telefone email" />
+									</p:column>
+									<p:column headerText="Código">
+										<h:outputText id="fornCodigo" value="#{fornecedor.codigo}" />
+									</p:column>
+									
+									<p:column headerText="Descrição">
+										<h:outputText id="fornDescricao" value="#{fornecedor.nomeFantasia}" />
+					            	</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+								
+						<div class="col-md-9">
+							<div class="form-group">
+							</div>
+						</div>
+							
+						<div class="col-md-3">
+							<div class="form-group">
+								<h:commandLink id="btn-cancel" class="btn btn-warning" actionListener="#{produtoMB.fecharDialog}" update="table-fornecedores" style="width: 100%; color:white;" immediate="false">
+									<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+								</h:commandLink>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+		
+	</ui:define>
+
+</ui:composition>

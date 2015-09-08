@@ -49,7 +49,7 @@
 					<li class="#{view.viewId eq '/admin/permissoes.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/permissoes.xhtml"><span class="glyphicon glyphicon-list-alt"></span>Permissões</a></li>
 				</ul>
 			</c:if>
-			<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_ATIVIDADE') eq true}">
+			<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_ATIVIDADE') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_CONS_ATIVIDADE')}">
 				<ul class="nav navbar-nav">
 					<li class="dropdown #{view.viewId eq '/admin/agendar_atividade.xhtml'? 'active' : ''}">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-book"/>Atividade<span class="caret"></span></a>
@@ -86,6 +86,69 @@
 					</li>
 				</ul>
 			</c:if>
+			<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_FORNECEDOR') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_CONS_FORNECEDOR') eq true}">
+				<ul class="nav navbar-nav">
+					<li class="dropdown #{view.viewId eq '/admin/fornecedor.xhtml' or view.viewId eq '/admin/consultaFornecedor.xhtml'? 'active' : ''}">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user"/>Fornecedor<span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_FORNECEDOR') eq true}">
+								<li class="#{view.viewId eq '/admin/fornecedor.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/fornecedor.xhtml">Cadastrar</a></li>
+							</c:if>
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CONS_FORNECEDOR') eq true}">
+								<li class="#{view.viewId eq '/admin/consultaFornecedor.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/consultaFornecedor.xhtml">Consultar</a></li>
+							</c:if>
+						</ul>
+					</li>
+				</ul>
+			</c:if>
+			
+			<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_CONTRATO') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_CONS_CONTRATO') eq true}">
+				<ul class="nav navbar-nav">
+					<li class="dropdown #{view.viewId eq '/admin/contrato.xhtml' or view.viewId eq '/admin/consultaContrato.xhtml'? 'active' : ''}">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-tag"/>Contrato<span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_CONTRATO') eq true}">
+								<li class="#{view.viewId eq '/admin/contrato.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/contrato.xhtml">Cadastrar</a></li>
+							</c:if>
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CONS_CONTRATO') eq true}">
+								<li class="#{view.viewId eq '/admin/consultaContrato.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/consultaContrato.xhtml">Consultar</a></li>
+							</c:if>
+						</ul>
+					</li>
+				</ul>
+			</c:if>
+			
+			<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_PRODUTO') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_CONS_PRODUTO') eq true}">
+				<ul class="nav navbar-nav">
+					<li class="dropdown #{view.viewId eq '/admin/produto.xhtml' or view.viewId eq '/admin/consultaProduto.xhtml'? 'active' : ''}">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-gift"/>Produto<span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_PRODUTO') eq true}">
+								<li class="#{view.viewId eq '/admin/produto.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/produto.xhtml">Cadastrar</a></li>
+							</c:if>
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CONS_PRODUTO') eq true}">
+								<li class="#{view.viewId eq '/admin/consultaProduto.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/consultaProduto.xhtml">Consultar</a></li>
+							</c:if>
+						</ul>
+					</li>
+				</ul>
+			</c:if>
+			
+			<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_MAQUINA') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_CONS_MAQUINA') eq true}">
+				<ul class="nav navbar-nav">
+					<li class="dropdown #{view.viewId eq '/admin/maquina.xhtml' or view.viewId eq '/admin/consultaMaquina.xhtml'? 'active' : ''}">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-modal-window"/>Máquina<span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_MAQUINA') eq true}">
+								<li class="#{view.viewId eq '/admin/maquina.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/maquina.xhtml">Cadastrar</a></li>
+							</c:if>
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CONS_MAQUINA') eq true}">
+								<li class="#{view.viewId eq '/admin/consultaMaquina.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/consultaMaquina.xhtml">Consultar</a></li>
+							</c:if>
+						</ul>
+					</li>
+				</ul>
+			</c:if>
 			
 			<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_NATUREZA') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_CONS_NATUREZA') eq true}">
 				<ul class="nav navbar-nav">
@@ -102,7 +165,7 @@
 					</li>
 				</ul>
 			</c:if>
-			
+
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -131,11 +194,13 @@
 										<div class="col-md-6">
 											<a href="#" class="btn btn-default" style="width:100%;">&nbsp;Alterar senha&nbsp;</a>
 										</div>
-										<div class="col-md-6">
-											<a href="#{request.contextPath}/j_spring_security_logout" class="btn btn-default pull-right" style="width:100%;">
-												<i class="glyphicon glyphicon-off"></i>&nbsp;Sair&nbsp;
-											</a>
-										</div>
+										<h:form>
+											<div class="col-md-6">
+												<h:commandLink id="btn-logout" actionListener="#{loginMB.efetuarLogout()}" class="btn btn-default pull-right" style="width: 100%;" type="button" immediate="true">
+													<i class="glyphicon glyphicon-off"></i>&nbsp;Sair&nbsp;
+												</h:commandLink>
+											</div>
+										</h:form>
 									</div>
 								</div>
 							</div>

@@ -10,6 +10,40 @@
     xmlns:c="http://java.sun.com/jstl/core"
     xmlns:pe="http://primefaces.org/ui/extensions"
     template="layoutLogado.xhtml">
+    
+	<ui:define name="script">
+		<script>
+			$(function() {
+				if($("#cpfCnpj").val() == '' &amp;&amp; $("#fisicaJuridica").val() == '') {
+					$("#cpfCnpj").prop("readonly", true);
+				} 
+				
+				if($("#fisicaJuridica").val() == 'PF') {
+					$("#cpfCnpj").mask("999.999.999-99");
+				} else if($("#fisicaJuridica").val() == 'PJ') {
+					$("#cpfCnpj").mask("99.999.999/9999-99");
+				}
+			});
+			
+			function mask() {
+				if($("#fisicaJuridica").val() == 'PF') {
+					$("#cpfCnpj").attr('placeholder', 'CPF')
+					$("#cpfCnpj").val('');
+					$("#cpfCnpj").prop("readonly", false);
+					$("#cpfCnpj").mask("999.999.999-99");
+				} else if($("#fisicaJuridica").val() == 'PJ') {
+					$("#cpfCnpj").attr('placeholder', 'CNPJ')
+					$("#cpfCnpj").val('');
+					$("#cpfCnpj").prop("readonly", false);
+					$("#cpfCnpj").mask("99.999.999/9999-99");
+				} else if($("#fisicaJuridica").val() == '') {
+					$("#cpfCnpj").attr('placeholder', 'CPF/CNPJ')
+					$("#cpfCnpj").prop("readonly", true);
+					$("#cpfCnpj").val('');
+				}
+			}
+		</script>
+	</ui:define>
 
 	<ui:define name="conteudo">
 		<p:panel id="basic" header="Filtro de pesquisa de clientes" style="margin-bottom:20px">
@@ -28,7 +62,7 @@
 					<div class="col-lg-4">	
 						<div class="form-group">
 							<label for="perfil">Física/Jurídica</label>
-							<h:selectOneMenu id="perfil" value="#{clienteMB.cliConsParam.fisicaJuridica}" styleClass="form-control">
+							<h:selectOneMenu id="fisicaJuridica" value="#{clienteMB.cliConsParam.fisicaJuridica}" styleClass="form-control" onchange="mask()">
 				                <f:selectItem itemLabel="[Selecione]" itemValue="" noSelectionOption="true" />
 				                <f:selectItem itemLabel="Pessoa física" itemValue="PF" noSelectionOption="false" />
 				                <f:selectItem itemLabel="Pessoa jurídica" itemValue="PJ" noSelectionOption="false" />
@@ -66,7 +100,7 @@
 					<div class="col-lg-4">	
 						<div class="form-group">
 							<label for="email">E-mail</label>
-							<input id="email" name="email" type="text" class="form-control" placeholder="E-mail" jsf:value="#{clienteMB.cliConsParam.email}" />
+							<input id="email" name="email" type="text" class="form-control" placeholder="E-mail" jsf:value="#{clienteMB.cliConsParam.email}" maxlength="35"/>
 							<pe:keyFilter regEx="/[a-z0-9_\.\-@]/i" for="email"/>
 						</div>
 					</div>

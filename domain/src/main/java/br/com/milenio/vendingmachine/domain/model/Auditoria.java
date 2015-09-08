@@ -20,8 +20,8 @@ public class Auditoria implements Serializable {
 	private static final long serialVersionUID = -922944240622308391L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 	
 	@ManyToOne

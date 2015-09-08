@@ -124,7 +124,6 @@ public class ClienteMB implements Serializable {
 	
 	public void consultarCEP() {
 		try {
-			indManual = false;
 			String cep = (String) inputTextCep.getSubmittedValue();
 			
 			Endereco endereco = enderecoService.consultarCepWebService(cep);
@@ -135,8 +134,9 @@ public class ClienteMB implements Serializable {
 				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Impossível consultar o CEP, favor informe os dados de endereço manualmente", null));
 				return;
 			}
-			
+
 			cliente.setEndereco(endereco);
+			
 		} catch (InconsistenciaException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
 		}
@@ -206,20 +206,24 @@ public class ClienteMB implements Serializable {
 			return;
 		}
 		
-		clienteService.editar(cliente);
+		try {
+			clienteService.editar(cliente);
 		
-		// Sucesso - Exibe mensagem de edição realizado com sucesso
-		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Cliente " + cliente.getNomeFantasia() + " editado com sucesso.", null));
-		logger.info("Cliente " + cliente.getNomeFantasia() + " foi editado no sistema com sucesso.");
-		
-		// Processo de auditoria de cadastro de usuário
-		Auditoria auditoria = new Auditoria();
-		auditoria.setDataAcao(new Date());
-		auditoria.setTitulo("Edição");
-		auditoria.setDescricao("Editou o cliente " + cliente.getNomeFantasia());
-		auditoria.setUsuario(Seguranca.getUsuarioLogado());
-		auditoria.setIp(request.getRemoteAddr());
-		auditoriaService.cadastrarNovaAcao(auditoria);
+			// Sucesso - Exibe mensagem de edição realizado com sucesso
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Cliente " + cliente.getNomeFantasia() + " editado com sucesso.", null));
+			logger.info("Cliente " + cliente.getNomeFantasia() + " foi editado no sistema com sucesso.");
+			
+			// Processo de auditoria de cadastro de usuário
+			Auditoria auditoria = new Auditoria();
+			auditoria.setDataAcao(new Date());
+			auditoria.setTitulo("Edição");
+			auditoria.setDescricao("Editou o cliente " + cliente.getNomeFantasia());
+			auditoria.setUsuario(Seguranca.getUsuarioLogado());
+			auditoria.setIp(request.getRemoteAddr());
+			auditoriaService.cadastrarNovaAcao(auditoria);
+		} catch(ConteudoJaExistenteNoBancoDeDadosException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+		}
 	}
 	
 	public void carregarDadosClienteParaEdicao() {

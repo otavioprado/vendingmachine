@@ -10,6 +10,7 @@ import com.uaihebert.uaicriteria.UaiCriteriaFactory;
 
 import br.com.milenio.vendingmachine.domain.AbstractVendingMachineRepositoryBean;
 import br.com.milenio.vendingmachine.domain.model.Cliente;
+import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 
 @Stateless(name = "ClienteRepository")
 public class ClienteRepositoryBean extends AbstractVendingMachineRepositoryBean<Cliente, Long> 
@@ -79,5 +80,43 @@ public class ClienteRepositoryBean extends AbstractVendingMachineRepositoryBean<
 		List<Cliente> usuarios = (List<Cliente>) uaiCriteria.getResultList();
 		
 		return usuarios;
+	}
+	
+	@Override
+	public Cliente findClienteByEmail(String email) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT c FROM Cliente c WHERE ");
+		sb.append(" c.email = :email");
+
+		TypedQuery<Cliente> query = getEntityManager().createQuery(sb.toString(), Cliente.class);
+
+		query.setParameter("email", email);
+
+		List<Cliente> clienteCadastrado = (List<Cliente>) query.getResultList();
+		
+		if(!clienteCadastrado.isEmpty()) {
+			return clienteCadastrado.get(0);
+		}
+		
+		return null;
+	}
+	
+	@Override
+	public Cliente findClienteByCpfCnpj(String cpfCnpj) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT c FROM Cliente c WHERE ");
+		sb.append(" c.cpfCnpj = :cpfCnpj");
+
+		TypedQuery<Cliente> query = getEntityManager().createQuery(sb.toString(), Cliente.class);
+
+		query.setParameter("cpfCnpj", cpfCnpj);
+
+		List<Cliente> clienteCadastrado = (List<Cliente>) query.getResultList();
+		
+		if(!clienteCadastrado.isEmpty()) {
+			return clienteCadastrado.get(0);
+		}
+		
+		return null;
 	}
 }

@@ -80,12 +80,8 @@ public class AtividadeServiceBean implements AtividadeService {
 	}
 
 	@Override
-	public Atividade excluirAtividade(Long idAtividade) throws InconsistenciaException {
+	public Atividade excluirAtividade(Long idAtividade) {
 		Atividade atividade = atividadeRepository.findById(idAtividade);
-		
-		if(atividade.getDataAgendamento().compareTo(new Date()) < 0) {
-			throw new InconsistenciaException("Apenas atividades passadas podem ser excluídas.");
-		}
 		
 		atividadeRepository.remove(atividade);
 		

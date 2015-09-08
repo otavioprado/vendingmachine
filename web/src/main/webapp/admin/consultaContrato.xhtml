@@ -1,0 +1,150 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;"> 
+]>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    template="layoutLogado.xhtml">
+
+	<ui:define name="conteudo">
+		<p:panel id="basic" header="Filtro de pesquisa de contratos" style="margin-bottom:20px">
+			<h:form prependId="false">
+				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="row">
+				
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="codigo">Código</label>
+							<input id="codigo" name="codigo" type="text" class="form-control" placeholder="Código" jsf:value="#{contratoMB.contratoConsParam.codigo}" />
+							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigo"/>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="perfil">Modalidade do contrato</label>
+							<h:selectOneMenu id="modContrato" value="#{contratoMB.contratoConsParam.modalidade}" styleClass="form-control"
+								requiredMessage="O campo modalidade do contrato é obrigatório">
+				                <f:selectItem itemLabel="[Selecione]" itemValue="" noSelectionOption="true" />
+				                <f:selectItem itemLabel="Aluguel" itemValue="ALUGUEL" noSelectionOption="false" />
+				                <f:selectItem itemLabel="Porcentagem sob as vendas" itemValue="PORCENTAGEM" noSelectionOption="false" />
+			            	</h:selectOneMenu>
+		            	</div>
+		            </div>
+		            
+		            <div class="col-lg-4">
+						<div class="form-group">
+							<label for="status">Status</label>
+							<h:selectOneMenu id="status" value="#{contratoMB.contratoConsParam.indDisponivel}" styleClass="form-control">
+				                <f:selectItem itemLabel="[Selecione]" itemValue="" noSelectionOption="true" />
+				                <f:selectItem itemLabel="Disponível" itemValue="true" noSelectionOption="false" />
+				                <f:selectItem itemLabel="Atribuido a cliente" itemValue="false" noSelectionOption="false" />
+			            	</h:selectOneMenu>
+						</div>
+					</div>
+					
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandLink id="btn-signup" class="btn btn-primary" actionListener="#{contratoMB.consultar(true)}" update="table-users" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-search"></i>&nbsp;Pesquisar&nbsp;
+							</h:commandLink>
+						</div>
+					</div>
+				</div>
+			</h:form>
+			<c:if test="${not empty contratoMB.listContratos}">
+			
+					<h:form prependId="false">
+						<p:dataTable tableStyleClass="table-hover" id="table-clientes" var="contrato" value="#{contratoMB.listContratos}" rows="10" paginator="true" paginatorPosition="bottom"
+							paginatorAlwaysVisible="false" rowsPerPageTemplate="10,15,20,25,30">
+							<h:inputHidden id="idContrato" value="#{contrato.id}" />
+							
+							<p:column headerText="Código">
+								<h:outputText id="codigoContrato" value="#{contrato.codigo}" />
+							</p:column>
+							
+							<p:column headerText="Descrição">
+								<h:outputText id="descricaoContrato" value="#{contrato.descricao}" />
+							</p:column>
+							
+							<p:column headerText="Modalidade">
+								<h:outputText id="modalidadeContrato" value="#{contrato.modalidade}" />
+							</p:column>
+							
+							<p:column headerText="Valor aluguel">
+								<h:outputText id="valorAlug" value="#{contrato.valorAluguel != null ? contrato.valorAluguel : '-'}">
+									<f:convertNumber type="currency" currencySymbol="R$" />
+								</h:outputText>
+							</p:column>
+							
+							<p:column headerText="Valor porcentagem">
+								<h:outputText id="valorPorcent" value="#{contrato.valorPorcentagem != null ? contrato.valorPorcentagem : '-'}">
+									<f:convertNumber type="percent" locale="pt-BR" integerOnly="false" maxFractionDigits="1" minFractionDigits="1"/>
+								</h:outputText>
+							</p:column>
+							
+							<p:column headerText="Status">
+								<h:outputText id="contratoStatus" value="#{contrato.indDisponivel eq true ? 'Disponível' : 'Atribuido a cliente'}" />
+							</p:column>
+							
+							
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EDT_CONTRATO') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_CONTRATO') eq true}">
+								<p:column style="width:128px; text-align: center" headerText="Ações">
+						            <c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EDT_CONTRATO') eq true}">
+							            <p:button icon="ui-icon-pencil" title="Editar" outcome="editar_contrato.xhtml">
+											<f:param name="contratoId" value="#{contrato.id}" />
+										</p:button>
+									</c:if>
+									
+									<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_CONTRATO') eq true}">
+										<p:commandButton onclick="PF('dlgExcluir').show();" icon="ui-icon-trash" title="Excluir">
+											<f:setPropertyActionListener value="#{contrato.id}" target="#{contratoMB.contrato.id}" />
+							            </p:commandButton>
+						            </c:if>
+								</p:column>
+							</c:if>
+						</p:dataTable>
+					</h:form>
+			</c:if>
+			
+			<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_CONTRATO') eq true}">
+				<h:form prependId="false">
+					<p:dialog widgetVar="dlgExcluir" width="450" showHeader="false" resizable="false" modal="true">
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<label for="nome">Tem certeza que deseja excluir este contrato? Essa operação não poderá ser desfeita!</label>
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<div class="form-group">
+										<h:commandLink id="btn-excluir" class="btn btn-primary" action="#{contratoMB.excluir}" 
+											style="width: 100%; color:white;" update="table-atividades">
+											<i class="glyphicon glyphicon-trash"></i>&nbsp;Excluir&nbsp;
+										</h:commandLink>
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<div class="form-group">
+										<h:commandLink id="btn-excluir-cancel" class="btn btn-warning" onclick="PF('dlgExcluir').hide();" style="width: 100%; color:white;" type="button" immediate="true">
+											<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+										</h:commandLink>
+									</div>
+								</div>
+							</div>
+						</div>
+					</p:dialog>
+				</h:form>
+			</c:if>
+		</p:panel>
+	</ui:define>
+
+</ui:composition>
