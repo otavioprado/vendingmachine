@@ -1,0 +1,280 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;"> 
+]>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+    template="layoutLogado.xhtml">
+    
+	<ui:define name="conteudo">
+		<p:panel id="basic" header="Cadastrar manutenção" style="margin-bottom:20px">
+			<h:form id="formPrincipal" prependId="false">
+				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="row">
+					<div class="col-md-12">
+						<p:fieldset style="margin-bottom:20px" styleClass="">
+							<legend>Máquina</legend>
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="codigoMaquina">Código *</label>
+									<h:inputText id="codigoMaquina" name="codigoMaquina" type="text" class="form-control" pt:placeholder="Código" value="#{manutencaoMB.manutencao.maquina.codigo}" required="true" maxlength="20"
+										requiredMessage="O campo código da máquina é obrigatório">
+										 <f:ajax event="blur" listener="#{manutencaoMB.selecionarMaquina(manutencaoMB.manutencao.maquina.codigo)}" render="codigoMaquina maquinaModelo dataMaquina" />
+									</h:inputText>
+								</div>
+							</div>
+							
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="maquinaModelo">Modelo</label>
+									<input id="maquinaModelo" name="maquinaModelo" type="text" class="form-control" placeholder="Nome fantasia" jsf:value="#{manutencaoMB.manutencao.maquina.modelo}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="dataMaquina">Data aquisição</label>
+									<input id="dataMaquina" name="dataMaquina" type="text" class="form-control" placeholder="Tipo pessoa" jsf:value="#{manutencaoMB.manutencao.maquina.dataAquisicao}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="email">&nbsp;</label>
+									<h:commandLink id="btn-maquinas" class="btn btn-primary" actionListener="#{manutencaoMB.abrirDialog('dlgConsultaMaquina')}" style="width: 100%; color:white;" immediate="true">
+										<i class="glyphicon glyphicon-search"></i>&nbsp;Máquinas&nbsp;
+									</h:commandLink>
+								</div>
+							</div>
+						</p:fieldset>
+						
+						<p:fieldset style="margin-bottom:20px" styleClass="">
+							<legend>Fornecedor da máquina</legend>
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="codigoFornecedor">Código *</label>
+									<h:inputText id="codigoFornecedor" name="codigo" type="text" class="form-control" pt:placeholder="Código" value="#{manutencaoMB.manutencao.fornecedor.codigo}" required="true" maxlength="20"
+										requiredMessage="O campo código do fornecedor é obrigatório">
+										 <f:ajax event="blur" listener="#{manutencaoMB.selecionarFornecedor(manutencaoMB.manutencao.fornecedor.codigo)}" render="codigoFornecedor nomeFantasia tipoPessoa cpfCnpj site telefone email" />
+									</h:inputText>
+								</div>
+							</div>
+							
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="nomeFantasia">Nome Fantasia</label>
+									<input id="nomeFantasia" name="nomeFantasia" type="text" class="form-control" placeholder="Nome fantasia" jsf:value="#{manutencaoMB.manutencao.fornecedor.nomeFantasia}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="tipoPessoa">Tipo Pessoa</label>
+									<input id="tipoPessoa" name="tipoPessoa" type="text" class="form-control" placeholder="Tipo pessoa" jsf:value="#{manutencaoMB.manutencao.fornecedor.fisicaJuridica}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="cpfCnpj">CPF/CNPJ</label>
+									<input id="cpfCnpj" name="cpfCnpj" type="text" class="form-control" placeholder="CPF/CNPJ" jsf:value="#{manutencaoMB.manutencao.fornecedor.cpfCnpj}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="site">Site</label>
+									<input id="site" name="site" type="text" class="form-control" placeholder="Site" jsf:value="#{manutencaoMB.manutencao.fornecedor.site}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="telefone">Telefone</label>
+									<input id="telefone" name="telefone" type="text" class="form-control" placeholder="Telefone" jsf:value="#{manutencaoMB.manutencao.fornecedor.telefoneFixo}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="email">E-mail</label>
+									<input id="email" name="email" type="text" class="form-control" placeholder="E-mail" jsf:value="#{manutencaoMB.manutencao.fornecedor.email}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="email">&nbsp;</label>
+									<h:commandLink id="btn-fornecedores" class="btn btn-primary" actionListener="#{manutencaoMB.abrirDialog('dlgConsultaFornecedor')}" style="width: 100%; color:white;" immediate="true">
+										<i class="glyphicon glyphicon-search"></i>&nbsp;Fornecedores&nbsp;
+									</h:commandLink>
+								</div>
+							</div>
+						</p:fieldset>
+					</div>
+					
+					<div class="col-lg-12">
+						<div class="form-group">
+							<label for="motivo">Motivo *</label>
+							<h:inputText id="motivo" name="descricao" type="text" class="form-control" placeholder="Descrição" value="#{manutencaoMB.manutencao.motivo}" required="true" maxlength="35"/>
+							<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="motivo"/>
+						</div>
+					</div>
+					
+        			<div class="col-lg-12">
+						<div class="form-group">
+							<div class="required">* Campos obrigatórios</div>
+						</div>
+					</div>
+				</div>
+	     		<div class="row">	
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandLink id="btn-signup" class="btn btn-primary" actionListener="#{manutencaoMB.cadastrar}" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-saved"></i>&nbsp;Cadastrar&nbsp;
+							</h:commandLink>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<a id="btn-cancel" class="btn btn-warning" href="#{request.contextPath}/admin/tela_inicial.xhtml" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+							</a>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:panel>
+		
+		<p:dialog widgetVar="dlgConsultaFornecedor" width="800" showHeader="false" resizable="false" modal="true">
+			<h:form prependId="false">
+				<p:messages id="dlgMessagesFornecedor" for="Message2" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="form-group">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="dlgCodigo">Código:</label>
+								<input id="dlgCodigo" name="dlgCodigo" type="text" class="form-control" placeholder="Código" jsf:value="#{manutencaoMB.fornecedor.codigo}" maxlength="25" />
+								<pe:keyFilter regEx="/[A-Z0-9]+/" for="dlgCodigo"/>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="dlgNomeFantasia">Nome fantasia:</label>
+								<input id="dlgNomeFantasia" name="dlgNomeFantasia" type="text" class="form-control" placeholder="Nome fantasia" jsf:value="#{manutencaoMB.fornecedor.nomeFantasia}" maxlength="25" />
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>&nbsp;</label>
+								<h:commandLink id="btn-pesquisar-fornecedor" class="btn btn-primary" actionListener="#{manutencaoMB.consultarFornecedor}" update="table-fornecedores" style="width: 100%; color:white;" immediate="false">
+									<i class="glyphicon glyphicon-search"></i>&nbsp;Pesquisar&nbsp;
+								</h:commandLink>
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<p:dataTable tableStyleClass="table-hover" id="table-fornecedores" var="fornecedor" value="#{manutencaoMB.listFornecedores}" rows="5" paginator="true" paginatorPosition="bottom"
+									paginatorAlwaysVisible="false" rowsPerPageTemplate="5,10" >
+									<p:column style="width:64px; text-align: center" headerText="">
+										<p:commandButton icon="ui-icon-arrowthick-1-e" title="Selecionar" actionListener="#{manutencaoMB.selecionarFornecedor(fornecedor.codigo)}" update="codigoFornecedor nomeFantasia tipoPessoa cpfCnpj site telefone email" />
+									</p:column>
+									<p:column headerText="Código">
+										<h:outputText id="fornCodigo" value="#{fornecedor.codigo}" />
+									</p:column>
+									
+									<p:column headerText="Descrição">
+										<h:outputText id="fornDescricao" value="#{fornecedor.nomeFantasia}" />
+					            	</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+								
+						<div class="col-md-9">
+							<div class="form-group">
+							</div>
+						</div>
+							
+						<div class="col-md-3">
+							<div class="form-group">
+								<h:commandLink id="btn-cancel-fornecedor" class="btn btn-warning" actionListener="#{manutencaoMB.fecharDialog('dlgConsultaFornecedor')}" update="table-fornecedores" style="width: 100%; color:white;" immediate="false">
+									<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+								</h:commandLink>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+		
+		<p:dialog widgetVar="dlgConsultaMaquina" width="800" showHeader="false" resizable="false" modal="true">
+			<h:form prependId="false">
+				<p:messages id="dlgMessagesMaquina" for="Message2" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="form-group">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="dlgCodigoMaquina">Código:</label>
+								<input id="dlgCodigoMaquina" name="dlgCodigoMaquina" type="text" class="form-control" placeholder="Código" jsf:value="#{manutencaoMB.maquina.codigo}" maxlength="25" />
+								<pe:keyFilter regEx="/[A-Z0-9]+/" for="dlgCodigo" />
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="dlgModeloMaquina">Modelo:</label>
+								<input id="dlgModeloMaquina" name="dlgModeloMaquina" type="text" class="form-control" placeholder="Modelo" jsf:value="#{manutencaoMB.maquina.modelo}" maxlength="25" />
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>&nbsp;</label>
+								<h:commandLink id="btn-pesquisar-maquina" class="btn btn-primary" actionListener="#{manutencaoMB.consultarMaquina}" update="table-maquinas" style="width: 100%; color:white;" immediate="false">
+									<i class="glyphicon glyphicon-search"></i>&nbsp;Pesquisar&nbsp;
+								</h:commandLink>
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<p:dataTable tableStyleClass="table-hover" id="table-maquinas" var="maquina" value="#{manutencaoMB.listMaquinas}" rows="5" paginator="true" paginatorPosition="bottom"
+									paginatorAlwaysVisible="false" rowsPerPageTemplate="5,10" >
+									<p:column style="width:64px; text-align: center" headerText="">
+										<p:commandButton icon="ui-icon-arrowthick-1-e" title="Selecionar" actionListener="#{manutencaoMB.selecionarMaquina(maquina.codigo)}" update="codigoMaquina maquinaModelo dataMaquina" />
+									</p:column>
+									<p:column headerText="Código">
+										<h:outputText id="maqCodigo" value="#{maquina.codigo}" />
+									</p:column>
+									
+									<p:column headerText="Modelo">
+										<h:outputText id="maqModelo" value="#{maquina.modelo}" />
+					            	</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+								
+						<div class="col-md-9">
+							<div class="form-group">
+							</div>
+						</div>
+							
+						<div class="col-md-3">
+							<div class="form-group">
+								<h:commandLink id="btn-cancel-maquinas" class="btn btn-warning" actionListener="#{manutencaoMB.fecharDialog('dlgConsultaFornecedor')}" update="table-maquinas" style="width: 100%; color:white;" immediate="false">
+									<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+								</h:commandLink>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+
+</ui:composition>

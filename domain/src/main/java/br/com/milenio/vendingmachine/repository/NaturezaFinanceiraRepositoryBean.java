@@ -8,9 +8,8 @@ import javax.persistence.TypedQuery;
 import com.uaihebert.uaicriteria.UaiCriteria;
 import com.uaihebert.uaicriteria.UaiCriteriaFactory;
 
-import br.com.milenio.vendingmachine.domain.model.Cliente;
-import br.com.milenio.vendingmachine.domain.model.NaturezaFinanceira;
 import br.com.milenio.vendingmachine.domain.AbstractVendingMachineRepositoryBean;
+import br.com.milenio.vendingmachine.domain.model.NaturezaFinanceira;
 
 @Stateless(name = "NaturezaFinanceiraRepository")
 public class NaturezaFinanceiraRepositoryBean extends AbstractVendingMachineRepositoryBean<NaturezaFinanceira, Long>
@@ -68,5 +67,24 @@ public class NaturezaFinanceiraRepositoryBean extends AbstractVendingMachineRepo
 		
 		return naturezasFinanceiras;
 
+	}
+
+	@Override
+	public NaturezaFinanceira findByDescricao(String descricao) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT nf FROM NaturezaFinanceira nf WHERE ");
+		sb.append(" nf.descricao = :descricao ");
+
+		TypedQuery<NaturezaFinanceira> query = getEntityManager().createQuery(sb.toString(), NaturezaFinanceira.class);
+
+		query.setParameter("descricao", descricao);
+
+		List<NaturezaFinanceira> naturezaFinanceirasCadastrada = query.getResultList();
+
+		if (!naturezaFinanceirasCadastrada.isEmpty()) {
+			return naturezaFinanceirasCadastrada.get(0);
+		}
+
+		return null;
 	}
 }

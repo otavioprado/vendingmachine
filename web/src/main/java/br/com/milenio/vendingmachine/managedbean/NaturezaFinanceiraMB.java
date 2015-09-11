@@ -119,20 +119,26 @@ public class NaturezaFinanceiraMB implements Serializable {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "O campo " + campoEmBranco +" não pode conter apenas espaços em branco.", null));
 			return;
 		}
-		naturezaFinanceiraService.editar(naturezaFinanceira);
 		
-		// Sucesso - Exibe mensagem de edição realizado com sucesso
-		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Natureza financeira " + naturezaFinanceira.getDescricao() + " editada com sucesso.", null));
-		logger.info("Natureza financeira " + naturezaFinanceira.getDescricao() + " foi editada no sistema com sucesso.");
-		
-		// Processo de auditoria de cadastro de usuário
-		Auditoria auditoria = new Auditoria();
-		auditoria.setDataAcao(new Date());
-		auditoria.setTitulo("Edição");
-		auditoria.setDescricao("Editou a natureza financeira " + naturezaFinanceira.getDescricao());
-		auditoria.setUsuario(Seguranca.getUsuarioLogado());
-		auditoria.setIp(request.getRemoteAddr());
-		auditoriaService.cadastrarNovaAcao(auditoria);
+		try{
+			naturezaFinanceiraService.editar(naturezaFinanceira);
+			
+			// Sucesso - Exibe mensagem de edição realizado com sucesso
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Natureza financeira " + naturezaFinanceira.getDescricao() + " editada com sucesso.", null));
+			logger.info("Natureza financeira " + naturezaFinanceira.getDescricao() + " foi editada no sistema com sucesso.");
+			
+			// Processo de auditoria de cadastro de usuário
+			Auditoria auditoria = new Auditoria();
+			auditoria.setDataAcao(new Date());
+			auditoria.setTitulo("Edição");
+			auditoria.setDescricao("Editou a natureza financeira " + naturezaFinanceira.getDescricao());
+			auditoria.setUsuario(Seguranca.getUsuarioLogado());
+			auditoria.setIp(request.getRemoteAddr());
+			auditoriaService.cadastrarNovaAcao(auditoria);
+		} catch (ConteudoJaExistenteNoBancoDeDadosException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+			logger.info(e.getMessage());
+		}
 	}
 	
 	public void excluirNaturezaFinanceira() {

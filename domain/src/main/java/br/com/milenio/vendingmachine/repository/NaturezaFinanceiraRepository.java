@@ -12,4 +12,6 @@ public interface NaturezaFinanceiraRepository extends Repository<NaturezaFinance
 	public NaturezaFinanceira findNaturezaFinanceiraByCodigoDescricao(NaturezaFinanceira naturezaFinanceira);
 	
 	public List<NaturezaFinanceira> buscarNaturezasComFiltro(NaturezaFinanceira naturezaFinanceira);
+
+	public NaturezaFinanceira findByDescricao(String descricao);
 }

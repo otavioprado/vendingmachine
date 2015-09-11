@@ -15,6 +15,7 @@ import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.exceptions.ConteudoJaExistenteNoBancoDeDadosException;
 import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
 import br.com.milenio.vendingmachine.repository.AuditoriaRepository;
+import br.com.milenio.vendingmachine.repository.FornecedorRepository;
 import br.com.milenio.vendingmachine.repository.MaquinaRepository;
 import br.com.milenio.vendingmachine.repository.MaquinaStatusRepository;
 import br.com.milenio.vendingmachine.repository.PerfilRepository;
@@ -24,6 +25,9 @@ public class MaquinaServiceBean implements MaquinaService {
 	
 	@EJB
 	private AuditoriaRepository auditoriaRepository;
+	
+	@EJB
+	private FornecedorRepository fornecedorRepository;
 	
 	@EJB
 	private MaquinaStatusRepository maquinaStatusRepository;
@@ -37,7 +41,18 @@ public class MaquinaServiceBean implements MaquinaService {
 	private static final Logger LOGGER = LogManager.getLogger(MaquinaServiceBean.class);
 
 	@Override
-	public void cadastrar(Maquina maquina) throws ConteudoJaExistenteNoBancoDeDadosException {
+	public void cadastrar(Maquina maquina) throws ConteudoJaExistenteNoBancoDeDadosException, InconsistenciaException {
+		String codigoFornecedor = maquina.getFornecedor().getCodigo();
+		if(codigoFornecedor == null || codigoFornecedor.isEmpty()) {
+			throw new InconsistenciaException("O código do fornecedor é inválido");
+		} else {
+			Fornecedor fornecedor = fornecedorRepository.findByCodigo(codigoFornecedor);
+			
+			if(fornecedor == null) {
+				throw new InconsistenciaException("O código do fornecedor é inválido");
+			}
+		}
+		
 		// Verifica se já existe uma máquina com o mesmo código cadastrado no banco de dados do sistema
 		Maquina maquinaAtual = maquinaRepository.findByCodigo(maquina.getCodigo());
 		
@@ -115,5 +130,10 @@ public class MaquinaServiceBean implements MaquinaService {
 		}
 		
 		maquinaRepository.merge(maquina);
+	}
+	
+	@Override
+	public Maquina findByCodigo(String codigo) {
+		return maquinaRepository.findByCodigo(codigo);
 	}
 }

@@ -109,7 +109,7 @@ public class MaquinaMB implements Serializable {
 			auditoria.setIp(request.getRemoteAddr());
 			auditoriaService.cadastrarNovaAcao(auditoria);
 			
-		} catch(ConteudoJaExistenteNoBancoDeDadosException e) {
+		} catch(ConteudoJaExistenteNoBancoDeDadosException | InconsistenciaException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
 			logger.info(e.getMessage());
 		}
@@ -201,6 +201,18 @@ public class MaquinaMB implements Serializable {
 	
 	public void consultar(boolean exibirMensagem) {
 		try {
+			if(maqConsParam.getDataAquisicao() != null) {
+				// Valida se a data informada não é menor que a data atual
+				DateTime hoje = new DateTime(new Date());
+				DateTime dataInformada = new DateTime(maqConsParam.getDataAquisicao());
+				Days daysBetween = Days.daysBetween(hoje, dataInformada);
+				
+				if(daysBetween.getDays() > 0) {
+					ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Apenas datas de aquisição passadas podem ser informadas.", null));
+					return;
+				}
+			}
+			
 			listMaquinas = maquinaService.buscarComFiltro(maqConsParam);
 		} catch (CadastroInexistenteException e) {
 			if(listMaquinas != null && !listMaquinas.isEmpty()) {
@@ -307,6 +319,7 @@ public class MaquinaMB implements Serializable {
 	
 	public void fecharDialogAdicionarProduto() {
 		listProdutos.clear();
+		fornecedor = new Fornecedor();
 		
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('dlgAdicionarProduto').hide();");

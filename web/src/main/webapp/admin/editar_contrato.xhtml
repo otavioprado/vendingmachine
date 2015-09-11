@@ -82,7 +82,7 @@
 							<label for="codigo">Descrição *</label>
 							<h:inputText id="descricao" name="codigo" pt:placeholder="Descrição"  styleClass="form-control" value="#{contratoMB.contrato.descricao}" 
 								required="true" maxlength="30" requiredMessage="O campo descrição é obrigatório"/>
-							<pe:keyFilter regEx="/[a-zA-Z0-9 ]+/i" for="descricao"/>
+							<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="descricao"/>
 						</div>
 					</div>
 				</div>

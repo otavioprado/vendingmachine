@@ -72,6 +72,8 @@ INSERT INTO PERMISSAO(ID, NOME, DESCRICAO, DEPENDENCIA_ID, IND_ATRIB_ANY_PERFIL)
 INSERT INTO PERMISSAO(ID, NOME, DESCRICAO, DEPENDENCIA_ID, IND_ATRIB_ANY_PERFIL) VALUES (33, 'ROLE_CONS_NATUREZA', 'Consultar natureza financeira', null, 1);
 INSERT INTO PERMISSAO(ID, NOME, DESCRICAO, DEPENDENCIA_ID, IND_ATRIB_ANY_PERFIL) VALUES (34, 'ROLE_EDT_NATUREZA', 'Editar natureza financeira', 33, 1);
 INSERT INTO PERMISSAO(ID, NOME, DESCRICAO, DEPENDENCIA_ID, IND_ATRIB_ANY_PERFIL) VALUES (35, 'ROLE_EXCLUIR_NATUREZA', 'Excluir natureza financeira', 33, 1);
+INSERT INTO PERMISSAO(ID, NOME, DESCRICAO, DEPENDENCIA_ID, IND_ATRIB_ANY_PERFIL) VALUES (36, 'ROLE_CAD_MANUTENCAO', 'Cadastrar manutenção', null, 1);
+INSERT INTO PERMISSAO(ID, NOME, DESCRICAO, DEPENDENCIA_ID, IND_ATRIB_ANY_PERFIL) VALUES (37, 'ROLE_CONS_MANUTENCAO', 'Consultar manutenção', null, 1);
 
 ----------------------------------------------------------------
 --  	Atribui as permissoes de cada perfil				  --
@@ -119,10 +121,15 @@ INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (2, 32); -- Gestor:
 INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (2, 33); -- Gestor: Consultar natureza financeira
 INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (2, 34); -- Gestor: Editar natureza financeira
 INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (2, 35); -- Gestor: Excluir natureza financeira
+INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (2, 36); -- Gestor: Cadastrar manutenção
+INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (2, 37); -- Gestor: Consultar manutenção
 
 
 INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (3, 1); -- Gerente: Usuário logado painel de Admin
--- INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (4, 1); -- Operador: Usuário logado painel de Admin
+INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (3, 36); -- Gerente: Cadastrar manutenção
+INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (3, 37); -- Gerente: Consultar manutenção
+
+INSERT INTO PERFIL_PERMISSAO(PERFIL_ID, PERMISSAO_ID) VALUES (4, 1); -- Operador: Usuário logado painel de Admin
 
 ----------------------------------------------------------------
 --  	Atribui as configurações do sistema					  --

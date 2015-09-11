@@ -46,7 +46,7 @@
 						<div class="form-group">
 							<label for="descricao">Descrição *</label>
 							<h:inputText id="descricao" name="descricao" type="text" class="form-control" placeholder="Descrição" value="#{produtoMB.produto.descricao}" required="true" maxlength="25"/>
-							<pe:keyFilter regEx="/[a-zA-Z0-9 ]+/i" for="descricao" />
+							<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="descricao"/>
 						</div>
 					</div>
 					

@@ -25,7 +25,7 @@
 						<div class="form-group">
 							<label for="codigo">Codigo *</label>
 							<input id="codigo" name="codigo" type="text" class="form-control" placeholder="Código" jsf:value="#{naturezaFinanceiraMB.naturezaFinanceira.codigo}" jsf:required="true" maxlength="25" 
-								jsf:requiredMessage="O campo código é obrigatório"/>
+								jsf:requiredMessage="O campo código é obrigatório" readonly="readonly"/>
 							<pe:keyFilter regEx="/[A-Z0-9_]+/" for="codigo"/>
 							<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="descricaoNatureza"/>
 						</div>
@@ -40,7 +40,8 @@
 					<div class="col-lg-4">	
 						<div class="form-group">
 							<label for="tipo">Tipo *</label>
-							<h:selectOneMenu id="tipoNaturezaFinanceira" value="#{naturezaFinanceiraMB.naturezaFinanceira.tipoNaturezaFinanceira}" styleClass="form-control" required="true">
+							<h:selectOneMenu id="tipoNaturezaFinanceira" value="#{naturezaFinanceiraMB.naturezaFinanceira.tipoNaturezaFinanceira}" styleClass="form-control" required="true"
+								requiredMessage="O campo tipo natureza financeira é obrigatório">
 				                <f:selectItem itemLabel="[Selecione]" itemValue="" noSelectionOption="true" />
 				                <f:selectItem itemLabel="Despesa" itemValue="DESPESA" noSelectionOption="false" />
 				                <f:selectItem itemLabel="Receita" itemValue="RECEITA" noSelectionOption="false" />

@@ -18,6 +18,7 @@
 		<script>
 			$(function() {
 				$("#dataAquisicaoInicio").datepicker($.datepicker.regional["pt-BR"]);
+				$("#dataAquisicaoInicio").datepicker("option", "maxDate", 0);
 			});
 		</script>
 	</ui:define>
@@ -31,14 +32,14 @@
 					<div class="col-lg-4">	
 						<div class="form-group">
 							<label for="codigo">Código</label>
-							<input id="codigo" name="codigo" type="text" class="form-control" placeholder="Código" jsf:value="#{maquinaMB.maqConsParam.codigo}" />
+							<input id="codigo" name="codigo" type="text" class="form-control" placeholder="Código" jsf:value="#{maquinaMB.maqConsParam.codigo}" maxlength="20"/>
 							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigo"/>
 						</div>
 					</div>
 					
 					<div class="col-lg-4">
 						<div class="form-group">
-							<label for="modelo">Modelo *</label>
+							<label for="modelo">Modelo</label>
 							<h:inputText id="modelo" name="modelo" type="text" class="form-control" pt:placeholder="Modelo" value="#{maquinaMB.maqConsParam.modelo}" maxlength="25"/>
 							<pe:keyFilter regEx="/[a-zA-Z0-9 ]+/i" for="modelo" />
 						</div>
@@ -56,7 +57,7 @@
 					
 					<div class="col-lg-4">
 						<div class="form-group">
-							<label for="dataAquisicaoInicio">Data de aquisição *</label>
+							<label for="dataAquisicaoInicio">Data de aquisição</label>
 							<h:inputText id="dataAquisicaoInicio" name="dataAquisicaoInicio" value="#{maquinaMB.maqConsParam.dataAquisicao}" 
 								styleClass="form-control" maxlength="10" pt:placeholder="Data aquisição">
 								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />

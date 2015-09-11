@@ -11,7 +11,7 @@ import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
 
 @Local
 public interface MaquinaService {
-	public void cadastrar(Maquina maquina) throws ConteudoJaExistenteNoBancoDeDadosException;
+	public void cadastrar(Maquina maquina) throws ConteudoJaExistenteNoBancoDeDadosException, InconsistenciaException;
 
 	public List<Maquina> buscarComFiltro(Maquina maquina) throws CadastroInexistenteException;
 
@@ -20,4 +20,6 @@ public interface MaquinaService {
 	public Maquina findById(Long id);
 
 	public void editar(Maquina maquina) throws ConteudoJaExistenteNoBancoDeDadosException;
+
+	public Maquina findByCodigo(String codigo);
 }

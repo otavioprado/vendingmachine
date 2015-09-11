@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import br.com.milenio.vendingmachine.domain.model.Cliente;
 import br.com.milenio.vendingmachine.domain.model.NaturezaFinanceira;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.exceptions.ConteudoJaExistenteNoBancoDeDadosException;
@@ -92,7 +93,23 @@ public class NaturezaFinanceiraServiceBean implements NaturezaFinanceiraService 
 	}
 
 	@Override
-	public void editar(NaturezaFinanceira naturezaFinanceira) {
+	public void editar(NaturezaFinanceira naturezaFinanceira) throws ConteudoJaExistenteNoBancoDeDadosException {
+		// Carrega um objeto com os dados atuais da natureza financeira sendo editada
+		NaturezaFinanceira naturezaAtual = naturezaFinanceiraRepository.findById(naturezaFinanceira.getId());
+		
+		NaturezaFinanceira resultado = null;
+		// Se houve mudança na descrição, é necessário validar se a nova descrição já não existe no sistema
+		if(!naturezaAtual.getDescricao().equalsIgnoreCase(naturezaFinanceira.getDescricao())) {
+			// Se entrou aqui, então houve alteração na descrição da natureza financeira
+			// Verifica se já existe uma natureza financeira com a mesma descrição cadastrado no banco de dados do sistema
+			resultado = naturezaFinanceiraRepository.findByDescricao(naturezaFinanceira.getDescricao());
+			
+			if(resultado != null && resultado.getDescricao().equalsIgnoreCase(naturezaFinanceira.getDescricao())) {
+				LOGGER.info("Já existe uma natureza financeira com descrição " + naturezaFinanceira.getDescricao() + " cadastrada no banco de dados.");
+				throw new ConteudoJaExistenteNoBancoDeDadosException("Já existe uma natureza financeira com descrição " + naturezaFinanceira.getDescricao() + " cadastrada no sistema.");
+			}
+		}
+		
 		naturezaFinanceiraRepository.merge(naturezaFinanceira);
 	}
 

@@ -34,7 +34,8 @@
 					<div class="col-lg-4">	
 						<div class="form-group">
 							<label for="tipo">Tipo *</label>
-							<h:selectOneMenu id="tipoNaturezaFinanceira" value="#{naturezaFinanceiraMB.naturezaFinanceira.tipoNaturezaFinanceira}" styleClass="form-control" required="true">
+							<h:selectOneMenu id="tipoNaturezaFinanceira" value="#{naturezaFinanceiraMB.naturezaFinanceira.tipoNaturezaFinanceira}" styleClass="form-control" required="true"
+								requiredMessage="O campo tipo natureza financeira é obrigatório">
 				                <f:selectItem itemLabel="[Selecione]" itemValue="" noSelectionOption="true" />
 				                <f:selectItem itemLabel="Despesa" itemValue="DESPESA" noSelectionOption="false" />
 				                <f:selectItem itemLabel="Receita" itemValue="RECEITA" noSelectionOption="false" />

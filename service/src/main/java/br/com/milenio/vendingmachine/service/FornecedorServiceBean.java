@@ -150,6 +150,4 @@ public class FornecedorServiceBean implements FornecedorService {
 	public Fornecedor findByCodigo(String codigo) {
 		return fornecedorRepository.findByCodigo(codigo);
 	}
-
-
 }
