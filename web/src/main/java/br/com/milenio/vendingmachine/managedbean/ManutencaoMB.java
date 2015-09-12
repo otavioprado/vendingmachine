@@ -13,6 +13,8 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.primefaces.context.RequestContext;
 
 import br.com.milenio.vendingmachine.domain.model.Auditoria;
@@ -21,6 +23,7 @@ import br.com.milenio.vendingmachine.domain.model.Manutencao;
 import br.com.milenio.vendingmachine.domain.model.Maquina;
 import br.com.milenio.vendingmachine.domain.model.MaquinaStatus;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
+import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
 import br.com.milenio.vendingmachine.repository.MaquinaStatusRepository;
 import br.com.milenio.vendingmachine.security.Seguranca;
 import br.com.milenio.vendingmachine.service.AuditoriaService;
@@ -62,6 +65,8 @@ public class ManutencaoMB implements Serializable {
 	private List<Fornecedor> listFornecedores = new ArrayList<Fornecedor>();
 	private List<Maquina> listMaquinas = new ArrayList<Maquina>();
 	private Manutencao manutencao = new Manutencao();
+	private List<Manutencao> listManutencao = new ArrayList<Manutencao>();
+	private Manutencao manuConsParam = new Manutencao();
 	
 	public void cadastrar() {
 		logger.debug("Tentando realizar o cadastro da manutenção para a máquina " + manutencao.getMaquina().getCodigo());
@@ -71,22 +76,36 @@ public class ManutencaoMB implements Serializable {
 		if(motivo.isEmpty() || motivo.isEmpty()) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "O campo motivo não pode conter apenas espaços em branco.", null));
 			return;
+		} else if (manutencao.getMaquina().getCodigo().trim().isEmpty()) {
+			// Se entrou aqui, então o código da máquina estava vázio
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "O campo código da máquina não pode conter apenas espaços em branco", null));
+			return;
+		} else if (manutencao.getFornecedor().getCodigo().trim().isEmpty()) {
+			// Se entrou aqui, então o código do fornecedor estava vázio
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "O campo código do fornecedor não pode conter apenas espaços em branco", null));
+			return;
 		}
-		manutencaoService.cadastrar(manutencao);
 		
-		// Sucesso - Exibe mensagem de cadastro realizado com sucesso
-		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Manutencao para a máquina " + manutencao.getMaquina().getCodigo() + " cadastrada com sucesso.", null));
-		logger.info("Manutenção para a máquina " + manutencao.getMaquina().getCodigo() + " cadastrada no sistema com sucesso.");
-		
-		// Processo de auditoria de cadastro de usuário
-		Auditoria auditoria = new Auditoria();
-		auditoria.setDataAcao(new Date());
-		auditoria.setTitulo("Cadastro");
-		auditoria.setDescricao("Cadastrou a manutenção para a máquina " + manutencao.getMaquina().getCodigo());
-		auditoria.setUsuario(Seguranca.getUsuarioLogado());
-		auditoria.setIp(request.getRemoteAddr());
-		auditoriaService.cadastrarNovaAcao(auditoria);
+		try {
+			manutencaoService.cadastrar(manutencao);
 
+			// Sucesso - Exibe mensagem de cadastro realizado com sucesso
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Manutenção para a máquina " + manutencao.getMaquina().getCodigo() + " cadastrada com sucesso. Status da máquina agora é 'EM MANUTENÇÃO'.", null));
+			logger.info("Manutenção para a máquina " + manutencao.getMaquina().getCodigo() + " cadastrada no sistema com sucesso. Status da máquina agora é 'EM MANUTENÇÃO'.");
+			
+			// Processo de auditoria de cadastro de usuário
+			Auditoria auditoria = new Auditoria();
+			auditoria.setDataAcao(new Date());
+			auditoria.setTitulo("Cadastro");
+			auditoria.setDescricao("Cadastrou a manutenção para a máquina " + manutencao.getMaquina().getCodigo());
+			auditoria.setUsuario(Seguranca.getUsuarioLogado());
+			auditoria.setIp(request.getRemoteAddr());
+			auditoriaService.cadastrarNovaAcao(auditoria);
+		} catch(InconsistenciaException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+			logger.info(e.getMessage());
+		}
+		
 		manutencao = new Manutencao();
 	}
 	
@@ -116,6 +135,36 @@ public class ManutencaoMB implements Serializable {
 			ctx.addMessage("Message2", new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("PF('dlgConsultaMaquina').show();");
+		}
+	}
+	
+	public void excluir() {
+		
+	}
+	
+	public void consultar(boolean exibirMensagem) {
+		try {
+			if(manuConsParam.getDataCadastro() != null) {
+				// Valida se a data informada não é menor que a data atual
+				DateTime hoje = new DateTime(new Date());
+				DateTime dataInformada = new DateTime(manuConsParam.getDataCadastro());
+				Days daysBetween = Days.daysBetween(hoje, dataInformada);
+				
+				if(daysBetween.getDays() > 0) {
+					ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Apenas datas passadas podem ser informadas.", null));
+					return;
+				}
+			}
+			
+			listManutencao = manutencaoService.buscarComFiltro(manuConsParam);
+		} catch (CadastroInexistenteException e) {
+			if(listManutencao != null && !listMaquinas.isEmpty()) {
+				listManutencao.clear();
+			}
+			
+			if(exibirMensagem) {
+				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
+			}
 		}
 	}
 	
@@ -198,5 +247,21 @@ public class ManutencaoMB implements Serializable {
 
 	public void setListMaquinas(List<Maquina> listMaquinas) {
 		this.listMaquinas = listMaquinas;
+	}
+
+	public List<Manutencao> getListManutencao() {
+		return listManutencao;
+	}
+
+	public void setListManutencao(List<Manutencao> listManutencao) {
+		this.listManutencao = listManutencao;
+	}
+
+	public Manutencao getManuConsParam() {
+		return manuConsParam;
+	}
+
+	public void setManuConsParam(Manutencao manuConsParam) {
+		this.manuConsParam = manuConsParam;
 	}
 }

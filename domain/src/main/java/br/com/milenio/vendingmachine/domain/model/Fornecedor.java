@@ -52,9 +52,6 @@ public class Fornecedor implements Serializable {
 	@JoinColumn(name= "ENDERECO_ID")
 	private Endereco endereco = new Endereco();
 	
-	@Column(name = "MOTIVO_BLOQUEIO")
-	private String motivoBloqueio;
-	
 	public Long getId() {
 		return id;
 	}
@@ -141,13 +138,5 @@ public class Fornecedor implements Serializable {
 
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
-	}
-
-	public String getMotivoBloqueio() {
-		return motivoBloqueio;
-	}
-
-	public void setMotivoBloqueio(String motivoBloqueio) {
-		this.motivoBloqueio = motivoBloqueio;
 	}
 }

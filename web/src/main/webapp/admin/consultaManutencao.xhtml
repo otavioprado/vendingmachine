@@ -1,0 +1,152 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;"> 
+]>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    template="layoutLogado.xhtml">
+    
+   	<ui:define name="script">
+		<h:outputScript name="js/datepicker-pt-BR.js" />
+
+		<script>
+			$(function() {
+				$("#dataManutencao").datepicker($.datepicker.regional["pt-BR"]);
+				$("#dataManutencao").datepicker("option", "maxDate", 0);
+			});
+		</script>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<p:panel id="basic" header="Filtro de pesquisa de manutenções" style="margin-bottom:20px">
+			<h:form prependId="false">
+				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="row">
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="codigoMaquina">Código da máquina</label>
+							<input id="codigoMaquina" name="codigoMaquina" type="text" class="form-control" placeholder="Código máquina" jsf:value="#{manutencaoMB.manuConsParam.maquina.codigo}" />
+							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigoMaquina"/>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="codigoFornecedor">Código do fornecedor</label>
+							<input id="codigoFornecedor" name="codigoFornecedor" type="text" class="form-control" placeholder="Código fornecedor" jsf:value="#{manutencaoMB.manuConsParam.fornecedor.codigo}" />
+							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigoFornecedor"/>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="motivoManutencao">Motivo manutenção</label>
+							<input id="motivoManutencao" name="motivoManutencao" type="text" class="form-control" placeholder="Motivo manutenção" jsf:value="#{manutencaoMB.manuConsParam.motivo}" />
+							<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="motivoManutencao"/>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="dataManutencao">Data manutenção</label>
+							<input id="dataManutencao" name="dataManutencao" type="text" class="form-control" placeholder="Data manutenção" jsf:value="#{manutencaoMB.manuConsParam.dataCadastro}">
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+							</input>
+						</div>
+					</div>
+				</div>
+				<div class="row">	
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandLink id="btn-signup" class="btn btn-primary" actionListener="#{manutencaoMB.consultar(true)}" update="table-manutencoes" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-search"></i>&nbsp;Pesquisar&nbsp;
+							</h:commandLink>
+						</div>
+					</div>
+				</div>
+			</h:form>
+			<c:if test="${not empty manutencaoMB.listManutencao}">
+					<h:form prependId="false">
+						<p:dataTable tableStyleClass="table-hover" id="table-manutencoes" var="manutencao" value="#{manutencaoMB.listManutencao}" rows="10" paginator="true" paginatorPosition="bottom"
+							paginatorAlwaysVisible="false" rowsPerPageTemplate="10,15,20,25,30">
+							<h:inputHidden id="idManutencao" value="#{manutencao.id}" />
+							
+							<p:column headerText="Código máquina">
+								<h:outputText id="maquinaCodigo" value="#{manutencao.maquina.codigo}" />
+							</p:column>
+							
+							<p:column headerText="Código fornecedor">
+								<h:outputText id="fornecedorCodigo" value="#{manutencao.fornecedor.codigo}" />
+							</p:column>
+							
+							<p:column headerText="Motivo manutenção">
+								<h:outputText id="motivoManutencao" value="#{manutencao.motivo}" />
+							</p:column>
+							
+							<p:column headerText="Data cadastro">
+								<h:outputText id="dataCadastro" value="#{manutencao.dataCadastro}">
+									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+								</h:outputText>
+							</p:column>
+							
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EDT_MANUTENCAO') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_MANUTENCAO') eq true}">
+								<p:column style="width:128px; text-align: center" headerText="Ações">
+						            <c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EDT_MANUTENCAO') eq true}">
+							            <p:button icon="ui-icon-pencil" title="Editar" outcome="editar_fornecedor.xhtml">
+											<f:param name="manutencaoId" value="#{manutencao.id}" />
+										</p:button>
+									</c:if>
+									
+									<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_MANUTENCAO') eq true}">
+										<p:commandButton onclick="PF('dlgExcluir').show();" icon="ui-icon-trash" title="Excluir">
+											<f:setPropertyActionListener value="#{manutencao.id}" target="#{manutencaoMB.manutencao.id}" />
+							            </p:commandButton>
+						            </c:if>
+								</p:column>
+							</c:if>
+						</p:dataTable>
+					</h:form>
+			</c:if>
+		</p:panel>
+		
+		<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_MANUTENCAO') eq true}">
+			<h:form prependId="false">
+				<p:dialog widgetVar="dlgExcluir" width="450" showHeader="false" resizable="false" modal="true">
+					<div class="form-group">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label for="nome">Tem certeza que deseja excluir esta manutenção? Essa operação não poderá ser desfeita!</label>
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="form-group">
+									<h:commandLink id="btn-excluir" class="btn btn-primary" action="#{manutencaoMB.excluir}" 
+										style="width: 100%; color:white;" update="table-manutencoes">
+										<i class="glyphicon glyphicon-trash"></i>&nbsp;Excluir&nbsp;
+									</h:commandLink>
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="form-group">
+									<h:commandLink id="btn-excluir-cancel" class="btn btn-warning" onclick="PF('dlgExcluir').hide();" style="width: 100%; color:white;" type="button" immediate="true">
+										<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+									</h:commandLink>
+								</div>
+							</div>
+						</div>
+					</div>
+				</p:dialog>
+			</h:form>
+		</c:if>
+		
+	</ui:define>
+
+</ui:composition>

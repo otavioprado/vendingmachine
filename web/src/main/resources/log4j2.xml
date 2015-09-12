@@ -3,7 +3,7 @@
 
 	<Properties>
 		<Property name="filename">testeMyLog.log</Property>
-		<Property name="directory">C:\Wildfly 8.2\standalone\log\app.log</Property>
+		<Property name="directory">C:\temp\log\app.log</Property>
 	</Properties>
 
 	<Appenders>

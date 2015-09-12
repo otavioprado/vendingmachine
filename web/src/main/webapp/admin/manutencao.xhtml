@@ -25,8 +25,9 @@
 									<label for="codigoMaquina">Código *</label>
 									<h:inputText id="codigoMaquina" name="codigoMaquina" type="text" class="form-control" pt:placeholder="Código" value="#{manutencaoMB.manutencao.maquina.codigo}" required="true" maxlength="20"
 										requiredMessage="O campo código da máquina é obrigatório">
-										 <f:ajax event="blur" listener="#{manutencaoMB.selecionarMaquina(manutencaoMB.manutencao.maquina.codigo)}" render="codigoMaquina maquinaModelo dataMaquina" />
+										<f:ajax event="blur" listener="#{manutencaoMB.selecionarMaquina(manutencaoMB.manutencao.maquina.codigo)}" render="codigoMaquina maquinaModelo dataMaquina" />
 									</h:inputText>
+									<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigoMaquina, codigoFornecedor"/>
 								</div>
 							</div>
 							
@@ -168,6 +169,7 @@
 							<div class="form-group">
 								<label for="dlgNomeFantasia">Nome fantasia:</label>
 								<input id="dlgNomeFantasia" name="dlgNomeFantasia" type="text" class="form-control" placeholder="Nome fantasia" jsf:value="#{manutencaoMB.fornecedor.nomeFantasia}" maxlength="25" />
+								<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="dlgNomeFantasia"/>
 							</div>
 						</div>
 						<div class="col-md-4">
@@ -190,7 +192,7 @@
 										<h:outputText id="fornCodigo" value="#{fornecedor.codigo}" />
 									</p:column>
 									
-									<p:column headerText="Descrição">
+									<p:column headerText="Nome fantasia">
 										<h:outputText id="fornDescricao" value="#{fornecedor.nomeFantasia}" />
 					            	</p:column>
 								</p:dataTable>
@@ -223,7 +225,7 @@
 							<div class="form-group">
 								<label for="dlgCodigoMaquina">Código:</label>
 								<input id="dlgCodigoMaquina" name="dlgCodigoMaquina" type="text" class="form-control" placeholder="Código" jsf:value="#{manutencaoMB.maquina.codigo}" maxlength="25" />
-								<pe:keyFilter regEx="/[A-Z0-9]+/" for="dlgCodigo" />
+								<pe:keyFilter regEx="/[A-Z0-9]+/" for="dlgCodigoMaquina" />
 							</div>
 						</div>
 						<div class="col-md-4">
