@@ -1,11 +1,14 @@
 package br.com.milenio.vendingmachine.managedbean;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.ejb.EJBTransactionRolledbackException;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -55,6 +58,9 @@ public class ManutencaoMB implements Serializable {
 	private HttpServletRequest request;
 	
 	@Inject
+	private ExternalContext external;
+	
+	@Inject
 	private FacesContext ctx;
 	
 	@Inject
@@ -67,6 +73,7 @@ public class ManutencaoMB implements Serializable {
 	private Manutencao manutencao = new Manutencao();
 	private List<Manutencao> listManutencao = new ArrayList<Manutencao>();
 	private Manutencao manuConsParam = new Manutencao();
+	private boolean carregarPagina = true;
 	
 	public void cadastrar() {
 		logger.debug("Tentando realizar o cadastro da manutenção para a máquina " + manutencao.getMaquina().getCodigo());
@@ -109,6 +116,45 @@ public class ManutencaoMB implements Serializable {
 		manutencao = new Manutencao();
 	}
 	
+	public void editar() {
+		logger.debug("Tentando realizar a edição da manutenção para a máquina " + manutencao.getMaquina().getCodigo());
+		
+		String motivo = manutencao.getMotivo() != null ? manutencao.getMotivo().trim() : "";
+		
+		if(motivo.isEmpty() || motivo.isEmpty()) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "O campo motivo não pode conter apenas espaços em branco.", null));
+			return;
+		} else if (manutencao.getMaquina().getCodigo().trim().isEmpty()) {
+			// Se entrou aqui, então o código da máquina estava vázio
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "O campo código da máquina não pode conter apenas espaços em branco", null));
+			return;
+		} else if (manutencao.getFornecedor().getCodigo().trim().isEmpty()) {
+			// Se entrou aqui, então o código do fornecedor estava vázio
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "O campo código do fornecedor não pode conter apenas espaços em branco", null));
+			return;
+		}
+		
+		try {
+			manutencaoService.editar(manutencao);
+
+			// Sucesso - Exibe mensagem de cadastro realizado com sucesso
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Manutenção para a máquina " + manutencao.getMaquina().getCodigo() + " editada com sucesso.", null));
+			logger.info("Manutenção para a máquina " + manutencao.getMaquina().getCodigo() + " editada no sistema com sucesso.");
+			
+			// Processo de auditoria de cadastro de usuário
+			Auditoria auditoria = new Auditoria();
+			auditoria.setDataAcao(new Date());
+			auditoria.setTitulo("Edição");
+			auditoria.setDescricao("Editou a manutenção para a máquina " + manutencao.getMaquina().getCodigo());
+			auditoria.setUsuario(Seguranca.getUsuarioLogado());
+			auditoria.setIp(request.getRemoteAddr());
+			auditoriaService.cadastrarNovaAcao(auditoria);
+		} catch(InconsistenciaException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+			logger.info(e.getMessage());
+		}
+	}
+	
 	public void consultarFornecedor() {
 		try {
 			listFornecedores = fornecedorService.buscarFornecedoresComFiltro(fornecedor);
@@ -139,7 +185,51 @@ public class ManutencaoMB implements Serializable {
 	}
 	
 	public void excluir() {
+		Manutencao man;
+		try {
+			man = manutencaoService.excluir(manutencao.getId());
+		} catch (InconsistenciaException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
+			return;
+		} catch(EJBTransactionRolledbackException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Essa manutenção não pode ser excluída.", null));
+			logger.warn("Tentativa de excluir uma manutenção vinculada a alguma outra entidade");
+			return;
+		}
 		
+		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Manutenção para a máquina " + man.getMaquina().getCodigo() + " excluída com sucesso", null));
+		
+		// Recarrega a listagem de atividades
+		consultar(false);
+	}
+	
+	public void excluirPelaEdicao() {
+		Manutencao man;
+		
+		try {
+			man = manutencaoService.excluir(manutencao.getId());
+		} catch (InconsistenciaException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
+			return;
+		}
+		
+		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Manutenção para a máquina " + man.getMaquina().getCodigo() + " excluída com sucesso", null));
+		
+		try {
+			external.getFlash().setKeepMessages(true);
+			external.redirect(request.getContextPath() + "/admin/consultaManutencao.xhtml");
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.error("Erro ao tentar redirecionar para a página " + request.getContextPath() + "/admin/consultaManutencao.xhtml");
+		}
+	}
+	
+	public void carregarDadosParaEdicao() {
+		if(carregarPagina) {
+			manutencao = manutencaoService.findById(manutencao.getId());
+		}
+		
+		carregarPagina = false;
 	}
 	
 	public void consultar(boolean exibirMensagem) {
@@ -158,7 +248,7 @@ public class ManutencaoMB implements Serializable {
 			
 			listManutencao = manutencaoService.buscarComFiltro(manuConsParam);
 		} catch (CadastroInexistenteException e) {
-			if(listManutencao != null && !listMaquinas.isEmpty()) {
+			if(listManutencao != null && !listManutencao.isEmpty()) {
 				listManutencao.clear();
 			}
 			
@@ -166,6 +256,19 @@ public class ManutencaoMB implements Serializable {
 				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
 			}
 		}
+	}
+	
+	public void efetivarRetorno() {
+		manutencaoService.efetivarRetorno(manutencao);
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("Retorno da manutenção salvo com sucesso. Máquina ");
+		sb.append(manutencao.getMaquina().getCodigo());
+		sb.append(" agora está com o status ");
+		sb.append(manutencao.getMaquina().getMaquinaStatus().getDescricao());
+		sb.append(".");
+		
+		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, sb.toString(), null));
 	}
 	
 	public void selecionarFornecedor(String codigo) {
@@ -183,11 +286,11 @@ public class ManutencaoMB implements Serializable {
 		context.execute("PF('dlgConsultaFornecedor').hide();");
 	}
 	
-	public void selecionarMaquina(String codigo) {
+	public void selecionarMaquina(String codigo, boolean telaEdicao) {
 		Maquina maq = maquinaService.findByCodigo(codigo);
 		
 		if(maq != null) {
-			if(!"EM ESTOQUE".equalsIgnoreCase(maq.getMaquinaStatus().getDescricao())) {
+			if(!"EM ESTOQUE".equalsIgnoreCase(maq.getMaquinaStatus().getDescricao()) && telaEdicao == false) {
 				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Código inválido: O código " + codigo + " informado não corresponde a uma máquina disponível em estoque.", null));
 				manutencao.setMaquina(new Maquina());
 				return;
@@ -204,6 +307,11 @@ public class ManutencaoMB implements Serializable {
 	}
 	
 	public void abrirDialog(String dialog) {
+		fornecedor = new Fornecedor();
+		maquina = new Maquina();
+		listMaquinas = new ArrayList<Maquina>();
+		listFornecedores = new ArrayList<Fornecedor>();
+		
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('" + dialog + "').show();");
 	}

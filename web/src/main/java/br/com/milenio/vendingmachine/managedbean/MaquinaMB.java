@@ -301,6 +301,9 @@ public class MaquinaMB implements Serializable {
 	}
 	
 	public void abrirDialog() {
+		fornecedor = new Fornecedor();
+		listFornecedores = new ArrayList<Fornecedor>();
+		
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('dlgConsultaFornecedor').show();");
 	}

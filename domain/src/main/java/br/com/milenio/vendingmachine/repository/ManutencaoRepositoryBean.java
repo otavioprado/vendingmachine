@@ -10,6 +10,7 @@ import com.uaihebert.uaicriteria.UaiCriteriaFactory;
 
 import br.com.milenio.vendingmachine.domain.AbstractVendingMachineRepositoryBean;
 import br.com.milenio.vendingmachine.domain.model.Manutencao;
+import br.com.milenio.vendingmachine.domain.model.Maquina;
 
 @Stateless(name = "ManutencaoRepository")
 public class ManutencaoRepositoryBean extends AbstractVendingMachineRepositoryBean<Manutencao, Long> 
@@ -46,8 +47,8 @@ public class ManutencaoRepositoryBean extends AbstractVendingMachineRepositoryBe
 			uaiCriteria.andEquals("dataCadastro", dataCadastro);
 		}
 		
-		List<Manutencao> maquinas = (List<Manutencao>) uaiCriteria.getResultList();
+		List<Manutencao> manutencoes = (List<Manutencao>) uaiCriteria.getResultList();
 		
-		return maquinas;
+		return manutencoes;
 	}
 }

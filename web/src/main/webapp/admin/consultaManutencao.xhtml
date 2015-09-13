@@ -94,10 +94,14 @@
 								</h:outputText>
 							</p:column>
 							
+							<p:column headerText="Situação">
+								<h:outputText id="situacao" value="#{manutencao.indEfetivado eq true? 'Efetivado' : 'Pendente'}" />
+							</p:column>
+							
 							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EDT_MANUTENCAO') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_MANUTENCAO') eq true}">
 								<p:column style="width:128px; text-align: center" headerText="Ações">
 						            <c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EDT_MANUTENCAO') eq true}">
-							            <p:button icon="ui-icon-pencil" title="Editar" outcome="editar_fornecedor.xhtml">
+							            <p:button icon="ui-icon-pencil" title="Editar" outcome="editar_manutencao.xhtml">
 											<f:param name="manutencaoId" value="#{manutencao.id}" />
 										</p:button>
 									</c:if>

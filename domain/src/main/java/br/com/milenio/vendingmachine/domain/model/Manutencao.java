@@ -35,6 +35,9 @@ public class Manutencao implements Serializable {
 	@Column(name= "CUSTO")
 	private Double custo;
 	
+	@Column(name= "DESCRICAO")
+	private String descricao;
+	
 	@Column(name= "MOTIVO")
 	private String motivo;
 	
@@ -45,6 +48,9 @@ public class Manutencao implements Serializable {
 	@ManyToOne
 	@JoinColumn(name= "FORNECEDOR_ID")
 	private Fornecedor fornecedor = new Fornecedor();
+	
+	@Column(name= "IND_EFETIVADO")
+	private Boolean indEfetivado;
 
 	public Long getId() {
 		return id;
@@ -100,5 +106,21 @@ public class Manutencao implements Serializable {
 
 	public void setFornecedor(Fornecedor fornecedor) {
 		this.fornecedor = fornecedor;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public Boolean getIndEfetivado() {
+		return indEfetivado;
+	}
+
+	public void setIndEfetivado(Boolean indEfetivado) {
+		this.indEfetivado = indEfetivado;
 	}
 }
