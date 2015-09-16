@@ -29,6 +29,17 @@ public class Seguranca {
 		return nome;
 	}
 	
+	public static Long getIdUsuarioLogado() {
+		Long id = null;
+		UsuarioSistemaSpring usuario = getUsuarioSistemaSpringLogado();
+
+		if (usuario != null) {
+			id = usuario.getUsuario().getId();
+		}
+		
+		return id;
+	}
+	
 	public static UsuarioSistema getUsuarioLogado() {
 		UsuarioSistema usuarioSistema = null;
 		UsuarioSistemaSpring usuario = getUsuarioSistemaSpringLogado();

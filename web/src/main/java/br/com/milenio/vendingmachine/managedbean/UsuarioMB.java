@@ -18,6 +18,7 @@ import br.com.milenio.vendingmachine.domain.model.Auditoria;
 import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.exceptions.ConteudoJaExistenteNoBancoDeDadosException;
+import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
 import br.com.milenio.vendingmachine.security.Seguranca;
 import br.com.milenio.vendingmachine.service.AuditoriaService;
 import br.com.milenio.vendingmachine.service.UsuarioService;
@@ -51,6 +52,9 @@ public class UsuarioMB implements Serializable {
 	private Boolean status;
 	private Long perfilId;
 	private String motivoBloqueio;
+	private String confirmacaoSenha;
+	
+	private boolean carregarPagina = true;
 
 	private Long id;
 
@@ -209,6 +213,43 @@ public class UsuarioMB implements Serializable {
 		}
 	}
 	
+	public void editarCadastroPessoal() {
+		try {
+			usuarioService.editarCadastroPessoal(usuario);
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Cadastro pessoal alterado com sucesso.", null));
+		} catch (InconsistenciaException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+			logger.info(e.getMessage());
+		}
+	}
+	
+	public void alterarSenha() {
+		try {
+			// Valida se a senha e a confirmação são iguais
+			if(!usuario.getSenhaAplicacao().equals(confirmacaoSenha)) {
+				// Se entrou aqui, então a senha digitada não é igual
+				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "As senhas informadas não são iguais.", null));
+				return;
+			}
+			
+			usuario.setId(Seguranca.getIdUsuarioLogado());
+			usuarioService.alterarSenha(usuario);
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Senha alterada com sucesso.", null));
+		} catch (InconsistenciaException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+			logger.info(e.getMessage());
+		}
+	}
+	
+	public void carregarDadosUsuarioLogadoParaEdicao() {
+		if(carregarPagina) {
+			usuario = usuarioService.findById(Seguranca.getIdUsuarioLogado());
+			confirmacaoSenha = usuario.getSenhaAplicacao();
+		}
+		
+		carregarPagina = false;
+	}
+	
 	public void carregarDadosUsuarioParaEdicao() {
 		usuario = usuarioService.findById(id);
 	}
@@ -275,5 +316,13 @@ public class UsuarioMB implements Serializable {
 
 	public void setMotivoBloqueio(String motivoBloqueio) {
 		this.motivoBloqueio = motivoBloqueio;
+	}
+
+	public String getConfirmacaoSenha() {
+		return confirmacaoSenha;
+	}
+
+	public void setConfirmacaoSenha(String confirmacaoSenha) {
+		this.confirmacaoSenha = confirmacaoSenha;
 	}
 }

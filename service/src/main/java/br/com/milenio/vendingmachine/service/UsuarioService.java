@@ -7,6 +7,7 @@ import javax.ejb.Local;
 import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.exceptions.ConteudoJaExistenteNoBancoDeDadosException;
+import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
 import br.com.milenio.vendingmachine.exceptions.UsuarioBloqueadoNoSistemaException;
 import br.com.milenio.vendingmachine.exceptions.UsuarioInexistenteNoSistemaException;
 
@@ -29,4 +30,8 @@ public interface UsuarioService {
 	public void editarUsuario(UsuarioSistema usuarioEditado) throws ConteudoJaExistenteNoBancoDeDadosException;
 	
 	public UsuarioSistema findByLogin(String login);
+
+	public void editarCadastroPessoal(UsuarioSistema usuario) throws InconsistenciaException;
+
+	public void alterarSenha(UsuarioSistema usuario) throws InconsistenciaException;
 }

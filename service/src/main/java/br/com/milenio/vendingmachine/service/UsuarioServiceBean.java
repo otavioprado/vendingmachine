@@ -15,6 +15,7 @@ import br.com.milenio.vendingmachine.domain.model.Perfil;
 import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.exceptions.ConteudoJaExistenteNoBancoDeDadosException;
+import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
 import br.com.milenio.vendingmachine.exceptions.UsuarioBloqueadoNoSistemaException;
 import br.com.milenio.vendingmachine.exceptions.UsuarioInexistenteNoSistemaException;
 import br.com.milenio.vendingmachine.repository.ConfiguracaoSistemaRepository;
@@ -215,6 +216,34 @@ public class UsuarioServiceBean implements UsuarioService {
 		String senhaDigitadaCriptografada = MD5Util.criptografar(senhaDigitada);
 		
 		return senhaDigitadaCriptografada.equals(usuario.getSenhaAplicacao());
+	}
+
+	@Override
+	public void editarCadastroPessoal(UsuarioSistema usuario) throws InconsistenciaException {
+		// Carrega o cadastro atual do usuário do banco de dados
+		UsuarioSistema usuarioAtual = usuarioSistemaRepository.findById(usuario.getId());
+		
+		if(usuarioAtual == null) {
+			throw new InconsistenciaException("O usuário requisitado não existe");
+		}
+		
+		usuarioSistemaRepository.merge(usuario);
+	}
+
+	@Override
+	public void alterarSenha(UsuarioSistema usuario) throws InconsistenciaException {
+		// Carrega o cadastro do usuário do banco de dados
+		UsuarioSistema usuarioAtual = usuarioSistemaRepository.findById(usuario.getId());
+		
+		// Verifica se houve troca de senha
+		if(!usuarioAtual.getSenhaAplicacao().equals(usuario.getSenhaAplicacao())) {
+			// Se entrou aqui, o usuário informou outra senha
+			
+			// Criptografa a senha digitada antes de persistir no banco de dados
+			usuarioAtual.setSenhaAplicacao(MD5Util.criptografar(usuario.getSenhaAplicacao()));
+		}
+		
+		usuarioSistemaRepository.merge(usuarioAtual);
 	}
 	
 }

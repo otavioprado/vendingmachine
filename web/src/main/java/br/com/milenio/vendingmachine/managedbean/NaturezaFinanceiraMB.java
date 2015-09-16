@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
 
-import br.com.milenio.vendingmachine.domain.model.Atividade;
 import br.com.milenio.vendingmachine.domain.model.Auditoria;
 import br.com.milenio.vendingmachine.domain.model.NaturezaFinanceira;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
@@ -105,9 +104,7 @@ public class NaturezaFinanceiraMB implements Serializable {
 			if(exibirMensagem) {
 				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
 			}
-			
 		}
-		
 	}
 
 	public void editarNaturezaFinanceira() {
