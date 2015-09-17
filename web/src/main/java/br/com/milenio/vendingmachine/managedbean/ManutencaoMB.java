@@ -100,7 +100,7 @@ public class ManutencaoMB implements Serializable {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Manutenção para a máquina " + manutencao.getMaquina().getCodigo() + " cadastrada com sucesso. Status da máquina agora é 'EM MANUTENÇÃO'.", null));
 			logger.info("Manutenção para a máquina " + manutencao.getMaquina().getCodigo() + " cadastrada no sistema com sucesso. Status da máquina agora é 'EM MANUTENÇÃO'.");
 			
-			// Processo de auditoria de cadastro de usuário
+			// Processo de auditoria de cadastro de manutenção
 			Auditoria auditoria = new Auditoria();
 			auditoria.setDataAcao(new Date());
 			auditoria.setTitulo("Cadastro");
@@ -141,7 +141,7 @@ public class ManutencaoMB implements Serializable {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Manutenção para a máquina " + manutencao.getMaquina().getCodigo() + " editada com sucesso.", null));
 			logger.info("Manutenção para a máquina " + manutencao.getMaquina().getCodigo() + " editada no sistema com sucesso.");
 			
-			// Processo de auditoria de cadastro de usuário
+			// Processo de auditoria de edição de manutenção
 			Auditoria auditoria = new Auditoria();
 			auditoria.setDataAcao(new Date());
 			auditoria.setTitulo("Edição");
@@ -199,6 +199,15 @@ public class ManutencaoMB implements Serializable {
 		
 		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Manutenção para a máquina " + man.getMaquina().getCodigo() + " excluída com sucesso", null));
 		
+		// Processo de auditoria de exclusão de manutenção
+		Auditoria auditoria = new Auditoria();
+		auditoria.setDataAcao(new Date());
+		auditoria.setTitulo("Exclusão");
+		auditoria.setDescricao("Excluiu a manutenção para a máquina " + manutencao.getMaquina().getCodigo());
+		auditoria.setUsuario(Seguranca.getUsuarioLogado());
+		auditoria.setIp(request.getRemoteAddr());
+		auditoriaService.cadastrarNovaAcao(auditoria);
+		
 		// Recarrega a listagem de atividades
 		consultar(false);
 	}
@@ -214,6 +223,15 @@ public class ManutencaoMB implements Serializable {
 		}
 		
 		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Manutenção para a máquina " + man.getMaquina().getCodigo() + " excluída com sucesso", null));
+		
+		// Processo de auditoria de exclusão de manutenção
+		Auditoria auditoria = new Auditoria();
+		auditoria.setDataAcao(new Date());
+		auditoria.setTitulo("Exclusão");
+		auditoria.setDescricao("Excluiu a manutenção para a máquina " + manutencao.getMaquina().getCodigo());
+		auditoria.setUsuario(Seguranca.getUsuarioLogado());
+		auditoria.setIp(request.getRemoteAddr());
+		auditoriaService.cadastrarNovaAcao(auditoria);
 		
 		try {
 			external.getFlash().setKeepMessages(true);
@@ -267,6 +285,15 @@ public class ManutencaoMB implements Serializable {
 		sb.append(" agora está com o status ");
 		sb.append(manutencao.getMaquina().getMaquinaStatus().getDescricao());
 		sb.append(".");
+		
+		// Processo de auditoria de exclusão de manutenção
+		Auditoria auditoria = new Auditoria();
+		auditoria.setDataAcao(new Date());
+		auditoria.setTitulo("Retorno");
+		auditoria.setDescricao("Informou o retorno da manutenção para a máquina " + manutencao.getMaquina().getCodigo());
+		auditoria.setUsuario(Seguranca.getUsuarioLogado());
+		auditoria.setIp(request.getRemoteAddr());
+		auditoriaService.cadastrarNovaAcao(auditoria);
 		
 		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, sb.toString(), null));
 	}

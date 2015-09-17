@@ -31,7 +31,7 @@ public interface UsuarioService {
 	
 	public UsuarioSistema findByLogin(String login);
 
-	public void editarCadastroPessoal(UsuarioSistema usuario) throws InconsistenciaException;
+	public void editarCadastroPessoal(UsuarioSistema usuario) throws InconsistenciaException, ConteudoJaExistenteNoBancoDeDadosException;
 
 	public void alterarSenha(UsuarioSistema usuario) throws InconsistenciaException;
 }

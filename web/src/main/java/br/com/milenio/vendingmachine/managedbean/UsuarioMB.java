@@ -215,9 +215,20 @@ public class UsuarioMB implements Serializable {
 	
 	public void editarCadastroPessoal() {
 		try {
+			String nome = usuario.getNome() != null ? usuario.getNome().trim() : "";
+			String email = usuario.getEmail() != null ? usuario.getEmail().trim() : "";
+			
+			if(nome == null || nome.isEmpty()) {
+				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "O campo nome não pode conter apenas espaços em branco.", null));
+				return;
+			} else if(email == null || email.isEmpty()) {
+				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "O campo e-mail não pode conter apenas espaços em branco.", null));
+				return;
+			}
+			
 			usuarioService.editarCadastroPessoal(usuario);
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Cadastro pessoal alterado com sucesso.", null));
-		} catch (InconsistenciaException e) {
+		} catch (InconsistenciaException | ConteudoJaExistenteNoBancoDeDadosException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
 			logger.info(e.getMessage());
 		}

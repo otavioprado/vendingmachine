@@ -30,7 +30,8 @@
 					<div class="col-lg-4">
 						<div class="form-group">
 							<label for="codigoMaquina">Código da máquina</label>
-							<input id="codigoMaquina" name="codigoMaquina" type="text" class="form-control" placeholder="Código máquina" jsf:value="#{manutencaoMB.manuConsParam.maquina.codigo}" />
+							<input id="codigoMaquina" name="codigoMaquina" type="text" class="form-control" placeholder="Código máquina" jsf:value="#{manutencaoMB.manuConsParam.maquina.codigo}" 
+								maxlength="20"/>
 							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigoMaquina"/>
 						</div>
 					</div>
@@ -38,7 +39,8 @@
 					<div class="col-lg-4">
 						<div class="form-group">
 							<label for="codigoFornecedor">Código do fornecedor</label>
-							<input id="codigoFornecedor" name="codigoFornecedor" type="text" class="form-control" placeholder="Código fornecedor" jsf:value="#{manutencaoMB.manuConsParam.fornecedor.codigo}" />
+							<input id="codigoFornecedor" name="codigoFornecedor" type="text" class="form-control" placeholder="Código fornecedor" jsf:value="#{manutencaoMB.manuConsParam.fornecedor.codigo}" 
+								maxlength="20"/>
 							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigoFornecedor"/>
 						</div>
 					</div>
@@ -46,7 +48,8 @@
 					<div class="col-lg-4">
 						<div class="form-group">
 							<label for="motivoManutencao">Motivo manutenção</label>
-							<input id="motivoManutencao" name="motivoManutencao" type="text" class="form-control" placeholder="Motivo manutenção" jsf:value="#{manutencaoMB.manuConsParam.motivo}" />
+							<input id="motivoManutencao" name="motivoManutencao" type="text" class="form-control" placeholder="Motivo manutenção" jsf:value="#{manutencaoMB.manuConsParam.motivo}" 
+								maxlength="35"/>
 							<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="motivoManutencao"/>
 						</div>
 					</div>

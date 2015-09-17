@@ -157,7 +157,7 @@
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-usd"/>Financeiro<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_RECEITA') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_CONS_RECEITA') eq true}">
-								<li class="dropdown-header">Despesa</li>
+								<li class="dropdown-header">Receita</li>
 								<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_RECEITA') eq true}">
 									<li class="#{view.viewId eq '/admin/receita.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/receita.xhtml">Cadastrar</a></li>
 								</c:if>

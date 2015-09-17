@@ -219,9 +219,21 @@ public class UsuarioServiceBean implements UsuarioService {
 	}
 
 	@Override
-	public void editarCadastroPessoal(UsuarioSistema usuario) throws InconsistenciaException {
+	public void editarCadastroPessoal(UsuarioSistema usuario) throws InconsistenciaException, ConteudoJaExistenteNoBancoDeDadosException {
 		// Carrega o cadastro atual do usuário do banco de dados
 		UsuarioSistema usuarioAtual = usuarioSistemaRepository.findById(usuario.getId());
+		
+		if(!usuarioAtual.getEmail().equalsIgnoreCase(usuario.getEmail())) {
+			// Se houve mudança no email, é necessário validar se o novo email já não existe no sistema
+			
+			// Verifica se já existe um usuário com o mesmo e-mail cadastrado no banco de dados do sistema
+			UsuarioSistema usuarioEmail = usuarioSistemaRepository.findUsuarioByEmail(usuario.getEmail());
+			
+			if(usuarioEmail != null && usuarioEmail.getEmail().equalsIgnoreCase(usuario.getEmail())) {
+				logger.info("Já existe um usuário com email " + usuario.getEmail() + " cadastrado no banco de dados.");
+				throw new ConteudoJaExistenteNoBancoDeDadosException("O email " + usuario.getEmail() + " já existe cadastrado no sistema.");
+			}
+		}
 		
 		if(usuarioAtual == null) {
 			throw new InconsistenciaException("O usuário requisitado não existe");

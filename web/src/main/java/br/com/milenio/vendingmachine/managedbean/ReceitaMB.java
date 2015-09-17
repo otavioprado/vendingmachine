@@ -57,6 +57,7 @@ public class ReceitaMB implements Serializable {
 	private Maquina maquina = new Maquina();
 	private Receita receitaConsParam = new Receita();
 	private List<Receita> listReceitas = new ArrayList<Receita>();
+	private Date dataFinal;
 	
 	public void cadastrar() {
 		String codigoMaquina = receita.getMaquina().getCodigo() != null ? receita.getMaquina().getCodigo().trim() : "";
@@ -106,6 +107,7 @@ public class ReceitaMB implements Serializable {
 	
 	public void abrirDialog(String dialog) {
 		listMaquinas = new ArrayList<Maquina>();
+		maquina = new Maquina();
 		
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('" + dialog + "').show();");
@@ -141,7 +143,7 @@ public class ReceitaMB implements Serializable {
 	
 	public void consultar(boolean exibirMensagem) {
 		try {
-			listReceitas = receitaService.buscarComFiltro(receita);
+			listReceitas = receitaService.buscarComFiltro(receitaConsParam, dataFinal);
 		} catch (CadastroInexistenteException e) {
 			if(listReceitas != null && !listReceitas.isEmpty()) {
 				listReceitas.clear();
@@ -203,5 +205,13 @@ public class ReceitaMB implements Serializable {
 
 	public void setListReceitas(List<Receita> listReceitas) {
 		this.listReceitas = listReceitas;
+	}
+
+	public Date getDataFinal() {
+		return dataFinal;
+	}
+
+	public void setDataFinal(Date dataFinal) {
+		this.dataFinal = dataFinal;
 	}
 }

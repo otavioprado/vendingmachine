@@ -145,6 +145,11 @@
 								<f:convertNumber type="currency" currencySymbol="R$"/>
 							</h:inputText>
 							<pe:keyFilter regEx="/[0-9]+/" for="custoManutencao"/>
+							<script>
+								$(function() {
+									$("#custoManutencao").maskMoney({prefix:'R$ ', allowNegative: false, thousands:'.', decimal:',', affixesStay: true});
+								});
+							</script>
 						</div>
 					</div>
 							
@@ -392,7 +397,7 @@
 								<div class="form-group">
 									<label for="dlgDescricao">Descrição *</label>
 									<h:inputText id="dlgDescricao" name="dlgDescricao" pt:placeholder="Descrição"  styleClass="form-control" value="#{manutencaoMB.manutencao.descricao}" 
-										maxlength="25" />
+										maxlength="25" required="true" requiredMessage="O campo descrição é obrigatório"/>
 									<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="dlgDescricao"/>
 								</div>
 							</div>

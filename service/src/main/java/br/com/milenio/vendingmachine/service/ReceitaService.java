@@ -1,5 +1,6 @@
 package br.com.milenio.vendingmachine.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Local;
@@ -11,5 +12,5 @@ import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 public interface ReceitaService {
 	public void cadastrar(Receita receita);
 
-	public List<Receita> buscarComFiltro(Receita receita) throws CadastroInexistenteException;
+	public List<Receita> buscarComFiltro(Receita receita, Date dataFim) throws CadastroInexistenteException;
 }

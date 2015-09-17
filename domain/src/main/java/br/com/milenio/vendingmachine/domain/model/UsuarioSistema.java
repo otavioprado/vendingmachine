@@ -34,7 +34,7 @@ public class UsuarioSistema implements Serializable {
 	private Long id;
 
 	@NotNull
-	@Column(name = "LOGIN", unique = true)
+	@Column(name = "LOGIN", unique = true, columnDefinition = "VARCHAR(255) COLLATE latin1_general_cs") // Coluna case sensitive do MySQL
 	private String login;
 	
 	@Column(name = "SENHA_APLICACAO")

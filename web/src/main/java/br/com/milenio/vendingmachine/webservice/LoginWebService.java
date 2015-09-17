@@ -46,8 +46,7 @@ public class LoginWebService {
 			JsonObjectBuilder usuarioJsonBuilder = Json.createObjectBuilder();
 			usuarioJsonBuilder.add("motivo-bloqueio", usuario.getMotivoBloqueio());
 			JsonObject jsonUsuario = usuarioJsonBuilder.build();
-			
-			return Response.serverError().entity(jsonUsuario.toString()).build(); // HTTP 500 - Internal server error
+			return Response.status(403).entity(jsonUsuario.toString()).build(); // HTTP 403 Forbidden
 		}
 		
 		return Response.ok().build();

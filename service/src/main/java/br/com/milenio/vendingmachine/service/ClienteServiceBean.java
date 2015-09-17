@@ -59,7 +59,6 @@ public class ClienteServiceBean implements ClienteService {
 
 	@Override
 	public List<Cliente> buscarClientesComFiltro(Cliente cliente) throws CadastroInexistenteException {
-		
 		List<Cliente> clientes;
 		
 		// Se não houver filtros informados, fará a busca de todos os registros
@@ -69,7 +68,6 @@ public class ClienteServiceBean implements ClienteService {
 			if(clientes.isEmpty()) {
 				throw new CadastroInexistenteException("Não existem clientes cadastrados no sistema");
 			}
-			
 			return clientes;
 		} else {
 			clientes = clienteRepository.buscarClientesComFiltro(cliente);
@@ -77,7 +75,6 @@ public class ClienteServiceBean implements ClienteService {
 			if(clientes.isEmpty()) {
 				throw new CadastroInexistenteException("Não existe nenhum cadastro de cliente para o filtro informado.");
 			}
-			
 			return clientes;
 		}
 	}
