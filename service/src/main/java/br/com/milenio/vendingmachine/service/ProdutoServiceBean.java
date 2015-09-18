@@ -111,7 +111,6 @@ public class ProdutoServiceBean implements ProdutoService {
 
 	@Override
 	public void editar(Produto produto) throws InconsistenciaException {
-		
 		if(produto.getValorUnitario() >= produto.getPrecoVenda()) {
 			throw new InconsistenciaException("O preço de venda deve ser maior que o valor unitário!");
 		}

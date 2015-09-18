@@ -87,7 +87,6 @@ public class ContratoServiceBean implements ContratoService {
 
 	@Override
 	public void editar(Contrato contrato) throws InconsistenciaException {
-		
 		if(contrato.getIndDisponivel() == false) {
 			throw new InconsistenciaException("Apenas contratos que não tenham sido atribuídos a nenhum cliente podem ser editados.");
 		}

@@ -20,6 +20,7 @@
 			$(function() {
 				$("#valor").maskMoney({prefix:'R$ ', allowNegative: false, thousands:'.', decimal:',', affixesStay: true});
 				$("#data").datepicker($.datepicker.regional["pt-BR"]);
+				$("#data").datepicker("option", "maxDate", 0);
 			});
 		</script>
 	</ui:define>

@@ -18,7 +18,6 @@ import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
 
 import br.com.milenio.vendingmachine.domain.model.Auditoria;
-import br.com.milenio.vendingmachine.domain.model.Contrato;
 import br.com.milenio.vendingmachine.domain.model.Maquina;
 import br.com.milenio.vendingmachine.domain.model.NaturezaFinanceira;
 import br.com.milenio.vendingmachine.domain.model.Receita;

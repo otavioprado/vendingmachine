@@ -194,7 +194,7 @@ public class ProdutoMB implements Serializable {
 			Auditoria auditoria = new Auditoria();
 			auditoria.setDataAcao(new Date());
 			auditoria.setTitulo("Edição");
-			auditoria.setDescricao("Editou o produto " + produto.getDescricao());
+			auditoria.setDescricao("Editou o produto " + produto.getCodigo());
 			auditoria.setUsuario(Seguranca.getUsuarioLogado());
 			auditoria.setIp(request.getRemoteAddr());
 			auditoriaService.cadastrarNovaAcao(auditoria);
@@ -216,6 +216,15 @@ public class ProdutoMB implements Serializable {
 		}
 
 		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Produto " + prod.getDescricao() + " excluído com sucesso", null));
+		
+		// Processo de auditoria de exclusão de contratos
+		Auditoria auditoria = new Auditoria();
+		auditoria.setDataAcao(new Date());
+		auditoria.setTitulo("Exclusão");
+		auditoria.setDescricao("Excluiu o produto " + prod.getDescricao());
+		auditoria.setUsuario(Seguranca.getUsuarioLogado());
+		auditoria.setIp(request.getRemoteAddr());
+		auditoriaService.cadastrarNovaAcao(auditoria);
 		
 		try {
 			external.getFlash().setKeepMessages(true);

@@ -203,7 +203,7 @@ public class ManutencaoMB implements Serializable {
 		Auditoria auditoria = new Auditoria();
 		auditoria.setDataAcao(new Date());
 		auditoria.setTitulo("Exclusão");
-		auditoria.setDescricao("Excluiu a manutenção para a máquina " + manutencao.getMaquina().getCodigo());
+		auditoria.setDescricao("Excluiu a manutenção para a máquina " + man.getMaquina().getCodigo());
 		auditoria.setUsuario(Seguranca.getUsuarioLogado());
 		auditoria.setIp(request.getRemoteAddr());
 		auditoriaService.cadastrarNovaAcao(auditoria);
@@ -228,7 +228,7 @@ public class ManutencaoMB implements Serializable {
 		Auditoria auditoria = new Auditoria();
 		auditoria.setDataAcao(new Date());
 		auditoria.setTitulo("Exclusão");
-		auditoria.setDescricao("Excluiu a manutenção para a máquina " + manutencao.getMaquina().getCodigo());
+		auditoria.setDescricao("Excluiu a manutenção para a máquina " + man.getMaquina().getCodigo());
 		auditoria.setUsuario(Seguranca.getUsuarioLogado());
 		auditoria.setIp(request.getRemoteAddr());
 		auditoriaService.cadastrarNovaAcao(auditoria);

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.ejb.EJBTransactionRolledbackException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -145,9 +146,22 @@ public class NaturezaFinanceiraMB implements Serializable {
 		} catch (InconsistenciaException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
 			return;
+		} catch(EJBTransactionRolledbackException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Essa natureza financeira não pode ser excluída em quanto estiver vinculada à receitas e/ou despesas.", null));
+			logger.warn("Essa natureza financeira não pode ser excluída em quanto estiver vinculada à receitas e/ou despesas.");
+			return;
 		}
 		
 		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Natureza financeira " + nat.getDescricao() + " excluída com sucesso", null));
+		
+		// Processo de auditoria de exclusão de contratos
+		Auditoria auditoria = new Auditoria();
+		auditoria.setDataAcao(new Date());
+		auditoria.setTitulo("Exclusão");
+		auditoria.setDescricao("Excluiu a natureza financeira " + nat.getCodigo());
+		auditoria.setUsuario(Seguranca.getUsuarioLogado());
+		auditoria.setIp(request.getRemoteAddr());
+		auditoriaService.cadastrarNovaAcao(auditoria);
 		
 		// Recarrega a listagem de naturezas
 		consultarNaturezaFinanceira(false);
@@ -161,9 +175,22 @@ public class NaturezaFinanceiraMB implements Serializable {
 		} catch (InconsistenciaException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
 			return;
+		} catch(EJBTransactionRolledbackException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Essa natureza financeira não pode ser excluída em quanto estiver vinculada à receitas e/ou despesas.", null));
+			logger.warn("Essa natureza financeira não pode ser excluída em quanto estiver vinculada à receitas e/ou despesas.");
+			return;
 		}
 		
 		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Natureza financeira " + nat.getDescricao()+ " excluída com sucesso", null));
+		
+		// Processo de auditoria de exclusão de contratos
+		Auditoria auditoria = new Auditoria();
+		auditoria.setDataAcao(new Date());
+		auditoria.setTitulo("Exclusão");
+		auditoria.setDescricao("Excluiu a natureza financeira " + nat.getCodigo());
+		auditoria.setUsuario(Seguranca.getUsuarioLogado());
+		auditoria.setIp(request.getRemoteAddr());
+		auditoriaService.cadastrarNovaAcao(auditoria);
 		
 		try {
 			external.getFlash().setKeepMessages(true);

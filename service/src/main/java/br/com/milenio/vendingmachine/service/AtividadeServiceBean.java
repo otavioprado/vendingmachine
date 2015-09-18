@@ -94,7 +94,6 @@ public class AtividadeServiceBean implements AtividadeService {
 
 	@Override
 	public void editarUsuario(Atividade atividade) throws CadastroInexistenteException {
-		
 		String login = atividade.getUsuario().getLogin();
 		
 		UsuarioSistema usuario = usuarioService.findByLogin(login);

@@ -137,6 +137,15 @@ public class ContratoMB implements Serializable {
 		
 		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Contrato " + cnt.getDescricao() + " excluído com sucesso", null));
 		
+		// Processo de auditoria de exclusão de contratos
+		Auditoria auditoria = new Auditoria();
+		auditoria.setDataAcao(new Date());
+		auditoria.setTitulo("Exclusão");
+		auditoria.setDescricao("Excluiu o contrato " + cnt.getDescricao());
+		auditoria.setUsuario(Seguranca.getUsuarioLogado());
+		auditoria.setIp(request.getRemoteAddr());
+		auditoriaService.cadastrarNovaAcao(auditoria);
+		
 		try {
 			external.getFlash().setKeepMessages(true);
 			external.redirect(request.getContextPath() + "/admin/consultaContrato.xhtml");

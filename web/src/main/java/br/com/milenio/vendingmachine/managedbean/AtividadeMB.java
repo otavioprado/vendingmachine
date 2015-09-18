@@ -237,6 +237,16 @@ public class AtividadeMB implements Serializable {
 
 		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Atividade " + atv.getTitulo() + " excluída com sucesso", null));
 		
+
+		// Processo de auditoria
+		Auditoria auditoria = new Auditoria();
+		auditoria.setDataAcao(new Date());
+		auditoria.setTitulo("Exclusão");
+		auditoria.setDescricao("Excluiu a atividade " + atv.getTitulo());
+		auditoria.setUsuario(Seguranca.getUsuarioLogado());
+		auditoria.setIp(request.getRemoteAddr());
+		auditoriaService.cadastrarNovaAcao(auditoria);
+		
 		try {
 			external.getFlash().setKeepMessages(true);
 			external.redirect(request.getContextPath() + "/admin/consultarAtividade.xhtml");
@@ -250,6 +260,15 @@ public class AtividadeMB implements Serializable {
 		Atividade atv = atividadeService.excluirAtividade(idAtividade);
 
 		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Atividade " + atv.getTitulo() + " excluída com sucesso", null));
+		
+		// Processo de auditoria
+		Auditoria auditoria = new Auditoria();
+		auditoria.setDataAcao(new Date());
+		auditoria.setTitulo("Exclusão");
+		auditoria.setDescricao("Excluiu a atividade " + atv.getTitulo());
+		auditoria.setUsuario(Seguranca.getUsuarioLogado());
+		auditoria.setIp(request.getRemoteAddr());
+		auditoriaService.cadastrarNovaAcao(auditoria);
 		
 		// Recarrega a listagem de atividades
 		consultarAtividades(false);
