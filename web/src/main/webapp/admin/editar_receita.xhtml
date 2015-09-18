@@ -1,0 +1,237 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;"> 
+]>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+    template="layoutLogado.xhtml">
+    
+    <ui:define name="script">
+    	<h:outputScript name="js/jquery.maskMoney.min.js" />
+    	<h:outputScript name="js/datepicker-pt-BR.js" />
+    
+		<script>
+			$(function() {
+				$("#valor").maskMoney({prefix:'R$ ', allowNegative: false, thousands:'.', decimal:',', affixesStay: true});
+				$("#data").datepicker($.datepicker.regional["pt-BR"]);
+			});
+		</script>
+	</ui:define>
+	
+	<f:metadata>
+	    <f:viewParam name="idReceita" value="#{receitaMB.receita.id}" />
+	    <f:event type="preRenderView" listener="#{receitaMB.carregarDadosParaEdicao}"/>
+	</f:metadata>
+    
+	<ui:define name="conteudo">
+		<p:panel id="basic" header="Editar receita" style="margin-bottom:20px">
+			<h:form id="formPrincipal" prependId="false">
+				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="row">
+										<div class="col-md-12">
+						<p:fieldset style="margin-bottom:20px" styleClass="">
+							<legend>Máquina</legend>
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="codigoMaquina">Código *</label>
+									<h:inputText id="codigoMaquina" name="codigoMaquina" type="text" class="form-control" pt:placeholder="Código" value="#{receitaMB.receita.maquina.codigo}" required="true" maxlength="20"
+										requiredMessage="O campo código da máquina é obrigatório">
+										<f:ajax event="blur" listener="#{receitaMB.selecionarMaquina(receitaMB.receita.maquina.codigo)}" render="codigoMaquina maquinaModelo dataMaquina" />
+									</h:inputText>
+									<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigoMaquina"/>
+								</div>
+							</div>
+							
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="maquinaModelo">Modelo</label>
+									<input id="maquinaModelo" name="maquinaModelo" type="text" class="form-control" placeholder="Nome fantasia" jsf:value="#{receitaMB.receita.maquina.modelo}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="dataMaquina">Data aquisição</label>
+									<input id="dataMaquina" name="dataMaquina" type="text" class="form-control" placeholder="Tipo pessoa" jsf:value="#{receitaMB.receita.maquina.dataAquisicao}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="email">&nbsp;</label>
+									<h:commandLink id="btn-maquinas" class="btn btn-primary" actionListener="#{receitaMB.abrirDialog('dlgConsultaMaquina')}" style="width: 100%; color:white;" immediate="true">
+										<i class="glyphicon glyphicon-search"></i>&nbsp;Máquinas&nbsp;
+									</h:commandLink>
+								</div>
+							</div>
+						</p:fieldset>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="valor">Valor *</label>
+							<h:inputText id="valor" name="valor" type="text" class="form-control" placeholder="Valor" value="#{receitaMB.receita.valor}" required="true" maxlength="10"
+								requiredMessage="O campo valor é obrigatório">
+								<f:convertNumber type="currency" currencySymbol="R$"/>
+							</h:inputText>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="data">Data *</label>
+							<h:inputText id="data" name="data" value="#{receitaMB.receita.data}"
+								required="true" styleClass="form-control" maxlength="10" requiredMessage="O campo data é obrigatório" >
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+							</h:inputText>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="perecivel">Natureza financeira *</label>
+							<h:selectOneMenu id="naturezaFinanceira" value="#{receitaMB.receita.naturezaFinanceira.id}" styleClass="form-control" required="true"
+								requiredMessage="O campo natureza financeira é obrigatório">
+				                <f:selectItem itemLabel="[Selecione]" itemValue="#{null}" noSelectionOption="true" />
+				                <f:selectItems value="#{receitaMB.listNaturezaFinanceira}" var="natureza" itemValue="#{natureza.id}" itemLabel="#{natureza.descricao}"/>
+			            	</h:selectOneMenu>
+		            	</div>
+		            </div>
+        			
+        			<div class="col-lg-12">
+						<div class="form-group">
+							<div class="required">* Campos obrigatórios</div>
+						</div>
+					</div>
+				</div>
+	     		<div class="row">	
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandLink id="btn-signup" class="btn btn-primary" actionListener="#{receitaMB.editar}" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-saved"></i>&nbsp;Salvar&nbsp;
+							</h:commandLink>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<a id="btn-cancel" class="btn btn-warning" href="#{request.contextPath}/admin/consultaReceita.xhtml" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+							</a>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandLink id="btn-excluir-receita" class="btn btn-danger" actionListener="#{receitaMB.abrirDialog('dlgExcluir')}" style="width: 100%; color:white;" immediate="true">
+								<i class="glyphicon glyphicon-remove"></i>&nbsp;Excluir&nbsp;
+							</h:commandLink>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:panel>
+		
+		<p:dialog widgetVar="dlgConsultaMaquina" width="800" showHeader="false" resizable="false" modal="true">
+			<h:form prependId="false">
+				<p:messages id="dlgMessagesMaquina" for="Message2" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="form-group">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="dlgCodigoMaquina">Código:</label>
+								<input id="dlgCodigoMaquina" name="dlgCodigoMaquina" type="text" class="form-control" placeholder="Código" jsf:value="#{receitaMB.maquina.codigo}" maxlength="25" />
+								<pe:keyFilter regEx="/[A-Z0-9]+/" for="dlgCodigoMaquina" />
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="dlgModeloMaquina">Modelo:</label>
+								<input id="dlgModeloMaquina" name="dlgModeloMaquina" type="text" class="form-control" placeholder="Modelo" jsf:value="#{receitaMB.maquina.modelo}" maxlength="25" />
+								<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="dlgModeloMaquina"/>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>&nbsp;</label>
+								<h:commandLink id="btn-pesquisar-maquina" class="btn btn-primary" actionListener="#{receitaMB.consultarMaquina}" update="table-maquinas" style="width: 100%; color:white;" immediate="false">
+									<i class="glyphicon glyphicon-search"></i>&nbsp;Pesquisar&nbsp;
+								</h:commandLink>
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<p:dataTable tableStyleClass="table-hover" id="table-maquinas" var="maquina" value="#{receitaMB.listMaquinas}" rows="5" paginator="true" paginatorPosition="bottom"
+									paginatorAlwaysVisible="false" rowsPerPageTemplate="5,10" >
+									<p:column style="width:64px; text-align: center" headerText="">
+										<p:commandButton icon="ui-icon-arrowthick-1-e" title="Selecionar" actionListener="#{receitaMB.selecionarMaquina(maquina.codigo)}" update="codigoMaquina maquinaModelo dataMaquina" />
+									</p:column>
+									<p:column headerText="Código">
+										<h:outputText id="maqCodigo" value="#{maquina.codigo}" />
+									</p:column>
+									
+									<p:column headerText="Modelo">
+										<h:outputText id="maqModelo" value="#{maquina.modelo}" />
+					            	</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+								
+						<div class="col-md-9">
+							<div class="form-group">
+							</div>
+						</div>
+							
+						<div class="col-md-3">
+							<div class="form-group">
+								<h:commandLink id="btn-cancel-maquinas" class="btn btn-warning" actionListener="#{receitaMB.fecharDialog('dlgConsultaMaquina')}" update="table-maquinas" style="width: 100%; color:white;" immediate="false">
+									<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+								</h:commandLink>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+		
+				<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_RECEITA') eq true}">
+				<h:form prependId="false">
+					<p:dialog widgetVar="dlgExcluir" width="450" showHeader="false" resizable="false" modal="true">
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<label for="nome">Tem certeza que deseja excluir esta receita? Essa operação não poderá ser desfeita!</label>
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<div class="form-group">
+										<h:commandLink id="btn-excluir" class="btn btn-primary" action="#{receitaMB.excluirPelaEdicao}" 
+											style="width: 100%; color:white;" update="table-atividades">
+											<i class="glyphicon glyphicon-trash"></i>&nbsp;Excluir&nbsp;
+										</h:commandLink>
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<div class="form-group">
+										<h:commandLink id="btn-excluir-cancel" class="btn btn-warning" onclick="PF('dlgExcluir').hide();" style="width: 100%; color:white;" type="button" immediate="true">
+											<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+										</h:commandLink>
+									</div>
+								</div>
+							</div>
+						</div>
+					</p:dialog>
+				</h:form>
+			</c:if>
+		
+	</ui:define>
+
+</ui:composition>

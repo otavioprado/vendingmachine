@@ -43,7 +43,7 @@
 					<div class="col-lg-4">	
 						<div class="form-group">
 							<label for="codigo">Código da máquina</label>
-							<input id="codigo" name="codigoMaquina" type="text" class="form-control" placeholder="Código" jsf:value="#{receitaMB.receitaConsParam.maquina.codigo}" maxlength="20"/>
+							<input id="codigoMaquina" name="codigoMaquina" type="text" class="form-control" placeholder="Código" jsf:value="#{receitaMB.receitaConsParam.maquina.codigo}" maxlength="20"/>
 							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigoMaquina"/>
 						</div>
 					</div>
@@ -121,7 +121,7 @@
 								</c:if>
 								
 								<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_RECEITA') eq true}">
-									<p:commandButton onclick="PF('dlgExcluir').show();" icon="ui-icon-minusthick" title="Inativar" rendered="#{maquina.maquinaStatus.descricao eq 'EM ESTOQUE'}">
+									<p:commandButton onclick="PF('dlgExcluir').show();" icon="ui-icon-trash" title="Excluir">
 										<f:setPropertyActionListener value="#{receita.id}" target="#{receitaMB.receita.id}" />
 						            </p:commandButton>
 					            </c:if>
@@ -131,6 +131,39 @@
 				</h:form>
 			</c:if>
 		</p:panel>
+		
+		<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_RECEITA') eq true}">
+				<h:form prependId="false">
+					<p:dialog widgetVar="dlgExcluir" width="450" showHeader="false" resizable="false" modal="true">
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<label for="nome">Tem certeza que deseja excluir esta receita? Essa operação não poderá ser desfeita!</label>
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<div class="form-group">
+										<h:commandLink id="btn-excluir" class="btn btn-primary" action="#{receitaMB.excluir}" 
+											style="width: 100%; color:white;" update="table-atividades">
+											<i class="glyphicon glyphicon-trash"></i>&nbsp;Excluir&nbsp;
+										</h:commandLink>
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<div class="form-group">
+										<h:commandLink id="btn-excluir-cancel" class="btn btn-warning" onclick="PF('dlgExcluir').hide();" style="width: 100%; color:white;" type="button" immediate="true">
+											<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+										</h:commandLink>
+									</div>
+								</div>
+							</div>
+						</div>
+					</p:dialog>
+				</h:form>
+			</c:if>
 	</ui:define>
 
 </ui:composition>

@@ -1,11 +1,13 @@
 package br.com.milenio.vendingmachine.managedbean;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -16,10 +18,12 @@ import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
 
 import br.com.milenio.vendingmachine.domain.model.Auditoria;
+import br.com.milenio.vendingmachine.domain.model.Contrato;
 import br.com.milenio.vendingmachine.domain.model.Maquina;
 import br.com.milenio.vendingmachine.domain.model.NaturezaFinanceira;
 import br.com.milenio.vendingmachine.domain.model.Receita;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
+import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
 import br.com.milenio.vendingmachine.security.Seguranca;
 import br.com.milenio.vendingmachine.service.AuditoriaService;
 import br.com.milenio.vendingmachine.service.MaquinaService;
@@ -44,6 +48,9 @@ public class ReceitaMB implements Serializable {
 	private MaquinaService maquinaService;
 	
 	@Inject
+	private ExternalContext external;
+	
+	@Inject
 	private ReceitaService receitaService;
 	
 	@Inject
@@ -58,6 +65,8 @@ public class ReceitaMB implements Serializable {
 	private Receita receitaConsParam = new Receita();
 	private List<Receita> listReceitas = new ArrayList<Receita>();
 	private Date dataFinal;
+
+	private boolean carregarPagina = true;
 	
 	public void cadastrar() {
 		String codigoMaquina = receita.getMaquina().getCodigo() != null ? receita.getMaquina().getCodigo().trim() : "";
@@ -78,7 +87,7 @@ public class ReceitaMB implements Serializable {
 			Auditoria auditoria = new Auditoria();
 			auditoria.setDataAcao(new Date());
 			auditoria.setTitulo("Cadastro");
-			auditoria.setDescricao("Cadastrou uma receita de " + receita.getValor());
+			auditoria.setDescricao("Cadastrou uma receita de " + receita.getValor() + " para a máquina " + receita.getMaquina().getCodigo());
 			auditoria.setUsuario(Seguranca.getUsuarioLogado());
 			auditoria.setIp(request.getRemoteAddr());
 			auditoriaService.cadastrarNovaAcao(auditoria);
@@ -88,6 +97,35 @@ public class ReceitaMB implements Serializable {
 		}
 		
 		receita = new Receita();
+	}
+	
+	public void editar() {
+		String codigoMaquina = receita.getMaquina().getCodigo() != null ? receita.getMaquina().getCodigo().trim() : "";
+		
+		if(codigoMaquina.isEmpty()) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "O campo código não pode conter apenas espaços em branco.", null));
+			return;
+		}
+		
+		try {
+			receitaService.editar(receita);
+			
+			// Sucesso - Exibe mensagem de cadastro realizado com sucesso
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Receita R$" + receita.getValor() + " editada para a máquina " + receita.getMaquina().getCodigo() + " com sucesso.", null));
+			logger.info("Receita R$" + receita.getValor() + " editada para a máquina " + receita.getMaquina().getCodigo() + " com sucesso.");
+			
+			// Processo de auditoria de cadastro de produtos
+			Auditoria auditoria = new Auditoria();
+			auditoria.setDataAcao(new Date());
+			auditoria.setTitulo("Edição");
+			auditoria.setDescricao("Editou uma receita de " + receita.getValor() + " para a máquina " + receita.getMaquina().getCodigo());
+			auditoria.setUsuario(Seguranca.getUsuarioLogado());
+			auditoria.setIp(request.getRemoteAddr());
+			auditoriaService.cadastrarNovaAcao(auditoria);
+		} catch(Exception e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+			logger.info(e.getMessage());
+		}
 	}
 	
 	public void selecionarMaquina(String codigo) {
@@ -153,6 +191,68 @@ public class ReceitaMB implements Serializable {
 				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
 			}
 		}
+	}
+	
+	public void carregarDadosParaEdicao() {
+		if(carregarPagina ) {
+			receita = receitaService.findById(receita.getId());
+		}
+		
+		carregarPagina = false;
+	}
+	
+	public void excluir() {
+		Receita recei;
+		try {
+			recei = receitaService.excluir(receita.getId());
+		} catch (InconsistenciaException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
+			return;
+		}
+		
+		// Processo de auditoria de exclusão de receitas
+		Auditoria auditoria = new Auditoria();
+		auditoria.setDataAcao(new Date());
+		auditoria.setTitulo("Exclusão");
+		auditoria.setDescricao("Excluiu uma receita de " + recei.getValor() + " para a máquina " + receita.getMaquina().getCodigo());
+		auditoria.setUsuario(Seguranca.getUsuarioLogado());
+		auditoria.setIp(request.getRemoteAddr());
+		auditoriaService.cadastrarNovaAcao(auditoria);
+		
+		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Receita de R$" + recei.getValor() + " para a máquina " + recei.getMaquina().getCodigo() + " excluída com sucesso.", null));
+		
+		// Recarrega a listagem de contratos
+		consultar(false);
+	}
+	
+	public void excluirPelaEdicao() {
+		Receita recei;
+		try {
+			recei = receitaService.excluir(receita.getId());
+		} catch (InconsistenciaException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
+			return;
+		}
+		
+		// Processo de auditoria de exclusão de receitas
+		Auditoria auditoria = new Auditoria();
+		auditoria.setDataAcao(new Date());
+		auditoria.setTitulo("Exclusão");
+		auditoria.setDescricao("Excluiu uma receita de " + recei.getValor() + " para a máquina " + receita.getMaquina().getCodigo());
+		auditoria.setUsuario(Seguranca.getUsuarioLogado());
+		auditoria.setIp(request.getRemoteAddr());
+		auditoriaService.cadastrarNovaAcao(auditoria);
+		
+		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Receita de R$" + recei.getValor() + " para a máquina " + recei.getMaquina().getCodigo() + " excluída com sucesso.", null));
+		
+		try {
+			external.getFlash().setKeepMessages(true);
+			external.redirect(request.getContextPath() + "/admin/consultaReceita.xhtml");
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.error("Erro ao tentar redirecionar para a página " + request.getContextPath() + "/consultaReceita.xhtml");
+		}
+	
 	}
 	
 	public List<NaturezaFinanceira> getListNaturezaFinanceira() {

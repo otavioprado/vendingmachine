@@ -6,8 +6,11 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import br.com.milenio.vendingmachine.domain.model.Maquina;
 import br.com.milenio.vendingmachine.domain.model.Receita;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
+import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
+import br.com.milenio.vendingmachine.repository.MaquinaRepository;
 import br.com.milenio.vendingmachine.repository.ReceitaRepository;
 
 @Stateless
@@ -16,8 +19,22 @@ public class ReceitaServiceBean implements ReceitaService {
 	@EJB
 	ReceitaRepository receitaRepository;
 	
+	@EJB
+	MaquinaRepository maquinaRepository;
+	
 	@Override
-	public void cadastrar(Receita receita) {
+	public void cadastrar(Receita receita) throws InconsistenciaException {
+		String codigoMaquina = receita.getMaquina().getCodigo();
+		if(codigoMaquina == null || codigoMaquina.isEmpty()) {
+			throw new InconsistenciaException("O código da máquina é inválido");
+		} else {
+			Maquina maquina = maquinaRepository.findByCodigo(codigoMaquina);
+			
+			if(maquina == null) {
+				throw new InconsistenciaException("O código da máquina é inválido");
+			}
+		}
+		
 		receitaRepository.persist(receita);
 	}
 
@@ -44,5 +61,39 @@ public class ReceitaServiceBean implements ReceitaService {
 			
 			return receitas;
 		}
+	}
+
+	@Override
+	public Receita findById(Long id) {
+		return receitaRepository.findById(id);
+	}
+
+	@Override
+	public Receita excluir(Long id) throws InconsistenciaException {
+		Receita receita = receitaRepository.findById(id);
+		
+		if(receita == null) {
+			throw new InconsistenciaException("Não existe nenhuma receita para o ID informado.");
+		}
+		
+		receitaRepository.remove(receita);
+		
+		return receita;
+	}
+
+	@Override
+	public void editar(Receita receita) throws InconsistenciaException {
+		String codigoMaquina = receita.getMaquina().getCodigo();
+		if(codigoMaquina == null || codigoMaquina.isEmpty()) {
+			throw new InconsistenciaException("O código da máquina é inválido");
+		} else {
+			Maquina maquina = maquinaRepository.findByCodigo(codigoMaquina);
+			
+			if(maquina == null) {
+				throw new InconsistenciaException("O código da máquina é inválido");
+			}
+		}
+		
+		receitaRepository.merge(receita);
 	}
 }

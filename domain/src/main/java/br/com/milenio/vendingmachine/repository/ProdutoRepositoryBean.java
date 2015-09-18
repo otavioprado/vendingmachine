@@ -9,7 +9,6 @@ import com.uaihebert.uaicriteria.UaiCriteria;
 import com.uaihebert.uaicriteria.UaiCriteriaFactory;
 
 import br.com.milenio.vendingmachine.domain.AbstractVendingMachineRepositoryBean;
-import br.com.milenio.vendingmachine.domain.model.Fornecedor;
 import br.com.milenio.vendingmachine.domain.model.Produto;
 
 @Stateless(name = "ProdutoRepository")
