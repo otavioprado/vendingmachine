@@ -44,12 +44,12 @@ public class MaquinaServiceBean implements MaquinaService {
 	public void cadastrar(Maquina maquina) throws ConteudoJaExistenteNoBancoDeDadosException, InconsistenciaException {
 		String codigoFornecedor = maquina.getFornecedor().getCodigo();
 		if(codigoFornecedor == null || codigoFornecedor.isEmpty()) {
-			throw new InconsistenciaException("O código do fornecedor é inválido");
+			throw new InconsistenciaException("O código do fornecedor não é inválido");
 		} else {
 			Fornecedor fornecedor = fornecedorRepository.findByCodigo(codigoFornecedor);
 			
 			if(fornecedor == null) {
-				throw new InconsistenciaException("O código do fornecedor é inválido");
+				throw new InconsistenciaException("O código do fornecedor não é inválido");
 			}
 		}
 		

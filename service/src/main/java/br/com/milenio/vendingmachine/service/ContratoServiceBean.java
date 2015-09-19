@@ -45,7 +45,6 @@ public class ContratoServiceBean implements ContratoService {
 
 	@Override
 	public List<Contrato> buscarContratosComFiltro(Contrato contratoConsParam) throws CadastroInexistenteException {
-		
 		List<Contrato> listContratos;
 		String codigo = contratoConsParam.getCodigo();
 		String modalidade = contratoConsParam.getModalidade();
@@ -97,6 +96,11 @@ public class ContratoServiceBean implements ContratoService {
 	@Override
 	public Contrato findById(Long id) {
 		return contratoRepository.findById(id);
+	}
+	
+	@Override
+	public Contrato findByCodigo(String codigo) {
+		return contratoRepository.findByCodigo(codigo);
 	}
 	
 }

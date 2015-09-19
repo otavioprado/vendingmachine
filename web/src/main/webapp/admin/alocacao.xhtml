@@ -1,0 +1,252 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;"> 
+]>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+    template="layoutLogado.xhtml">
+    
+	<f:metadata>
+	    <f:viewParam name="clienteId" value="#{alocacaoMB.alocacao.cliente.id}" />
+	    <f:event type="preRenderView" listener="#{alocacaoMB.carregarCliente}"/>
+	</f:metadata>
+    
+	<ui:define name="conteudo">
+		<p:panel id="basic" header="Solicitar alocação de máquina para cliente" style="margin-bottom:20px">
+			<h:form id="formPrincipal" prependId="false">
+				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="row">
+					<div class="col-md-12">
+						<p:fieldset style="margin-bottom:20px" styleClass="">
+							<legend>Máquina</legend>
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="codigoMaquina">Código *</label>
+									<h:inputText id="codigoMaquina" name="codigoMaquina" type="text" class="form-control" pt:placeholder="Código" value="#{alocacaoMB.alocacao.maquina.codigo}" required="true" maxlength="20"
+										requiredMessage="O campo código da máquina é obrigatório">
+										<f:ajax event="blur" listener="#{alocacaoMB.selecionarMaquina(alocacaoMB.alocacao.maquina.codigo)}" render="codigoMaquina maquinaModelo dataAquisicao" />
+									</h:inputText>
+									<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigoMaquina, codigoContrato"/>
+								</div>
+							</div>
+							
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="maquinaModelo">Modelo</label>
+									<input id="maquinaModelo" name="maquinaModelo" type="text" class="form-control" placeholder="Nome fantasia" jsf:value="#{alocacaoMB.alocacao.maquina.modelo}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="dataAquisicao">Data aquisição</label>
+									<input id="dataAquisicao" name="dataAquisicao" type="text" class="form-control" placeholder="Tipo pessoa" jsf:value="#{alocacaoMB.alocacao.maquina.dataAquisicao}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="email">&nbsp;</label>
+									<h:commandLink id="btn-maquinas" class="btn btn-primary" actionListener="#{alocacaoMB.abrirDialog('dlgConsultaMaquina')}" style="width: 100%; color:white;" immediate="true">
+										<i class="glyphicon glyphicon-search"></i>&nbsp;Máquinas&nbsp;
+									</h:commandLink>
+								</div>
+							</div>
+						</p:fieldset>
+						
+						<p:fieldset style="margin-bottom:20px" styleClass="">
+							<legend>Contrato</legend>
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="codigoContrato">Código *</label>
+									<h:inputText id="codigoContrato" name="codigo" type="text" class="form-control" pt:placeholder="Código" value="#{alocacaoMB.alocacao.contrato.codigo}" required="true" maxlength="20"
+										requiredMessage="O campo código do contrato é obrigatório">
+										 <f:ajax event="blur" listener="#{alocacaoMB.selecionarContrato(alocacaoMB.alocacao.contrato.codigo)}" render="codigoContrato modalidadeContrato descricaoContrato" />
+									</h:inputText>
+								</div>
+							</div>
+							
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="modalidadeContrato">Modalidade</label>
+									<input id="modalidadeContrato" name="modalidadeContrato" type="text" class="form-control" placeholder="Nome fantasia" jsf:value="#{alocacaoMB.alocacao.contrato.modalidade}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label for="descricaoContrato">Descrição</label>
+									<input id="descricaoContrato" name="descricaoContrato" type="text" class="form-control" placeholder="Tipo pessoa" jsf:value="#{alocacaoMB.alocacao.contrato.descricao}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="email">&nbsp;</label>
+									<h:commandLink id="btn-contratos" class="btn btn-primary" actionListener="#{alocacaoMB.abrirDialog('dlgConsultaContrato')}" style="width: 100%; color:white;" immediate="true">
+										<i class="glyphicon glyphicon-search"></i>&nbsp;Contratos&nbsp;
+									</h:commandLink>
+								</div>
+							</div>
+						</p:fieldset>
+					</div>
+					
+        			<div class="col-lg-12">
+						<div class="form-group">
+							<div class="required">* Campos obrigatórios</div>
+						</div>
+					</div>
+				</div>
+	     		<div class="row">	
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandLink id="btn-signup" class="btn btn-primary" actionListener="#{alocacaoMB.cadastrar}" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-saved"></i>&nbsp;Cadastrar&nbsp;
+							</h:commandLink>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<a id="btn-cancel" class="btn btn-warning" href="#{request.contextPath}/admin/tela_inicial.xhtml" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+							</a>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:panel>
+		
+		<p:dialog widgetVar="dlgConsultaMaquina" width="800" showHeader="false" resizable="false" modal="true">
+			<h:form prependId="false">
+				<p:messages id="dlgMessagesMaquina" for="Message2" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="form-group">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="dlgCodigoMaquina">Código:</label>
+								<input id="dlgCodigoMaquina" name="dlgCodigoMaquina" type="text" class="form-control" placeholder="Código" jsf:value="#{alocacaoMB.maquina.codigo}" maxlength="25" />
+								<pe:keyFilter regEx="/[A-Z0-9]+/" for="dlgCodigoMaquina" />
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="dlgModeloMaquina">Modelo:</label>
+								<input id="dlgModeloMaquina" name="dlgModeloMaquina" type="text" class="form-control" placeholder="Modelo" jsf:value="#{alocacaoMB.maquina.modelo}" maxlength="25" />
+								<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="dlgModeloMaquina"/>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>&nbsp;</label>
+								<h:commandLink id="btn-pesquisar-maquina" class="btn btn-primary" actionListener="#{alocacaoMB.consultarMaquina}" update="table-maquinas" style="width: 100%; color:white;" immediate="false">
+									<i class="glyphicon glyphicon-search"></i>&nbsp;Pesquisar&nbsp;
+								</h:commandLink>
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<p:dataTable tableStyleClass="table-hover" id="table-maquinas" var="maquina" value="#{alocacaoMB.listMaquinas}" rows="5" paginator="true" paginatorPosition="bottom"
+									paginatorAlwaysVisible="false" rowsPerPageTemplate="5,10" >
+									<p:column style="width:64px; text-align: center" headerText="">
+										<p:commandButton icon="ui-icon-arrowthick-1-e" title="Selecionar" actionListener="#{alocacaoMB.selecionarMaquina(maquina.codigo)}" update="codigoMaquina maquinaModelo dataAquisicao" />
+									</p:column>
+									<p:column headerText="Código">
+										<h:outputText id="maqCodigo" value="#{maquina.codigo}" />
+									</p:column>
+									
+									<p:column headerText="Modelo">
+										<h:outputText id="maqModelo" value="#{maquina.modelo}" />
+					            	</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+								
+						<div class="col-md-9">
+							<div class="form-group">
+							</div>
+						</div>
+							
+						<div class="col-md-3">
+							<div class="form-group">
+								<h:commandLink id="btn-cancel-maquinas" class="btn btn-warning" actionListener="#{alocacaoMB.fecharDialog('dlgConsultaContrato')}" update="table-maquinas" style="width: 100%; color:white;" immediate="false">
+									<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+								</h:commandLink>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+		
+		<p:dialog widgetVar="dlgConsultaContrato" width="800" showHeader="false" resizable="false" modal="true">
+			<h:form prependId="false">
+				<p:messages id="dlgConsultaContrato" for="Message2" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="form-group">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="dlgCodigoContrato">Código:</label>
+								<input id="dlgCodigoContrato" name="dlgCodigoContrato" type="text" class="form-control" placeholder="Código" jsf:value="#{alocacaoMB.contrato.codigo}" maxlength="25" />
+								<pe:keyFilter regEx="/[A-Z0-9]+/" for="dlgCodigoContrato" />
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="dlgDescricaoContrato">Descrição:</label>
+								<input id="dlgDescricaoContrato" name="dlgDescricaoContrato" type="text" class="form-control" placeholder="Modelo" jsf:value="#{alocacaoMB.contrato.descricao}" maxlength="25" />
+								<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="dlgDescricaoContrato"/>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>&nbsp;</label>
+								<h:commandLink id="btn-pesquisar-contrato" class="btn btn-primary" actionListener="#{alocacaoMB.consultarContrato}" update="table-contratos" style="width: 100%; color:white;" immediate="false">
+									<i class="glyphicon glyphicon-search"></i>&nbsp;Pesquisar&nbsp;
+								</h:commandLink>
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<div class="form-group">
+								<p:dataTable tableStyleClass="table-hover" id="table-contratos" var="contrato" value="#{alocacaoMB.listContratos}" rows="5" paginator="true" paginatorPosition="bottom"
+									paginatorAlwaysVisible="false" rowsPerPageTemplate="5,10" >
+									<p:column style="width:64px; text-align: center" headerText="">
+										<p:commandButton icon="ui-icon-arrowthick-1-e" title="Selecionar" actionListener="#{alocacaoMB.selecionarContrato(contrato.codigo)}" update="codigoContrato modalidadeContrato descricaoContrato" />
+									</p:column>
+									<p:column headerText="Código">
+										<h:outputText id="contCodigo" value="#{contrato.codigo}" />
+									</p:column>
+									
+									<p:column headerText="Modelo">
+										<h:outputText id="contDescricao" value="#{contrato.descricao}" />
+					            	</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+								
+						<div class="col-md-9">
+							<div class="form-group">
+							</div>
+						</div>
+							
+						<div class="col-md-3">
+							<div class="form-group">
+								<h:commandLink id="btn-cancel-contratos" class="btn btn-warning" actionListener="#{alocacaoMB.fecharDialog('dlgConsultaContrato')}" update="table-maquinas" style="width: 100%; color:white;" immediate="false">
+									<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+								</h:commandLink>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+
+</ui:composition>

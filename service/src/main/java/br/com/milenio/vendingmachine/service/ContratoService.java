@@ -21,4 +21,6 @@ public interface ContratoService {
 	void editar(Contrato contrato) throws InconsistenciaException;
 
 	Contrato findById(Long id);
+
+	Contrato findByCodigo(String codigo);
 }
