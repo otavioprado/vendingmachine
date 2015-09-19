@@ -1,0 +1,169 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;">
+]>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+    template="layoutLogado.xhtml">
+
+	<ui:define name="script">
+		<h:outputScript name="js/datepicker-pt-BR.js" />
+		<h:outputScript name="js/jquery.maskMoney.min.js" />
+
+		<script>
+			$(function() {
+				$("#dataInicio").datepicker($.datepicker.regional["pt-BR"]);
+				$("#dataFim").datepicker($.datepicker.regional["pt-BR"]);
+				$("#valor").maskMoney({prefix:'R$ ', allowNegative: false, thousands:'.', decimal:',', affixesStay: true});
+			});
+		</script>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<p:panel id="basic" header="Filtro de pesquisa de despesas" style="margin-bottom:20px">
+			<h:form prependId="false">
+				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="row">
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="perecivel">Natureza financeira</label>
+							<h:selectOneMenu id="naturezaFinanceira" value="#{despesaMB.despesaConsParam.naturezaFinanceira.id}" styleClass="form-control">
+				                <f:selectItem itemLabel="[Selecione]" itemValue="#{null}" noSelectionOption="true" />
+				                <f:selectItems value="#{despesaMB.listNaturezaFinanceira}" var="natureza" itemValue="#{natureza.id}" itemLabel="#{natureza.descricao}"/>
+			            	</h:selectOneMenu>
+		            	</div>
+		            </div>
+		            
+					<div class="col-lg-4">	
+						<div class="form-group">
+							<label for="codigo">Código da máquina</label>
+							<input id="codigoMaquina" name="codigoMaquina" type="text" class="form-control" placeholder="Código" jsf:value="#{despesaMB.despesaConsParam.maquina.codigo}" maxlength="20"/>
+							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigoMaquina"/>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="valor">Valor</label>
+							<h:inputText id="valor" name="valor" type="text" class="form-control" placeholder="Valor" value="#{despesaMB.despesaConsParam.valor}">
+								<f:convertNumber type="currency" currencySymbol="R$"/>
+							</h:inputText>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="dataInicio">Data inicial</label>
+							<h:inputText id="dataInicio" name="dataInicio" value="#{despesaMB.despesaConsParam.data}" 
+								styleClass="form-control" maxlength="10" pt:placeholder="Data">
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+							</h:inputText>
+						</div>
+					</div>
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="dataFim">Data final</label>
+							<h:inputText id="dataFim" name="dataFim" value="#{despesaMB.dataFinal}" 
+								styleClass="form-control" maxlength="10" pt:placeholder="Data">
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+							</h:inputText>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandLink id="btn-signup" class="btn btn-primary" actionListener="#{despesaMB.consultar(true)}" update="table-maquinas" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-search"></i>&nbsp;Pesquisar&nbsp;
+							</h:commandLink>
+						</div>
+					</div>
+				</div>
+			</h:form>
+			<c:if test="${not empty despesaMB.listDespesas}">
+				<h:form prependId="false">
+					<p:dataTable tableStyleClass="table-hover" id="table-maquinas" var="despesa" value="#{despesaMB.listDespesas}" rows="10" paginator="true" paginatorPosition="bottom"
+						paginatorAlwaysVisible="false" rowsPerPageTemplate="10,15,20,25,30">
+						<h:inputHidden id="id" value="#{maquina.id}" />
+						
+						<p:column headerText="Código máquina">
+							<h:outputText id="maquinaCodigo" value="#{despesa.maquina.codigo}" />
+						</p:column>
+						
+						<p:column headerText="Valor">
+							<h:outputText id="despesaValor" value="#{despesa.valor}">
+								<f:convertNumber type="currency" currencySymbol="R$" />
+							</h:outputText>
+						</p:column>
+						
+						<p:column headerText="Natureza financeira">
+							<h:outputText id="despesaNF" value="#{despesa.naturezaFinanceira.descricao}" />
+						</p:column>
+						
+						<p:column headerText="Data">
+							<h:outputText id="data" value="#{despesa.data}" >
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+							</h:outputText>
+						</p:column>
+						
+						<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EDT_DESPESA') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_DESPESA') eq true}">
+							<p:column style="width:128px; text-align: center" headerText="Ações">
+					            <c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EDT_DESPESA') eq true}">
+						            <p:button icon="ui-icon-pencil" title="Editar" outcome="editar_despesa.xhtml">
+										<f:param name="idDespesa" value="#{despesa.id}" />
+									</p:button>
+								</c:if>
+								
+								<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_DESPESA') eq true}">
+									<p:commandButton onclick="PF('dlgExcluir').show();" icon="ui-icon-trash" title="Excluir">
+										<f:setPropertyActionListener value="#{despesa.id}" target="#{despesaMB.despesa.id}" />
+						            </p:commandButton>
+					            </c:if>
+							</p:column>
+						</c:if>
+					</p:dataTable>
+				</h:form>
+			</c:if>
+		</p:panel>
+		
+		<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_DESPESA') eq true}">
+				<h:form prependId="false">
+					<p:dialog widgetVar="dlgExcluir" width="450" showHeader="false" resizable="false" modal="true">
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<label for="nome">Tem certeza que deseja excluir esta despesa? Essa operação não poderá ser desfeita!</label>
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<div class="form-group">
+										<h:commandLink id="btn-excluir" class="btn btn-primary" action="#{despesaMB.excluir}" 
+											style="width: 100%; color:white;" update="table-atividades">
+											<i class="glyphicon glyphicon-trash"></i>&nbsp;Excluir&nbsp;
+										</h:commandLink>
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<div class="form-group">
+										<h:commandLink id="btn-excluir-cancel" class="btn btn-warning" onclick="PF('dlgExcluir').hide();" style="width: 100%; color:white;" type="button" immediate="true">
+											<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+										</h:commandLink>
+									</div>
+								</div>
+							</div>
+						</div>
+					</p:dialog>
+				</h:form>
+			</c:if>
+	</ui:define>
+
+</ui:composition>

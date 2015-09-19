@@ -18,20 +18,20 @@ import org.apache.logging.log4j.Logger;
 import org.primefaces.context.RequestContext;
 
 import br.com.milenio.vendingmachine.domain.model.Auditoria;
+import br.com.milenio.vendingmachine.domain.model.Despesa;
 import br.com.milenio.vendingmachine.domain.model.Maquina;
 import br.com.milenio.vendingmachine.domain.model.NaturezaFinanceira;
-import br.com.milenio.vendingmachine.domain.model.Receita;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
 import br.com.milenio.vendingmachine.security.Seguranca;
 import br.com.milenio.vendingmachine.service.AuditoriaService;
+import br.com.milenio.vendingmachine.service.DespesaService;
 import br.com.milenio.vendingmachine.service.MaquinaService;
 import br.com.milenio.vendingmachine.service.NaturezaFinanceiraService;
-import br.com.milenio.vendingmachine.service.ReceitaService;
 
 @Named
 @ViewScoped
-public class ReceitaMB implements Serializable {
+public class DespesaMB implements Serializable {
 	private static final long serialVersionUID = 8402849166616207220L;
 	
 	@Inject
@@ -50,7 +50,7 @@ public class ReceitaMB implements Serializable {
 	private ExternalContext external;
 	
 	@Inject
-	private ReceitaService receitaService;
+	private DespesaService despesaService;
 	
 	@Inject
 	private NaturezaFinanceiraService naturezaFinanceiraService;
@@ -58,17 +58,17 @@ public class ReceitaMB implements Serializable {
 	@Inject
 	private HttpServletRequest request;
 	
-	private Receita receita = new Receita();
+	private Despesa despesa = new Despesa();
 	private List<Maquina> listMaquinas = new ArrayList<Maquina>();
 	private Maquina maquina = new Maquina();
-	private Receita receitaConsParam = new Receita();
-	private List<Receita> listReceitas = new ArrayList<Receita>();
+	private Despesa despesaConsParam = new Despesa();
+	private List<Despesa> listDespesas = new ArrayList<Despesa>();
 	private Date dataFinal;
 
 	private boolean carregarPagina = true;
 	
 	public void cadastrar() {
-		String codigoMaquina = receita.getMaquina().getCodigo() != null ? receita.getMaquina().getCodigo().trim() : "";
+		String codigoMaquina = despesa.getMaquina().getCodigo() != null ? despesa.getMaquina().getCodigo().trim() : "";
 		
 		if(codigoMaquina.isEmpty()) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "O campo código não pode conter apenas espaços em branco.", null));
@@ -76,17 +76,17 @@ public class ReceitaMB implements Serializable {
 		}
 		
 		try {
-			receitaService.cadastrar(receita);
+			despesaService.cadastrar(despesa);
 			
 			// Sucesso - Exibe mensagem de cadastro realizado com sucesso
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Receita R$" + receita.getValor() + " cadastrada para a máquina " + receita.getMaquina().getCodigo() + " com sucesso.", null));
-			logger.info("Receita R$" + receita.getValor() + " cadastrada para a máquina " + receita.getMaquina().getCodigo() + " com sucesso.");
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Despesa R$" + despesa.getValor() + " cadastrada para a máquina " + despesa.getMaquina().getCodigo() + " com sucesso.", null));
+			logger.info("Despesa R$" + despesa.getValor() + " cadastrada para a máquina " + despesa.getMaquina().getCodigo() + " com sucesso.");
 			
 			// Processo de auditoria de cadastro de produtos
 			Auditoria auditoria = new Auditoria();
 			auditoria.setDataAcao(new Date());
 			auditoria.setTitulo("Cadastro");
-			auditoria.setDescricao("Cadastrou uma receita de " + receita.getValor() + " para a máquina " + receita.getMaquina().getCodigo());
+			auditoria.setDescricao("Cadastrou uma despesa de " + despesa.getValor() + " para a máquina " + despesa.getMaquina().getCodigo());
 			auditoria.setUsuario(Seguranca.getUsuarioLogado());
 			auditoria.setIp(request.getRemoteAddr());
 			auditoriaService.cadastrarNovaAcao(auditoria);
@@ -95,11 +95,11 @@ public class ReceitaMB implements Serializable {
 			logger.info(e.getMessage());
 		}
 		
-		receita = new Receita();
+		despesa = new Despesa();
 	}
 	
 	public void editar() {
-		String codigoMaquina = receita.getMaquina().getCodigo() != null ? receita.getMaquina().getCodigo().trim() : "";
+		String codigoMaquina = despesa.getMaquina().getCodigo() != null ? despesa.getMaquina().getCodigo().trim() : "";
 		
 		if(codigoMaquina.isEmpty()) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "O campo código não pode conter apenas espaços em branco.", null));
@@ -107,17 +107,17 @@ public class ReceitaMB implements Serializable {
 		}
 		
 		try {
-			receitaService.editar(receita);
+			despesaService.editar(despesa);
 			
 			// Sucesso - Exibe mensagem de cadastro realizado com sucesso
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Receita R$" + receita.getValor() + " editada para a máquina " + receita.getMaquina().getCodigo() + " com sucesso.", null));
-			logger.info("Receita R$" + receita.getValor() + " editada para a máquina " + receita.getMaquina().getCodigo() + " com sucesso.");
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Despesa R$" + despesa.getValor() + " editada para a máquina " + despesa.getMaquina().getCodigo() + " com sucesso.", null));
+			logger.info("Despesa R$" + despesa.getValor() + " editada para a máquina " + despesa.getMaquina().getCodigo() + " com sucesso.");
 			
 			// Processo de auditoria de cadastro de produtos
 			Auditoria auditoria = new Auditoria();
 			auditoria.setDataAcao(new Date());
 			auditoria.setTitulo("Edição");
-			auditoria.setDescricao("Editou uma receita de " + receita.getValor() + " para a máquina " + receita.getMaquina().getCodigo());
+			auditoria.setDescricao("Editou uma despesa de " + despesa.getValor() + " para a máquina " + despesa.getMaquina().getCodigo());
 			auditoria.setUsuario(Seguranca.getUsuarioLogado());
 			auditoria.setIp(request.getRemoteAddr());
 			auditoriaService.cadastrarNovaAcao(auditoria);
@@ -131,9 +131,9 @@ public class ReceitaMB implements Serializable {
 		Maquina maq = maquinaService.findByCodigo(codigo);
 		
 		if(maq != null) {
-			receita.setMaquina(maq);
+			despesa.setMaquina(maq);
 		} else{
-			receita.setMaquina(new Maquina());
+			despesa.setMaquina(new Maquina());
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Código inválido: O código " + codigo + " informado não corresponde a nenhuma máquina cadastrada no sistema.", null));
 			return;
 		}
@@ -180,10 +180,10 @@ public class ReceitaMB implements Serializable {
 	
 	public void consultar(boolean exibirMensagem) {
 		try {
-			listReceitas = receitaService.buscarComFiltro(receitaConsParam, dataFinal);
+			listDespesas = despesaService.buscarComFiltro(despesaConsParam, dataFinal);
 		} catch (CadastroInexistenteException e) {
-			if(listReceitas != null && !listReceitas.isEmpty()) {
-				listReceitas.clear();
+			if(listDespesas != null && !listDespesas.isEmpty()) {
+				listDespesas.clear();
 			}
 			
 			if(exibirMensagem) {
@@ -193,17 +193,17 @@ public class ReceitaMB implements Serializable {
 	}
 	
 	public void carregarDadosParaEdicao() {
-		if(carregarPagina ) {
-			receita = receitaService.findById(receita.getId());
+		if(carregarPagina) {
+			despesa = despesaService.findById(despesa.getId());
 		}
 		
 		carregarPagina = false;
 	}
 	
 	public void excluir() {
-		Receita recei;
+		Despesa desp;
 		try {
-			recei = receitaService.excluir(receita.getId());
+			desp = despesaService.excluir(despesa.getId());
 		} catch (InconsistenciaException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
 			return;
@@ -213,21 +213,21 @@ public class ReceitaMB implements Serializable {
 		Auditoria auditoria = new Auditoria();
 		auditoria.setDataAcao(new Date());
 		auditoria.setTitulo("Exclusão");
-		auditoria.setDescricao("Excluiu uma receita de " + recei.getValor() + " para a máquina " + recei.getMaquina().getCodigo());
+		auditoria.setDescricao("Excluiu uma despesa de " + desp.getValor() + " para a máquina " + desp.getMaquina().getCodigo());
 		auditoria.setUsuario(Seguranca.getUsuarioLogado());
 		auditoria.setIp(request.getRemoteAddr());
 		auditoriaService.cadastrarNovaAcao(auditoria);
 		
-		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Receita de R$" + recei.getValor() + " para a máquina " + recei.getMaquina().getCodigo() + " excluída com sucesso.", null));
+		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Despesa de R$" + desp.getValor() + " para a máquina " + desp.getMaquina().getCodigo() + " excluída com sucesso.", null));
 		
 		// Recarrega a listagem de contratos
 		consultar(false);
 	}
 	
 	public void excluirPelaEdicao() {
-		Receita recei;
+		Despesa desp;
 		try {
-			recei = receitaService.excluir(receita.getId());
+			desp = despesaService.excluir(despesa.getId());
 		} catch (InconsistenciaException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
 			return;
@@ -237,12 +237,12 @@ public class ReceitaMB implements Serializable {
 		Auditoria auditoria = new Auditoria();
 		auditoria.setDataAcao(new Date());
 		auditoria.setTitulo("Exclusão");
-		auditoria.setDescricao("Excluiu uma receita de " + recei.getValor() + " para a máquina " + recei.getMaquina().getCodigo());
+		auditoria.setDescricao("Excluiu uma despesa de " + desp.getValor() + " para a máquina " + desp.getMaquina().getCodigo());
 		auditoria.setUsuario(Seguranca.getUsuarioLogado());
 		auditoria.setIp(request.getRemoteAddr());
 		auditoriaService.cadastrarNovaAcao(auditoria);
 		
-		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Receita de R$" + recei.getValor() + " para a máquina " + recei.getMaquina().getCodigo() + " excluída com sucesso.", null));
+		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Despesa de R$" + desp.getValor() + " para a máquina " + desp.getMaquina().getCodigo() + " excluída com sucesso.", null));
 		
 		try {
 			external.getFlash().setKeepMessages(true);
@@ -256,7 +256,7 @@ public class ReceitaMB implements Serializable {
 	
 	public List<NaturezaFinanceira> getListNaturezaFinanceira() {
 		NaturezaFinanceira nf = new NaturezaFinanceira();
-		nf.setTipoNaturezaFinanceira("RECEITA");
+		nf.setTipoNaturezaFinanceira("DESPESA");
 		
 		try {
 			List<NaturezaFinanceira> listNf = naturezaFinanceiraService.buscarNaturezasComFiltro(nf);
@@ -266,12 +266,12 @@ public class ReceitaMB implements Serializable {
 		}
 	}
 
-	public Receita getReceita() {
-		return receita;
+	public Despesa getDespesa() {
+		return despesa;
 	}
 
-	public void setReceita(Receita receita) {
-		this.receita = receita;
+	public void setDespesa(Despesa despesa) {
+		this.despesa = despesa;
 	}
 
 	public List<Maquina> getListMaquinas() {
@@ -290,27 +290,27 @@ public class ReceitaMB implements Serializable {
 		this.maquina = maquina;
 	}
 
-	public Receita getReceitaConsParam() {
-		return receitaConsParam;
-	}
-
-	public void setReceitaConsParam(Receita receitaConsParam) {
-		this.receitaConsParam = receitaConsParam;
-	}
-
-	public List<Receita> getListReceitas() {
-		return listReceitas;
-	}
-
-	public void setListReceitas(List<Receita> listReceitas) {
-		this.listReceitas = listReceitas;
-	}
-
 	public Date getDataFinal() {
 		return dataFinal;
 	}
 
 	public void setDataFinal(Date dataFinal) {
 		this.dataFinal = dataFinal;
+	}
+
+	public Despesa getDespesaConsParam() {
+		return despesaConsParam;
+	}
+
+	public void setDespesaConsParam(Despesa despesaConsParam) {
+		this.despesaConsParam = despesaConsParam;
+	}
+
+	public List<Despesa> getListDespesas() {
+		return listDespesas;
+	}
+
+	public void setListDespesas(List<Despesa> listDespesas) {
+		this.listDespesas = listDespesas;
 	}
 }
