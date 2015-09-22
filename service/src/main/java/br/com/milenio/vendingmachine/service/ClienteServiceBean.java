@@ -154,4 +154,9 @@ public class ClienteServiceBean implements ClienteService {
 		enderecoService.editar(clienteEditado.getEndereco());
 		clienteRepository.merge(clienteEditado);
 	}
+
+	@Override
+	public Cliente findByCodigo(String codigo) {
+		return clienteRepository.findByCodigo(codigo);
+	}
 }

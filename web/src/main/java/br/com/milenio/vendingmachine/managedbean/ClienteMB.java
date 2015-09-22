@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.logging.log4j.Logger;
 
+import br.com.milenio.vendingmachine.domain.model.Alocacao;
 import br.com.milenio.vendingmachine.domain.model.Auditoria;
 import br.com.milenio.vendingmachine.domain.model.Cliente;
 import br.com.milenio.vendingmachine.domain.model.Endereco;
@@ -25,6 +26,7 @@ import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.exceptions.ConteudoJaExistenteNoBancoDeDadosException;
 import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
 import br.com.milenio.vendingmachine.security.Seguranca;
+import br.com.milenio.vendingmachine.service.AlocacaoService;
 import br.com.milenio.vendingmachine.service.AuditoriaService;
 import br.com.milenio.vendingmachine.service.ClienteService;
 import br.com.milenio.vendingmachine.service.EnderecoService;
@@ -42,6 +44,9 @@ public class ClienteMB implements Serializable {
 	
 	@Inject
 	private EnderecoService enderecoService;
+	
+	@Inject
+	private AlocacaoService alocacaoService;
 	
 	@Inject
 	private ClienteService clienteService;
@@ -240,6 +245,10 @@ public class ClienteMB implements Serializable {
 			
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
 		}
+	}
+	
+	public List<Alocacao> getListAlocacoes() {
+		return alocacaoService.findByCliente(cliente.getId());
 	}
 	
 	public Cliente getCliente() {

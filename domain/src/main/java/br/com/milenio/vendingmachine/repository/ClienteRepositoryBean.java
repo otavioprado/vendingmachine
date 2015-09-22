@@ -10,7 +10,6 @@ import com.uaihebert.uaicriteria.UaiCriteriaFactory;
 
 import br.com.milenio.vendingmachine.domain.AbstractVendingMachineRepositoryBean;
 import br.com.milenio.vendingmachine.domain.model.Cliente;
-import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 
 @Stateless(name = "ClienteRepository")
 public class ClienteRepositoryBean extends AbstractVendingMachineRepositoryBean<Cliente, Long> 
@@ -110,6 +109,25 @@ public class ClienteRepositoryBean extends AbstractVendingMachineRepositoryBean<
 		TypedQuery<Cliente> query = getEntityManager().createQuery(sb.toString(), Cliente.class);
 
 		query.setParameter("cpfCnpj", cpfCnpj);
+
+		List<Cliente> clienteCadastrado = (List<Cliente>) query.getResultList();
+		
+		if(!clienteCadastrado.isEmpty()) {
+			return clienteCadastrado.get(0);
+		}
+		
+		return null;
+	}
+
+	@Override
+	public Cliente findByCodigo(String codigo) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT c FROM Cliente c WHERE ");
+		sb.append(" c.codigo = :codigo");
+
+		TypedQuery<Cliente> query = getEntityManager().createQuery(sb.toString(), Cliente.class);
+
+		query.setParameter("codigo", codigo);
 
 		List<Cliente> clienteCadastrado = (List<Cliente>) query.getResultList();
 		

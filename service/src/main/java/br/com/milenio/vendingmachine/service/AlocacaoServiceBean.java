@@ -1,5 +1,8 @@
 package br.com.milenio.vendingmachine.service;
 
+import java.util.Date;
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
@@ -12,6 +15,7 @@ import br.com.milenio.vendingmachine.domain.model.Maquina;
 import br.com.milenio.vendingmachine.domain.model.MaquinaStatus;
 import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
 import br.com.milenio.vendingmachine.repository.AlocacaoRepository;
+import br.com.milenio.vendingmachine.repository.AlocacaoRepositoryBean;
 import br.com.milenio.vendingmachine.repository.ContratoRepository;
 import br.com.milenio.vendingmachine.repository.MaquinaRepository;
 import br.com.milenio.vendingmachine.repository.MaquinaStatusRepository;
@@ -81,9 +85,17 @@ public class AlocacaoServiceBean implements AlocacaoService {
 		contratoRepository.persist(contrato);
 		
 		// Salva a alocação
+		alocacao.setDataCadastro(new Date());
 		alocacaoRepository.persist(alocacao);
 		
 		LOGGER.info("Alocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia() + " realizada com SUCESSO.");
 		LOGGER.info("A máquina " + alocacao.getMaquina().getCodigo() + " agora está com status " + maquina.getMaquinaStatus().getDescricao());
+	}
+
+	@Override
+	public List<Alocacao> findByCliente(Long clienteId) {
+		List<Alocacao> alocacoes = alocacaoRepository.findByCliente(clienteId);
+		
+		return alocacoes;
 	}
 }

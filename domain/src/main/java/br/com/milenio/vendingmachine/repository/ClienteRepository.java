@@ -17,4 +17,6 @@ public interface ClienteRepository extends Repository<Cliente, Long> {
 	public Cliente findClienteByEmail(String email);
 
 	public Cliente findClienteByCpfCnpj(String cpfCnpj);
+
+	public Cliente findByCodigo(String codigo);
 }

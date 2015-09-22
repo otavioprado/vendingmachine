@@ -302,6 +302,64 @@
 			</p:panel>
 		</h:form>
 		
+		<hr class="divider"/>
+		
+		<h:form prependId="false">
+			<p:panel id="basicAlocacoes" header="Máquinas alocadas ao cliente" style="margin-bottom:20px">
+				<p:messages id="messagesAlocacoes" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="row">
+					<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_ALOCACAO') eq true}">
+						<div class="col-md-3">
+							<div class="form-group">
+								<a id="btn-signup" class="btn btn-primary" href="#{request.contextPath}/admin/alocacao.xhtml?clienteId=#{clienteMB.cliente.id}" style="width: 100%; color:white;">
+									<i class="glyphicon glyphicon-hand-right"></i>&nbsp;Solicitar alocação de máquina&nbsp;
+								</a>
+							</div>
+						</div>
+					</c:if>
+				
+					<div class="col-lg-12">
+						<p:dataTable tableStyleClass="table-hover" id="table-alocacoes" var="alocacao" value="#{clienteMB.listAlocacoes}" rows="10" paginator="true" paginatorPosition="bottom"
+							paginatorAlwaysVisible="false" rowsPerPageTemplate="10,15,20,25,30" emptyMessage="Nenhum registro encontrado: não há nenhuma alocação realizada para este cliente.">
+							<h:inputHidden id="id" value="#{maquina.id}" />
+							
+							<p:column headerText="Código máquina">
+								<h:outputText id="maquinaCodigo" value="#{alocacao.maquina.codigo}" />
+							</p:column>
+							
+							<p:column headerText="Modelo">
+								<h:outputText id="clienteModelo" value="#{alocacao.maquina.modelo}" />
+							</p:column>
+							
+							<p:column headerText="Status">
+								<h:outputText id="maquinaStatus" value="#{alocacao.maquina.maquinaStatus.descricao}" />
+							</p:column>
+							
+							<p:column headerText="Data de cadastro">
+								<h:outputText id="data" value="#{alocacao.dataCadastro}" >
+									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+								</h:outputText>
+							</p:column>
+							
+							<p:column headerText="Responsável">
+								<h:outputText id="maquinaResponsavel" value="#{alocacao.usuario.nome}" />
+							</p:column>
+							
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EDT_MAQUINA') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_INATIVAR_MAQUINA') eq true}">
+								<p:column style="width:128px; text-align: center" headerText="Ações">
+						            <c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EDT_MAQUINA') eq true}">
+							            <p:button icon="ui-icon-pencil" title="Solicitar desalocação" outcome="editar_maquina.xhtml">
+											<f:param name="idMaquina" value="#{maquina.id}" />
+										</p:button>
+									</c:if>
+								</p:column>
+							</c:if>
+						</p:dataTable>
+					</div>
+				</div>
+			</p:panel>
+		</h:form>
+		
 		<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_BLOQ_CLIENTE') eq true}">
 			<h:form prependId="false">
 				<p:dialog widgetVar="dlgBloq" width="450" showHeader="false" resizable="false" modal="true">

@@ -66,9 +66,11 @@ public class AlocacaoMB implements Serializable {
 	private boolean carregarPagina = true;
 	private Alocacao alocacao = new Alocacao();
 	private Contrato contrato = new Contrato();
+	private Cliente cliente = new Cliente();
 	private Maquina maquina = new Maquina();
 	private List<Maquina> listMaquinas = new ArrayList<Maquina>();
 	private List<Contrato> listContratos = new ArrayList<Contrato>();
+	private List<Cliente> listClientes = new ArrayList<Cliente>();
 	
 	public void cadastrar() {
 		logger.debug("Tentando realizar o cadastro da alocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia());
@@ -98,12 +100,33 @@ public class AlocacaoMB implements Serializable {
 	}
 	
 	public void carregarCliente() {
-		if(carregarPagina) {
-			Cliente cliente = clienteService.findById(alocacao.getCliente().getId());
+		Long id = alocacao.getCliente().getId();
+		if(carregarPagina && id != 0) {
+			Cliente cliente = clienteService.findById(id);
 			alocacao.setCliente(cliente);
 		}
 		
 		carregarPagina = false;
+	}
+	
+	public void selecionarCliente(String codigo) {
+		Cliente c = clienteService.findByCodigo(codigo);
+		
+		if(c != null) {
+			if(!c.getIndAtivo()) {
+				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Código inválido: O código " + codigo + " informado não corresponde a um cliente ativo.", null));
+				alocacao.setCliente(new Cliente());
+				return;
+			}
+			alocacao.setCliente(c);
+		} else {
+			alocacao.setCliente(new Cliente());
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Código inválido: O código " + codigo + " informado não corresponde a nenhum cliente cadastrado no sistema.", null));
+			return;
+		}
+		
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("PF('dlgConsultaCliente').hide();");
 	}
 	
 	public void selecionarMaquina(String codigo) {
@@ -177,6 +200,21 @@ public class AlocacaoMB implements Serializable {
 		}
 	}
 	
+	public void consultarCliente() {
+		try {
+			// Busca os clientes ativos
+			cliente.setIndAtivo(true);
+			listClientes = clienteService.buscarClientesComFiltro(cliente);
+			RequestContext context = RequestContext.getCurrentInstance();
+			context.execute("PF('dlgConsultaCliente').show();");
+		} catch (CadastroInexistenteException e) {
+			listMaquinas.clear();
+			ctx.addMessage("Message2", new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
+			RequestContext context = RequestContext.getCurrentInstance();
+			context.execute("PF('dlgConsultaCliente').show();");
+		}
+	}
+	
 	public void abrirDialog(String dialog) {
 		maquina = new Maquina();
 		contrato = new Contrato();
@@ -232,5 +270,21 @@ public class AlocacaoMB implements Serializable {
 
 	public void setListContratos(List<Contrato> listContratos) {
 		this.listContratos = listContratos;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	public List<Cliente> getListClientes() {
+		return listClientes;
+	}
+
+	public void setListClientes(List<Cliente> listClientes) {
+		this.listClientes = listClientes;
 	}
 }
