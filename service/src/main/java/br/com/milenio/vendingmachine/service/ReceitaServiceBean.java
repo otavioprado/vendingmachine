@@ -32,6 +32,8 @@ public class ReceitaServiceBean implements ReceitaService {
 			
 			if(maquina == null) {
 				throw new InconsistenciaException("O código da máquina é inválido");
+			} else if ("INATIVADA".equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
+				throw new InconsistenciaException("Máquinas inativadas não podem ter novas movimentações financeiras cadastradas.");
 			}
 		}
 		
@@ -91,6 +93,15 @@ public class ReceitaServiceBean implements ReceitaService {
 			
 			if(maquina == null) {
 				throw new InconsistenciaException("O código da máquina é inválido");
+			} else if ("INATIVADA".equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
+				// Busca os dados atual da receita no banco de dados
+				Receita receitaAtual = receitaRepository.findById(receita.getId());
+				
+				// Se a máquina está inativada, valida se a máquina da despesa sendo editada é a mesma do cadastro,
+				// se for deixa passar, caso contrário joga uma exception
+				if(!receitaAtual.getMaquina().getId().equals(receita.getMaquina().getId())) {
+					throw new InconsistenciaException("Máquinas inativadas não podem ter novas movimentações financeiras vinculadas pela edição.");
+				}
 			}
 		}
 		

@@ -248,7 +248,7 @@ public class ClienteMB implements Serializable {
 	}
 	
 	public List<Alocacao> getListAlocacoes() {
-		return alocacaoService.findByCliente(cliente.getId());
+		return alocacaoService.findAlocacoesAtivasByCliente(cliente.getId());
 	}
 	
 	public Cliente getCliente() {

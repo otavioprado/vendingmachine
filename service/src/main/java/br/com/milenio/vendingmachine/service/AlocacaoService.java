@@ -11,5 +11,11 @@ import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
 public interface AlocacaoService {
 	public void cadastrar(Alocacao alocacao) throws InconsistenciaException;
 
-	public List<Alocacao> findByCliente(Long clienteId);
+	public List<Alocacao> findAlocacoesAtivasByCliente(Long clienteId);
+
+	public Alocacao findById(Long id);
+
+	public void desalocar(Alocacao alocacao) throws InconsistenciaException;
+
+	public Alocacao excluir(Long id) throws InconsistenciaException;
 }

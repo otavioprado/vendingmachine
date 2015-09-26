@@ -1,11 +1,14 @@
 package br.com.milenio.vendingmachine.managedbean;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.ejb.EJBTransactionRolledbackException;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -19,6 +22,7 @@ import br.com.milenio.vendingmachine.domain.model.Alocacao;
 import br.com.milenio.vendingmachine.domain.model.Auditoria;
 import br.com.milenio.vendingmachine.domain.model.Cliente;
 import br.com.milenio.vendingmachine.domain.model.Contrato;
+import br.com.milenio.vendingmachine.domain.model.Fornecedor;
 import br.com.milenio.vendingmachine.domain.model.Maquina;
 import br.com.milenio.vendingmachine.domain.model.MaquinaStatus;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
@@ -50,6 +54,9 @@ public class AlocacaoMB implements Serializable {
 	
 	@Inject
 	private MaquinaService maquinaService;
+	
+	@Inject
+	private ExternalContext external;
 	
 	@Inject
 	private AuditoriaService auditoriaService;
@@ -104,6 +111,65 @@ public class AlocacaoMB implements Serializable {
 		if(carregarPagina && id != 0) {
 			Cliente cliente = clienteService.findById(id);
 			alocacao.setCliente(cliente);
+		}
+		
+		carregarPagina = false;
+	}
+	
+	public void desalocar() {
+		logger.debug("Tentando realizar a desalocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia());
+		
+		try {
+			alocacaoService.desalocar(alocacao);
+			
+			// Sucesso - Exibe mensagem de desalocação realizada com sucesso
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Desalocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia() + " realizada com sucesso.", null));
+			logger.info("Desalocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia() + " realizada com sucesso.");
+			
+			// Processo de auditoria de cadastro de usuário
+			Auditoria auditoria = new Auditoria();
+			auditoria.setDataAcao(new Date());
+			auditoria.setTitulo("Cadastro");
+			auditoria.setDescricao("Cadastrou uma desalocação para a máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia());
+			auditoria.setUsuario(Seguranca.getUsuarioLogado());
+			auditoria.setIp(request.getRemoteAddr());
+			auditoriaService.cadastrarNovaAcao(auditoria);
+		} catch (InconsistenciaException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+			logger.info(e.getMessage());
+		}
+		alocacao = new Alocacao(); 
+	}
+	
+	public void excluirPelaEdicao() {
+		Alocacao aloc;
+		try {
+			aloc = alocacaoService.excluir(alocacao.getId());
+		} catch (InconsistenciaException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
+			return;
+		} catch(EJBTransactionRolledbackException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Essa alocação não pode ser excluída.", null));
+			logger.warn("Tentativa inválida de excluir uma alocação.");
+			return;
+		}
+		
+		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Alocação para a máquina " + aloc.getMaquina().getCodigo() + " excluída com sucesso", null));
+		
+		// Processo de auditoria de exclusão de contratos
+		Auditoria auditoria = new Auditoria();
+		auditoria.setDataAcao(new Date());
+		auditoria.setTitulo("Exclusão");
+		auditoria.setDescricao("Excluiu uma solicitação de alocação para a máquina" + aloc.getMaquina().getCodigo());
+		auditoria.setUsuario(Seguranca.getUsuarioLogado());
+		auditoria.setIp(request.getRemoteAddr());
+		auditoriaService.cadastrarNovaAcao(auditoria);
+	}
+	
+	public void carregarAlocacao() {
+		Long id = alocacao.getId();
+		if(carregarPagina && id != 0) {
+			alocacao = alocacaoService.findById(id);
 		}
 		
 		carregarPagina = false;
@@ -218,8 +284,10 @@ public class AlocacaoMB implements Serializable {
 	public void abrirDialog(String dialog) {
 		maquina = new Maquina();
 		contrato = new Contrato();
+		cliente = new Cliente();
 		listMaquinas = new ArrayList<Maquina>();
 		listContratos = new ArrayList<Contrato>();
+		listClientes = new ArrayList<Cliente>();
 		
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('" + dialog + "').show();");

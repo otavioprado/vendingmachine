@@ -305,7 +305,7 @@
 		<hr class="divider"/>
 		
 		<h:form prependId="false">
-			<p:panel id="basicAlocacoes" header="Máquinas alocadas ao cliente" style="margin-bottom:20px">
+			<p:panel id="basicAlocacoes" header="Máquinas alocadas para o cliente" style="margin-bottom:20px">
 				<p:messages id="messagesAlocacoes" showDetail="false" autoUpdate="true" closable="true"/>
 				<div class="row">
 					<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_ALOCACAO') eq true}">
@@ -321,7 +321,7 @@
 					<div class="col-lg-12">
 						<p:dataTable tableStyleClass="table-hover" id="table-alocacoes" var="alocacao" value="#{clienteMB.listAlocacoes}" rows="10" paginator="true" paginatorPosition="bottom"
 							paginatorAlwaysVisible="false" rowsPerPageTemplate="10,15,20,25,30" emptyMessage="Nenhum registro encontrado: não há nenhuma alocação realizada para este cliente.">
-							<h:inputHidden id="id" value="#{maquina.id}" />
+							<h:inputHidden id="id" value="#{alocacao.id}" />
 							
 							<p:column headerText="Código máquina">
 								<h:outputText id="maquinaCodigo" value="#{alocacao.maquina.codigo}" />
@@ -336,7 +336,7 @@
 							</p:column>
 							
 							<p:column headerText="Data de cadastro">
-								<h:outputText id="data" value="#{alocacao.dataCadastro}" >
+								<h:outputText id="data" value="#{alocacao.dataCadastroAlocacao}" >
 									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
 								</h:outputText>
 							</p:column>
@@ -345,13 +345,23 @@
 								<h:outputText id="maquinaResponsavel" value="#{alocacao.usuario.nome}" />
 							</p:column>
 							
-							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EDT_MAQUINA') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_INATIVAR_MAQUINA') eq true}">
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_ALOCACAO') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_DESALOCACAO') eq true}">
 								<p:column style="width:128px; text-align: center" headerText="Ações">
-						            <c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EDT_MAQUINA') eq true}">
-							            <p:button icon="ui-icon-pencil" title="Solicitar desalocação" outcome="editar_maquina.xhtml">
+						            
+						            <c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_ALOCACAO') eq true}">
+										<p:commandButton onclick="PF('dlgExcluir').show();" icon="ui-icon-trash" title="Excluir solicitação de alocação" 
+											rendered="#{alocacao.dataAlocacao eq null}">
+											<f:setPropertyActionListener value="#{alocacao.id}" target="#{alocacaoMB.alocacao.id}" />
+							            </p:commandButton>
+						            </c:if>
+						            
+						            <c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_DESALOCACAO') eq true}">
+							            <p:button icon="ui-icon-arrowthick-1-sw" title="Solicitar desalocação" outcome="desalocacao.xhtml?alocacaoId=#{alocacao.id}"
+							            	rendered="#{alocacao.dataAlocacao ne null and alocacao.dataCadastroDesalocacao eq null}">
 											<f:param name="idMaquina" value="#{maquina.id}" />
 										</p:button>
 									</c:if>
+									
 								</p:column>
 							</c:if>
 						</p:dataTable>
@@ -399,6 +409,39 @@
 				</p:dialog>
 			</h:form>
 		</c:if>
+		
+		<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_ALOCACAO') eq true}">
+				<h:form prependId="false">
+					<p:dialog widgetVar="dlgExcluir" width="450" showHeader="false" resizable="false" modal="true">
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<label for="nome">Tem certeza que deseja excluir esta solicitação de alocação? Essa operação não poderá ser desfeita!</label>
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<div class="form-group">
+										<h:commandLink id="btn-excluir" class="btn btn-primary" action="#{alocacaoMB.excluirPelaEdicao}" 
+											style="width: 100%; color:white;" update="table-atividades">
+											<i class="glyphicon glyphicon-trash"></i>&nbsp;Excluir&nbsp;
+										</h:commandLink>
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<div class="form-group">
+										<h:commandLink id="btn-excluir-cancel" class="btn btn-warning" onclick="PF('dlgExcluir').hide();" style="width: 100%; color:white;" type="button" immediate="true">
+											<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+										</h:commandLink>
+									</div>
+								</div>
+							</div>
+						</div>
+					</p:dialog>
+				</h:form>
+			</c:if>
 		
 	</ui:define>
 

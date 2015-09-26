@@ -147,8 +147,8 @@ public class NaturezaFinanceiraMB implements Serializable {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
 			return;
 		} catch(EJBTransactionRolledbackException e) {
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Essa natureza financeira não pode ser excluída em quanto estiver vinculada à receitas e/ou despesas.", null));
-			logger.warn("Essa natureza financeira não pode ser excluída em quanto estiver vinculada à receitas e/ou despesas.");
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Essa natureza financeira não pode ser excluída enquanto estiver vinculada à receitas e/ou despesas.", null));
+			logger.warn("Essa natureza financeira não pode ser excluída enquanto estiver vinculada à receitas e/ou despesas.");
 			return;
 		}
 		
@@ -176,8 +176,8 @@ public class NaturezaFinanceiraMB implements Serializable {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
 			return;
 		} catch(EJBTransactionRolledbackException e) {
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Essa natureza financeira não pode ser excluída em quanto estiver vinculada à receitas e/ou despesas.", null));
-			logger.warn("Essa natureza financeira não pode ser excluída em quanto estiver vinculada à receitas e/ou despesas.");
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Essa natureza financeira não pode ser excluída enquanto estiver vinculada à receitas e/ou despesas.", null));
+			logger.warn("Essa natureza financeira não pode ser excluída enquanto estiver vinculada à receitas e/ou despesas.");
 			return;
 		}
 		

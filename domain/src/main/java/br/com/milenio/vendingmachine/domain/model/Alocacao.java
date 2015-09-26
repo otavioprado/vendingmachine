@@ -25,13 +25,17 @@ public class Alocacao implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name= "DATA_CADASTRO")
+	@Column(name= "DATA_SOLICITACAO_ALOCACAO")
 	@Temporal(value=TemporalType.DATE)
-	private Date dataCadastro;
+	private Date dataCadastroAlocacao;
 	
 	@Column(name= "DATA_ALOCACAO")
 	@Temporal(value=TemporalType.DATE)
 	private Date dataAlocacao;
+	
+	@Column(name= "DATA_SOLICITACAO_DESALOCACAO")
+	@Temporal(value=TemporalType.DATE)
+	private Date dataCadastroDesalocacao;
 	
 	@Column(name= "DATA_DESALOCACAO")
 	@Temporal(value=TemporalType.DATE)
@@ -59,14 +63,6 @@ public class Alocacao implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Date getDataCadastro() {
-		return dataCadastro;
-	}
-
-	public void setDataCadastro(Date dataCadastro) {
-		this.dataCadastro = dataCadastro;
 	}
 
 	public Date getDataAlocacao() {
@@ -115,5 +111,21 @@ public class Alocacao implements Serializable {
 
 	public void setContrato(Contrato contrato) {
 		this.contrato = contrato;
+	}
+
+	public Date getDataCadastroAlocacao() {
+		return dataCadastroAlocacao;
+	}
+
+	public void setDataCadastroAlocacao(Date dataCadastroAlocacao) {
+		this.dataCadastroAlocacao = dataCadastroAlocacao;
+	}
+
+	public Date getDataCadastroDesalocacao() {
+		return dataCadastroDesalocacao;
+	}
+
+	public void setDataCadastroDesalocacao(Date dataCadastroDesalocacao) {
+		this.dataCadastroDesalocacao = dataCadastroDesalocacao;
 	}
 }

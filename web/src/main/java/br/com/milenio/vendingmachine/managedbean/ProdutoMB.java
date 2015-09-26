@@ -144,7 +144,7 @@ public class ProdutoMB implements Serializable {
 		try{
 			prod = produtoService.excluir(produto.getId());
 		} catch(EJBTransactionRolledbackException e) {
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Esse produto não pode ser excluído em quanto estiver vinculado à máquinas.", null));
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Esse produto não pode ser excluído enquanto estiver vinculado à máquinas.", null));
 			logger.warn("Tentativa de excluir um produto vinculado a alguma máquina.");
 			return;
 		}
@@ -210,7 +210,7 @@ public class ProdutoMB implements Serializable {
 		try {
 			prod = produtoService.excluir(produto.getId());
 		} catch(EJBTransactionRolledbackException e) {
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Esse produto não pode ser excluído em quanto estiver vinculado à máquinas.", null));
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Esse produto não pode ser excluído enquanto estiver vinculado à máquinas.", null));
 			logger.warn("Tentativa de excluir um produto vinculado a alguma máquina.");
 			return;
 		}

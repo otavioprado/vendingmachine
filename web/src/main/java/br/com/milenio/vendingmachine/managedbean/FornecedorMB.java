@@ -158,7 +158,7 @@ public class FornecedorMB implements Serializable {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
 			return;
 		} catch(EJBTransactionRolledbackException e) {
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Esse fornecedor não pode ser excluído em quanto estiver vinculado à máquinas e/ou produtos.", null));
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Esse fornecedor não pode ser excluído enquanto estiver vinculado à máquinas e/ou produtos.", null));
 			logger.warn("Tentativa de excluir um fornecedor vinculado à máquinas e/ou produtos.");
 			return;
 		}
@@ -187,7 +187,7 @@ public class FornecedorMB implements Serializable {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
 			return;
 		} catch(EJBTransactionRolledbackException e) {
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Esse fornecedor não pode ser excluído em quanto estiver vinculado à máquinas e/ou produtos.", null));
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Esse fornecedor não pode ser excluído enquanto estiver vinculado à máquinas e/ou produtos.", null));
 			logger.warn("Tentativa de excluir um fornecedor vinculado à máquinas e/ou produtos.");
 			return;
 		}

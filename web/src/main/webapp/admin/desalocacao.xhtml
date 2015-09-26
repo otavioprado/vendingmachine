@@ -1,0 +1,135 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;"> 
+]>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+    template="layoutLogado.xhtml">
+    
+	<f:metadata>
+	    <f:viewParam name="alocacaoId" value="#{alocacaoMB.alocacao.id}" />
+	    <f:event type="preRenderView" listener="#{alocacaoMB.carregarAlocacao}"/>
+	</f:metadata>
+    
+	<ui:define name="conteudo">
+		<p:panel id="basic" header="Solicitar desalocação de máquina" style="margin-bottom:20px">
+			<h:form id="formPrincipal" prependId="false">
+				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="row">
+					<div class="col-md-12">
+						<p:fieldset style="margin-bottom:20px" styleClass="">
+							<legend>Cliente</legend>
+							<div class="col-lg-4">
+								<div class="form-group">
+									<label for="codigoCliente">Código</label>
+									<h:inputText id="codigoCliente" name="codigoCliente" type="text" class="form-control" pt:placeholder="Código" value="#{alocacaoMB.alocacao.cliente.codigo}" required="true" maxlength="20"
+										requiredMessage="O campo código do cliente é obrigatório" disabled="true" readonly="true">
+									</h:inputText>
+									<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigoCliente"/>
+								</div>
+							</div>
+							
+							<div class="col-lg-4">
+								<div class="form-group">
+									<label for="nomeFantasiaCliente">Nome fantasia</label>
+									<input id="nomeFantasiaCliente" name="nomeFantasiaCliente" type="text" class="form-control" placeholder="Nome fantasia cliente" jsf:value="#{alocacaoMB.alocacao.cliente.nomeFantasia}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-lg-4">
+								<div class="form-group">
+									<label for="cpfCnpjCliente">CPF/CNPJ</label>
+									<input id="cpfCnpjCliente" name="cpfCnpjCliente" type="text" class="form-control" placeholder="CPF/CNPJ" jsf:value="#{alocacaoMB.alocacao.cliente.cpfCnpj}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+						</p:fieldset>
+					
+						<p:fieldset style="margin-bottom:20px" styleClass="">
+							<legend>Máquina</legend>
+							<div class="col-lg-4">
+								<div class="form-group">
+									<label for="codigoMaquina">Código *</label>
+									<h:inputText id="codigoMaquina" name="codigoMaquina" type="text" class="form-control" pt:placeholder="Código" value="#{alocacaoMB.alocacao.maquina.codigo}" required="true" maxlength="20"
+										requiredMessage="O campo código da máquina é obrigatório" disabled="true" readonly="true">
+										<f:ajax event="blur" listener="#{alocacaoMB.selecionarMaquina(alocacaoMB.alocacao.maquina.codigo)}" render="codigoMaquina maquinaModelo dataAquisicao" />
+									</h:inputText>
+									<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigoMaquina, codigoContrato"/>
+								</div>
+							</div>
+							
+							<div class="col-lg-4">
+								<div class="form-group">
+									<label for="maquinaModelo">Modelo</label>
+									<input id="maquinaModelo" name="maquinaModelo" type="text" class="form-control" placeholder="Nome fantasia" jsf:value="#{alocacaoMB.alocacao.maquina.modelo}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-lg-4">
+								<div class="form-group">
+									<label for="dataAquisicao">Data aquisição</label>
+									<input id="dataAquisicao" name="dataAquisicao" type="text" class="form-control" placeholder="Tipo pessoa" jsf:value="#{alocacaoMB.alocacao.maquina.dataAquisicao}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+						</p:fieldset>
+						
+						<p:fieldset style="margin-bottom:20px" styleClass="">
+							<legend>Contrato</legend>
+							<div class="col-lg-4">
+								<div class="form-group">
+									<label for="codigoContrato">Código *</label>
+									<h:inputText id="codigoContrato" name="codigo" type="text" class="form-control" pt:placeholder="Código" value="#{alocacaoMB.alocacao.contrato.codigo}" required="true" maxlength="20"
+										requiredMessage="O campo código do contrato é obrigatório" disabled="true" readonly="true">
+										 <f:ajax event="blur" listener="#{alocacaoMB.selecionarContrato(alocacaoMB.alocacao.contrato.codigo)}" render="codigoContrato modalidadeContrato descricaoContrato" />
+									</h:inputText>
+								</div>
+							</div>
+							
+							<div class="col-lg-4">
+								<div class="form-group">
+									<label for="modalidadeContrato">Modalidade</label>
+									<input id="modalidadeContrato" name="modalidadeContrato" type="text" class="form-control" placeholder="Nome fantasia" jsf:value="#{alocacaoMB.alocacao.contrato.modalidade}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+							
+							<div class="col-lg-4">
+								<div class="form-group">
+									<label for="descricaoContrato">Descrição</label>
+									<input id="descricaoContrato" name="descricaoContrato" type="text" class="form-control" placeholder="Tipo pessoa" jsf:value="#{alocacaoMB.alocacao.contrato.descricao}" disabled="disabled" readonly="readonly"/>				 
+								</div>
+							</div>
+						</p:fieldset>
+					</div>
+					
+        			<div class="col-lg-12">
+						<div class="form-group">
+							<div class="required">* Campos obrigatórios</div>
+						</div>
+					</div>
+				</div>
+	     		<div class="row">	
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandLink id="btn-signup" class="btn btn-primary" actionListener="#{alocacaoMB.desalocar}" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-saved"></i>&nbsp;Confirmar desalocação&nbsp;
+							</h:commandLink>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<a id="btn-cancel" class="btn btn-warning" href="#{request.contextPath}/admin/tela_inicial.xhtml" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+							</a>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:panel>
+	</ui:define>
+
+</ui:composition>

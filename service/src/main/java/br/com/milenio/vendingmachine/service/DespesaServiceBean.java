@@ -32,6 +32,8 @@ public class DespesaServiceBean implements DespesaService {
 			
 			if(maquina == null) {
 				throw new InconsistenciaException("O código da máquina é inválido");
+			} else if ("INATIVADA".equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
+				throw new InconsistenciaException("Máquinas inativadas não podem ter novas movimentações financeiras cadastradas.");
 			}
 		}
 		
@@ -91,6 +93,15 @@ public class DespesaServiceBean implements DespesaService {
 			
 			if(maquina == null) {
 				throw new InconsistenciaException("O código da máquina é inválido");
+			} else if ("INATIVADA".equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
+				// Busca os dados atual da receita no banco de dados
+				Despesa despesaAtual = despesaRepository.findById(despesa.getId());
+				
+				// Se a máquina está inativada, valida se a máquina da despesa sendo editada é a mesma do cadastro,
+				// se for deixa passar, caso contrário joga uma exception
+				if(!despesaAtual.getMaquina().getId().equals(despesa.getMaquina().getId())) {
+					throw new InconsistenciaException("Máquinas inativadas não podem ter novas movimentações financeiras vinculadas pela edição.");
+				}
 			}
 		}
 		
