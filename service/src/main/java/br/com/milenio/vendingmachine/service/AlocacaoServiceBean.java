@@ -14,6 +14,7 @@ import br.com.milenio.vendingmachine.domain.model.Cliente;
 import br.com.milenio.vendingmachine.domain.model.Contrato;
 import br.com.milenio.vendingmachine.domain.model.Maquina;
 import br.com.milenio.vendingmachine.domain.model.MaquinaStatus;
+import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
 import br.com.milenio.vendingmachine.repository.AlocacaoRepository;
 import br.com.milenio.vendingmachine.repository.ClienteRepository;
@@ -126,8 +127,8 @@ public class AlocacaoServiceBean implements AlocacaoService {
 	}
 
 	@Override
-	public void desalocar(Alocacao alocacao) throws InconsistenciaException {
-		Maquina maquina = alocacao.getMaquina();
+	public void solicitarDesalocacao(Alocacao alocacao) throws InconsistenciaException {
+		Maquina maquina = maquinaRepository.findById(alocacao.getMaquina().getId());
 		
 		if(!"ALOCADA PARA CLIENTE".equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
 			throw new InconsistenciaException("Apenas máquinas alocadas em clientes podem ter uma solicitação de desalocação cadastrada.");
@@ -136,7 +137,11 @@ public class AlocacaoServiceBean implements AlocacaoService {
 		// Coloca a máquina para pendente de desalocação
 		MaquinaStatus ms = maquinaStatusRepository.findByDescricao("PENDENTE DE DESALOCAÇÃO");
 		maquina.setMaquinaStatus(ms);
-		maquinaRepository.persist(maquina);
+		maquinaRepository.merge(maquina);
+		
+		// Informa a data de solicitação de desalocação
+		alocacao.setDataCadastroDesalocacao(new Date());
+		alocacaoRepository.merge(alocacao);
 	}
 
 	@Override
@@ -156,5 +161,103 @@ public class AlocacaoServiceBean implements AlocacaoService {
 		alocacaoRepository.remove(alocacao);
 		
 		return alocacao;
+	}
+
+	@Override
+	public List<Alocacao> buscarComFiltro(Alocacao alocacao) throws CadastroInexistenteException {
+		List<Alocacao> alocacoes;
+		
+		String codCliente = alocacao.getCliente().getCodigo();
+		String codContrato = alocacao.getContrato().getCodigo();
+		String codMaquina = alocacao.getMaquina().getCodigo();
+		
+		// Se não houver filtros informados, fará a busca de todos os registros
+		if((codCliente == null || codCliente.isEmpty()) && (codContrato == null || codContrato.isEmpty()) && (codMaquina == null || codMaquina.isEmpty()) &&
+				alocacao.getDataAlocacao() == null && alocacao.getDataDesalocacao() == null) {
+			alocacoes = alocacaoRepository.getAll();
+			
+			if(alocacoes.isEmpty()) {
+				throw new CadastroInexistenteException("Não existem alocações cadastradas no sistema");
+			}
+			
+			return alocacoes;
+		} else {
+			alocacoes = alocacaoRepository.buscarComFiltro(alocacao);
+			
+			if(alocacoes.isEmpty()) {
+				throw new CadastroInexistenteException("Não existe nenhuma alocação para o filtro informado.");
+			}
+			
+			return alocacoes;
+		}
+	
+	}
+
+	@Override
+	public void alocar(Alocacao alocacao) throws InconsistenciaException {
+		LOGGER.info("Tentato confirmar a alocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia());
+		Maquina maquina = null;
+		
+		// Validação da máquina
+		String codigoMaquina = alocacao.getMaquina().getCodigo();
+		if(codigoMaquina == null || codigoMaquina.isEmpty()) {
+			throw new InconsistenciaException("O código da máquina não é válido");
+		} else {
+			maquina = maquinaRepository.findByCodigo(codigoMaquina);
+			
+			if(maquina == null) {
+				throw new InconsistenciaException("O código da máquina não é válido");
+			}
+			
+			if(!"PENDENTE DE ALOCAÇÃO".equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
+				throw new InconsistenciaException("Apenas máquinas que estejam pendentes de alocação podem ter uma confirmação de alocação cadastrada.");
+			}
+		}
+		
+		// Coloca a situação da máquina em ALOCADA PARA CLIENTE
+		MaquinaStatus ms = maquinaStatusRepository.findByDescricao("ALOCADA PARA CLIENTE");
+		maquina.setMaquinaStatus(ms);
+		maquinaRepository.merge(maquina);
+		
+		// Salva a alocação
+		alocacao.setDataAlocacao(new Date());
+		alocacaoRepository.merge(alocacao);
+		
+		LOGGER.info("Confirmação de alocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia() + " realizada com SUCESSO.");
+		LOGGER.info("A máquina " + alocacao.getMaquina().getCodigo() + " agora está com status " + maquina.getMaquinaStatus().getDescricao());
+	}
+	
+	@Override
+	public void desalocar(Alocacao alocacao) throws InconsistenciaException {
+		LOGGER.info("Tentato confirmar a desalocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia());
+		Maquina maquina = null;
+		
+		// Validação da máquina
+		String codigoMaquina = alocacao.getMaquina().getCodigo();
+		if(codigoMaquina == null || codigoMaquina.isEmpty()) {
+			throw new InconsistenciaException("O código da máquina não é válido");
+		} else {
+			maquina = maquinaRepository.findByCodigo(codigoMaquina);
+			
+			if(maquina == null) {
+				throw new InconsistenciaException("O código da máquina não é válido");
+			}
+			
+			if(!"PENDENTE DE DESALOCAÇÃO".equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
+				throw new InconsistenciaException("Apenas máquinas que estejam pendentes de desalocação podem ter uma confirmação de desalocação cadastrada.");
+			}
+		}
+		
+		// Coloca a situação da máquina para EM ESTOQUE
+		MaquinaStatus ms = maquinaStatusRepository.findByDescricao("EM ESTOQUE");
+		maquina.setMaquinaStatus(ms);
+		maquinaRepository.merge(maquina);
+		
+		// Salva a alocação
+		alocacao.setDataDesalocacao(new Date());
+		alocacaoRepository.merge(alocacao);
+		
+		LOGGER.info("Confirmação de desalocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia() + " realizada com SUCESSO.");
+		LOGGER.info("A máquina " + alocacao.getMaquina().getCodigo() + " agora está com status " + maquina.getMaquinaStatus().getDescricao());
 	}
 }

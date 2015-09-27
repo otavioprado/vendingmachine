@@ -1,5 +1,6 @@
 package br.com.milenio.vendingmachine.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -32,4 +33,45 @@ public class AlocacaoRepositoryBean extends AbstractVendingMachineRepositoryBean
 		
 		return alocacoes;
 	}
+
+	@Override
+	public List<Alocacao> buscarComFiltro(Alocacao alocacao) {
+		UaiCriteria<Alocacao> uaiCriteria = UaiCriteriaFactory.createQueryCriteria(getEntityManager(), Alocacao.class);
+		
+		String codCliente = alocacao.getCliente().getCodigo();
+		String codContrato = alocacao.getContrato().getCodigo();
+		String codMaquina = alocacao.getMaquina().getCodigo();
+		
+		if(codCliente != null && !codCliente.isEmpty()) {
+			uaiCriteria.innerJoin("cliente");
+			uaiCriteria.andEquals("cliente.codigo", codCliente);
+		}
+		
+		if(codContrato != null && !codContrato.isEmpty()) {
+			uaiCriteria.innerJoin("contrato");
+			uaiCriteria.andEquals("contrato.codigo", codContrato);
+		}
+		
+		if(codMaquina != null && !codMaquina.isEmpty()) {
+			uaiCriteria.innerJoin("maquina");
+			uaiCriteria.andEquals("maquina.codigo", codMaquina);
+		}
+		
+		Date dataAlocacao = alocacao.getDataAlocacao();
+		Date dataDesalocacao = alocacao.getDataDesalocacao();
+		
+		if(dataAlocacao != null && dataDesalocacao == null) {
+			uaiCriteria.andGreaterOrEqualTo("dataAlocacao", dataAlocacao);
+		} else if(dataDesalocacao != null && dataAlocacao == null) {
+			uaiCriteria.andLessOrEqualTo("dataDesalocacao", dataDesalocacao);
+		} else if(dataAlocacao != null && dataDesalocacao != null) {
+			uaiCriteria.andBetween("dataAlocacao", dataAlocacao, dataDesalocacao);
+		}
+		
+		List<Alocacao> alocacoes = (List<Alocacao>) uaiCriteria.getResultList();
+		
+		return alocacoes;
+	}
+	
+	
 }

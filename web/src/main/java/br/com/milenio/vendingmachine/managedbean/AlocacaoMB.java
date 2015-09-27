@@ -22,7 +22,6 @@ import br.com.milenio.vendingmachine.domain.model.Alocacao;
 import br.com.milenio.vendingmachine.domain.model.Auditoria;
 import br.com.milenio.vendingmachine.domain.model.Cliente;
 import br.com.milenio.vendingmachine.domain.model.Contrato;
-import br.com.milenio.vendingmachine.domain.model.Fornecedor;
 import br.com.milenio.vendingmachine.domain.model.Maquina;
 import br.com.milenio.vendingmachine.domain.model.MaquinaStatus;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
@@ -78,6 +77,8 @@ public class AlocacaoMB implements Serializable {
 	private List<Maquina> listMaquinas = new ArrayList<Maquina>();
 	private List<Contrato> listContratos = new ArrayList<Contrato>();
 	private List<Cliente> listClientes = new ArrayList<Cliente>();
+	private List<Alocacao> listAlocacoes = new ArrayList<Alocacao>();
+	private Alocacao alocacaoConsParam = new Alocacao();
 	
 	public void cadastrar() {
 		logger.debug("Tentando realizar o cadastro da alocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia());
@@ -87,14 +88,66 @@ public class AlocacaoMB implements Serializable {
 			alocacaoService.cadastrar(alocacao);
 			
 			// Sucesso - Exibe mensagem de cadastro realizado com sucesso
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Alocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia() + " cadastrada com sucesso.", null));
-			logger.info("Alocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia() + " cadastrada com sucesso.");
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitação de alocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia() + " cadastrada com sucesso.", null));
+			logger.info("Solicitação de alocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia() + " cadastrada com sucesso.");
 			
 			// Processo de auditoria de cadastro de usuário
 			Auditoria auditoria = new Auditoria();
 			auditoria.setDataAcao(new Date());
 			auditoria.setTitulo("Cadastro");
-			auditoria.setDescricao("Cadastrou uma alocação para a máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia());
+			auditoria.setDescricao("Cadastrou uma solicitação de alocação para a máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia());
+			auditoria.setUsuario(Seguranca.getUsuarioLogado());
+			auditoria.setIp(request.getRemoteAddr());
+			auditoriaService.cadastrarNovaAcao(auditoria);
+		} catch (InconsistenciaException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+			logger.info(e.getMessage());
+		}
+		
+		alocacao = new Alocacao(); 
+	}
+	
+	public void alocar() {
+		logger.debug("[Contingência] Tentando realizar a confirmação de alocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia());
+		
+		try {
+			alocacaoService.alocar(alocacao);
+			
+			// Sucesso - Exibe mensagem de alocação realizada com sucesso
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Alocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia() + " realizada com sucesso.", null));
+			logger.info("Alocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia() + " realizada com sucesso.");
+			
+			// Processo de auditoria de cadastro de usuário
+			Auditoria auditoria = new Auditoria();
+			auditoria.setDataAcao(new Date());
+			auditoria.setTitulo("Cadastro");
+			auditoria.setDescricao("Cadastrou uma confirmação de alocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia());
+			auditoria.setUsuario(Seguranca.getUsuarioLogado());
+			auditoria.setIp(request.getRemoteAddr());
+			auditoriaService.cadastrarNovaAcao(auditoria);
+		} catch (InconsistenciaException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+			logger.info(e.getMessage());
+		}
+		
+		alocacao = new Alocacao(); 
+	}
+	
+	public void desalocar() {
+		logger.debug("[Contingência] Tentando realizar a confirmação de desalocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia());
+		
+		try {
+			alocacaoService.desalocar(alocacao);
+			
+			// Sucesso - Exibe mensagem de alocação realizada com sucesso
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Desalocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia() + " realizada com sucesso.", null));
+			logger.info("Desalocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia() + " realizada com sucesso.");
+			
+			// Processo de auditoria de cadastro de usuário
+			Auditoria auditoria = new Auditoria();
+			auditoria.setDataAcao(new Date());
+			auditoria.setTitulo("Cadastro");
+			auditoria.setDescricao("Cadastrou uma confirmação de desalocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia());
 			auditoria.setUsuario(Seguranca.getUsuarioLogado());
 			auditoria.setIp(request.getRemoteAddr());
 			auditoriaService.cadastrarNovaAcao(auditoria);
@@ -116,21 +169,21 @@ public class AlocacaoMB implements Serializable {
 		carregarPagina = false;
 	}
 	
-	public void desalocar() {
-		logger.debug("Tentando realizar a desalocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia());
+	public void solicitarDesalocacao() {
+		logger.debug("Tentando realizar a solicitação de desalocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia());
 		
 		try {
-			alocacaoService.desalocar(alocacao);
+			alocacaoService.solicitarDesalocacao(alocacao);
 			
 			// Sucesso - Exibe mensagem de desalocação realizada com sucesso
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Desalocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia() + " realizada com sucesso.", null));
-			logger.info("Desalocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia() + " realizada com sucesso.");
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitação de desalocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia() + " realizada com sucesso.", null));
+			logger.info("Solicitação de desalocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia() + " realizada com sucesso.");
 			
 			// Processo de auditoria de cadastro de usuário
 			Auditoria auditoria = new Auditoria();
 			auditoria.setDataAcao(new Date());
 			auditoria.setTitulo("Cadastro");
-			auditoria.setDescricao("Cadastrou uma desalocação para a máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia());
+			auditoria.setDescricao("Cadastrou uma solicitação de desalocação para a máquina " + alocacao.getMaquina().getCodigo() + " do cliente " + alocacao.getCliente().getNomeFantasia());
 			auditoria.setUsuario(Seguranca.getUsuarioLogado());
 			auditoria.setIp(request.getRemoteAddr());
 			auditoriaService.cadastrarNovaAcao(auditoria);
@@ -139,9 +192,29 @@ public class AlocacaoMB implements Serializable {
 			logger.info(e.getMessage());
 		}
 		alocacao = new Alocacao(); 
+		
+		try {
+			external.getFlash().setKeepMessages(true);
+			external.redirect(request.getContextPath() + "/admin/consultaAlocacao.xhtml");
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.error("Erro ao tentar redirecionar para a página " + request.getContextPath() + "/consultaAlocacao.xhtml");
+		}
 	}
 	
-	public void excluirPelaEdicao() {
+	public void consultar() {
+		try {
+			listAlocacoes = alocacaoService.buscarComFiltro(alocacaoConsParam);
+		} catch (CadastroInexistenteException e) {
+			if(listAlocacoes != null && !listAlocacoes.isEmpty()) {
+				listAlocacoes.clear();
+			}
+
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
+		}
+	}
+	
+	public void excluir() {
 		Alocacao aloc;
 		try {
 			aloc = alocacaoService.excluir(alocacao.getId());
@@ -354,5 +427,21 @@ public class AlocacaoMB implements Serializable {
 
 	public void setListClientes(List<Cliente> listClientes) {
 		this.listClientes = listClientes;
+	}
+
+	public Alocacao getAlocacaoConsParam() {
+		return alocacaoConsParam;
+	}
+
+	public void setAlocacaoConsParam(Alocacao alocacaoConsParam) {
+		this.alocacaoConsParam = alocacaoConsParam;
+	}
+
+	public List<Alocacao> getListAlocacoes() {
+		return listAlocacoes;
+	}
+
+	public void setListAlocacoes(List<Alocacao> listAlocacoes) {
+		this.listAlocacoes = listAlocacoes;
 	}
 }

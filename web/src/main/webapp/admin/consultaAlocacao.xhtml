@@ -1,0 +1,204 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;"> 
+]>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+    template="layoutLogado.xhtml">
+    
+    <ui:define name="script">
+		<h:outputScript name="js/datepicker-pt-BR.js" />
+
+		<script>
+			$(function() {
+				$("#dtAlocacao").datepicker($.datepicker.regional["pt-BR"]);
+				$("#dtDesalocacao").datepicker($.datepicker.regional["pt-BR"]);
+			});
+		</script>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<p:panel id="basic" header="Filtro de pesquisa de alocações" style="margin-bottom:20px">
+			<h:form prependId="false">
+				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="row">
+				
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="codigo">Código do cliente</label>
+							<input id="codigo" name="codigoCliente" type="text" class="form-control" placeholder="Código do cliente" jsf:value="#{alocacaoMB.alocacaoConsParam.cliente.codigo}" />
+							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigoCliente"/>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="codigo">Código da máquina</label>
+							<input id="codigo" name="codigoMaquina" type="text" class="form-control" placeholder="Código da máquina" jsf:value="#{alocacaoMB.alocacaoConsParam.maquina.codigo}" />
+							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigoMaquina"/>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="codigo">Código do contrato</label>
+							<input id="codigo" name="codigoContrato" type="text" class="form-control" placeholder="Código do contrato" jsf:value="#{alocacaoMB.alocacaoConsParam.contrato.codigo}" />
+							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigoContrato"/>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="dtAlocacao">Data início da alocação</label>
+							<h:inputText id="dtAlocacao" name="dtAlocacao" value="#{alocacaoMB.alocacaoConsParam.dataAlocacao}" 
+								styleClass="form-control" maxlength="10" pt:placeholder="Data de alocação">
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+							</h:inputText>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="dtDesalocacao">Data fim da alocação</label>
+							<h:inputText id="dtDesalocacao" name="dtDesalocacao" value="#{alocacaoMB.alocacaoConsParam.dataDesalocacao}" 
+								styleClass="form-control" maxlength="10" pt:placeholder="Data de desalocação">
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+							</h:inputText>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandLink id="btn-signup" class="btn btn-primary" actionListener="#{alocacaoMB.consultar}" update="table-alocacoes" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-search"></i>&nbsp;Pesquisar&nbsp;
+							</h:commandLink>
+						</div>
+					</div>
+				</div>
+			</h:form>
+			<c:if test="${not empty alocacaoMB.listAlocacoes}">
+			
+					<h:form prependId="false">
+						<p:dataTable tableStyleClass="table-hover" id="table-alocacoes" var="alocacao" value="#{alocacaoMB.listAlocacoes}" rows="10" paginator="true" paginatorPosition="bottom"
+							paginatorAlwaysVisible="false" rowsPerPageTemplate="10,15,20,25,30">
+							<h:inputHidden id="idAlocacao" value="#{alocacao.id}" />
+							
+							<p:column headerText="Código do cliente">
+								<h:outputText id="codigoCliente" value="#{alocacao.cliente.codigo}" />
+							</p:column>
+							
+							<p:column headerText="Código da máquina">
+								<h:outputText id="codigoMaquina" value="#{alocacao.maquina.codigo}" />
+							</p:column>
+							
+							<p:column headerText="Código do contrato">
+								<h:outputText id="codigoContrato" value="#{alocacao.contrato.codigo}" />
+							</p:column>
+							
+							<p:column headerText="Data de cadastro da alocação">
+								<h:outputText id="dataCadastroAlocacao" value="#{alocacao.dataCadastroAlocacao}">
+									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+								</h:outputText>
+							</p:column>
+							
+							<p:column headerText="Data da alocação">
+								<h:outputText id="dataAlocacao" value="#{alocacao.dataAlocacao}">
+									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+								</h:outputText>
+							</p:column>
+							
+							<p:column headerText="Data de cadastro da desalocação">
+								<h:outputText id="dataCadastroDesalocacao" value="#{alocacao.dataCadastroDesalocacao}">
+									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+								</h:outputText>
+							</p:column>
+							
+							<p:column headerText="Data da desalocação">
+								<h:outputText id="dataDesalocacao" value="#{alocacao.dataDesalocacao}">
+									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+								</h:outputText>
+							</p:column>
+							
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_ALOCACAO') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_DESALOCACAO') eq true
+								or seguranca.getPermissaoUsuarioLogado('ROLE_CONTINGENCY_CONFIRMAR_ALOCACAO') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_CONTINGENCY_CONFIRMAR_DESALOCACAO') eq true}">
+								<p:column style="width:128px; text-align: center" headerText="Ações">
+						            
+						            <c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_ALOCACAO') eq true}">
+										<p:commandButton onclick="PF('dlgExcluir').show();" icon="ui-icon-trash" title="Excluir solicitação de alocação" 
+											rendered="#{alocacao.dataAlocacao eq null}">
+											<f:setPropertyActionListener value="#{alocacao.id}" target="#{alocacaoMB.alocacao.id}" />
+							            </p:commandButton>
+						            </c:if>
+						            
+						            <c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_DESALOCACAO') eq true}">
+							            <p:button icon="ui-icon-arrowthick-1-sw" title="Solicitar desalocação" outcome="desalocacao.xhtml"
+							            	rendered="#{alocacao.dataAlocacao ne null and alocacao.dataCadastroDesalocacao eq null}">
+											<f:param name="alocacaoId" value="#{alocacao.id}" />
+										</p:button>
+									</c:if>
+									
+									<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CONTINGENCY_CONFIRMAR_ALOCACAO') eq true}">
+							            <p:commandButton icon="ui-icon-seek-next" title="Confirmar alocação por contingência" outcome="desalocacao.xhtml?alocacaoId=#{alocacao.id}"
+							            	rendered="#{alocacao.dataAlocacao eq null}" action="#{alocacaoMB.alocar}" update="table-alocacoes">
+											<f:setPropertyActionListener value="#{alocacao}" target="#{alocacaoMB.alocacao}" />
+										</p:commandButton>
+									</c:if>
+									
+									<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CONTINGENCY_CONFIRMAR_DESALOCACAO') eq true}">
+							            <p:commandButton icon="ui-icon-seek-prev" title="Confirmar desalocação por contingência" outcome="desalocacao.xhtml?alocacaoId=#{alocacao.id}"
+							            	rendered="#{alocacao.dataAlocacao ne null and alocacao.dataCadastroDesalocacao ne null and alocacao.dataDesalocacao eq null}" action="#{alocacaoMB.desalocar}" update="table-alocacoes">
+											<f:setPropertyActionListener value="#{alocacao}" target="#{alocacaoMB.alocacao}" />
+										</p:commandButton>
+									</c:if>
+
+									
+								</p:column>
+							</c:if>
+						</p:dataTable>
+					</h:form>
+			</c:if>
+		</p:panel>
+		
+		<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_ALOCACAO') eq true}">
+			<h:form prependId="false">
+				<p:dialog widgetVar="dlgExcluir" width="450" showHeader="false" resizable="false" modal="true">
+					<div class="form-group">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label for="nome">Tem certeza que deseja excluir esta solicitação de alocação? Essa operação não poderá ser desfeita!</label>
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="form-group">
+									<h:commandLink id="btn-excluir" class="btn btn-primary" action="#{alocacaoMB.excluir}" 
+										style="width: 100%; color:white;" update="table-alocacoes">
+										<i class="glyphicon glyphicon-trash"></i>&nbsp;Excluir&nbsp;
+									</h:commandLink>
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="form-group">
+									<h:commandLink id="btn-excluir-cancel" class="btn btn-warning" onclick="PF('dlgExcluir').hide();" style="width: 100%; color:white;" type="button" immediate="true">
+										<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+									</h:commandLink>
+								</div>
+							</div>
+						</div>
+					</div>
+				</p:dialog>
+			</h:form>
+		</c:if>
+		
+	</ui:define>
+
+</ui:composition>

@@ -11,4 +11,6 @@ import br.com.milenio.vendingmachine.domain.model.Alocacao;
 public interface AlocacaoRepository extends Repository<Alocacao, Long> {
 
 	List<Alocacao> findAlocacoesAtivasByCliente(Long clienteId);
+
+	List<Alocacao> buscarComFiltro(Alocacao alocacao);
 }
