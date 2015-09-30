@@ -46,7 +46,8 @@ public class ClientesWebService {
 		for(Cliente cliente : lstClientes) {
 			// Contruindo o motivo do bloqueio
 			JsonObjectBuilder clienteJsonBuilder = Json.createObjectBuilder();
-			clienteJsonBuilder.add("nome-fantasia", cliente.getNomeFantasia());
+			clienteJsonBuilder.add("id", cliente.getId());
+			clienteJsonBuilder.add("nomeFantasia", cliente.getNomeFantasia());
 			JsonObject jsonUsuario = clienteJsonBuilder.build();
 			
 			clientesBuilder.add(jsonUsuario);

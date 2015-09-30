@@ -24,6 +24,7 @@ import br.com.milenio.vendingmachine.domain.model.Cliente;
 import br.com.milenio.vendingmachine.domain.model.Contrato;
 import br.com.milenio.vendingmachine.domain.model.Maquina;
 import br.com.milenio.vendingmachine.domain.model.MaquinaStatus;
+import br.com.milenio.vendingmachine.domain.model.Reserva;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
 import br.com.milenio.vendingmachine.repository.MaquinaStatusRepository;
@@ -33,6 +34,7 @@ import br.com.milenio.vendingmachine.service.AuditoriaService;
 import br.com.milenio.vendingmachine.service.ClienteService;
 import br.com.milenio.vendingmachine.service.ContratoService;
 import br.com.milenio.vendingmachine.service.MaquinaService;
+import br.com.milenio.vendingmachine.service.ReservaService;
 
 @Named
 @ViewScoped
@@ -59,6 +61,9 @@ public class AlocacaoMB implements Serializable {
 	
 	@Inject
 	private AuditoriaService auditoriaService;
+	
+	@Inject
+	private ReservaService reservaService;
 	
 	@Inject
 	private HttpServletRequest request;
@@ -202,7 +207,7 @@ public class AlocacaoMB implements Serializable {
 		}
 	}
 	
-	public void consultar() {
+	public void consultar(boolean exibirMensagem) {
 		try {
 			listAlocacoes = alocacaoService.buscarComFiltro(alocacaoConsParam);
 		} catch (CadastroInexistenteException e) {
@@ -210,7 +215,9 @@ public class AlocacaoMB implements Serializable {
 				listAlocacoes.clear();
 			}
 
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
+			if(exibirMensagem) {
+				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
+			}
 		}
 	}
 	
@@ -237,6 +244,9 @@ public class AlocacaoMB implements Serializable {
 		auditoria.setUsuario(Seguranca.getUsuarioLogado());
 		auditoria.setIp(request.getRemoteAddr());
 		auditoriaService.cadastrarNovaAcao(auditoria);
+		
+		// Recarrega a listagem de contratos
+		consultar(false);
 	}
 	
 	public void carregarAlocacao() {
@@ -271,17 +281,30 @@ public class AlocacaoMB implements Serializable {
 	public void selecionarMaquina(String codigo) {
 		Maquina maq = maquinaService.findByCodigo(codigo);
 		
-		if(maq != null) {
-			if(!"EM ESTOQUE".equalsIgnoreCase(maq.getMaquinaStatus().getDescricao())) {
-				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Código inválido: O código " + codigo + " informado não corresponde a uma máquina disponível em estoque.", null));
-				alocacao.setMaquina(new Maquina());
-				return;
-			}
-			alocacao.setMaquina(maq);
-		} else{
+		if(maq == null) {
 			alocacao.setMaquina(new Maquina());
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Código inválido: O código " + codigo + " informado não corresponde a nenhuma máquina cadastrada no sistema.", null));
 			return;
+		}
+		
+		String descricao = maq.getMaquinaStatus().getDescricao();
+		
+		if(!"EM ESTOQUE".equalsIgnoreCase(descricao) && !"RESERVADA".equalsIgnoreCase(descricao)) {
+			ctx.addMessage("Message2", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Código inválido: O código " + codigo + " informado não corresponde a uma máquina disponível em estoque ou que esteja reservada.", null));
+			alocacao.setMaquina(new Maquina());
+			return;
+		}
+		alocacao.setMaquina(maq);
+		
+		// Se a máquina selecionada tiver uma reserva cadastrada, então tem que ser para o cliente especifico
+		if("RESERVADA".equalsIgnoreCase(descricao)) {
+			Reserva r = new Reserva();
+			r.setMaquina(maq);
+			Reserva resultado = reservaService.buscarComFiltro(r);
+			
+			if(resultado != null) {
+				alocacao.setCliente(resultado.getCliente());
+			}
 		}
 		
 		RequestContext context = RequestContext.getCurrentInstance();
@@ -314,6 +337,12 @@ public class AlocacaoMB implements Serializable {
 			MaquinaStatus maquinaStatus = maquinaStatusRepository.findByDescricao("EM ESTOQUE");
 			maquina.setMaquinaStatus(maquinaStatus);
 			listMaquinas = maquinaService.buscarComFiltro(maquina);
+			
+			// Inclue na listagem todas as máquinas reservadas
+			maquinaStatus = maquinaStatusRepository.findByDescricao("RESERVADA");
+			maquina.setMaquinaStatus(maquinaStatus);
+			listMaquinas.addAll(maquinaService.buscarComFiltro(maquina));
+			
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("PF('dlgConsultaMaquina').show();");
 		} catch (CadastroInexistenteException e) {

@@ -30,6 +30,7 @@
 									<label for="codigoCliente">Código *</label>
 									<h:inputText id="codigoCliente" name="codigoCliente" type="text" class="form-control" pt:placeholder="Código" value="#{alocacaoMB.alocacao.cliente.codigo}" required="true" maxlength="20"
 										requiredMessage="O campo código do cliente é obrigatório">
+										<f:ajax event="blur" listener="#{alocacaoMB.selecionarCliente(alocacaoMB.alocacao.cliente.codigo)}" render="codigoCliente nomeFantasiaCliente cpfCnpjCliente" />
 									</h:inputText>
 									<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigoCliente"/>
 								</div>
@@ -66,7 +67,7 @@
 									<label for="codigoMaquina">Código *</label>
 									<h:inputText id="codigoMaquina" name="codigoMaquina" type="text" class="form-control" pt:placeholder="Código" value="#{alocacaoMB.alocacao.maquina.codigo}" required="true" maxlength="20"
 										requiredMessage="O campo código da máquina é obrigatório">
-										<f:ajax event="blur" listener="#{alocacaoMB.selecionarMaquina(alocacaoMB.alocacao.maquina.codigo)}" render="codigoMaquina maquinaModelo dataAquisicao" />
+										<f:ajax event="blur" listener="#{alocacaoMB.selecionarMaquina(alocacaoMB.alocacao.maquina.codigo)}" render="codigoMaquina maquinaModelo dataAquisicao codigoCliente nomeFantasiaCliente cpfCnpjCliente" />
 									</h:inputText>
 									<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigoMaquina, codigoContrato"/>
 								</div>
@@ -191,7 +192,7 @@
 								<p:dataTable tableStyleClass="table-hover" id="table-maquinas" var="maquina" value="#{alocacaoMB.listMaquinas}" rows="5" paginator="true" paginatorPosition="bottom"
 									paginatorAlwaysVisible="false" rowsPerPageTemplate="5,10" >
 									<p:column style="width:64px; text-align: center" headerText="">
-										<p:commandButton icon="ui-icon-arrowthick-1-e" title="Selecionar" actionListener="#{alocacaoMB.selecionarMaquina(maquina.codigo)}" update="codigoMaquina maquinaModelo dataAquisicao" />
+										<p:commandButton icon="ui-icon-arrowthick-1-e" title="Selecionar" actionListener="#{alocacaoMB.selecionarMaquina(maquina.codigo)}" update="codigoMaquina maquinaModelo dataAquisicao codigoCliente nomeFantasiaCliente cpfCnpjCliente" />
 									</p:column>
 									<p:column headerText="Código">
 										<h:outputText id="maqCodigo" value="#{maquina.codigo}" />

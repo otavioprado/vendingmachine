@@ -135,7 +135,8 @@
 			</c:if>
 			
 			<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_MAQUINA') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_CONS_MAQUINA') eq true or
-				seguranca.getPermissaoUsuarioLogado('ROLE_CAD_ALOCACAO') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_CONS_ALOCACAO') eq true}">
+				seguranca.getPermissaoUsuarioLogado('ROLE_CAD_ALOCACAO') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_CONS_ALOCACAO') eq true or 
+				seguranca.getPermissaoUsuarioLogado('ROLE_CAD_RESERVA') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_CONS_RESERVA')}">
 				<ul class="nav navbar-nav">
 					<li class="dropdown #{view.viewId eq '/admin/maquina.xhtml' or view.viewId eq '/admin/consultaMaquina.xhtml'? 'active' : ''}">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-modal-window"/>Máquina<span class="caret"></span></a>
@@ -151,6 +152,13 @@
 							</c:if>
 							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CONS_ALOCACAO') eq true}">
 								<li class="#{view.viewId eq '/admin/consultaAlocacao.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/consultaAlocacao.xhtml">Consultar alocações</a></li>
+							</c:if>
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_RESERVA') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_CONS_RESERVA') eq true}">
+								<li role="separator" class="divider"></li>
+								<li class="dropdown-header">Reserva</li>
+								<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_RESERVA') eq true}">
+									<li class="#{view.viewId eq '/admin/reserva.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/reserva.xhtml">Cadastrar reserva</a></li>
+								</c:if>
 							</c:if>
 						</ul>
 					</li>

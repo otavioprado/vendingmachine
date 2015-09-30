@@ -14,6 +14,7 @@ import br.com.milenio.vendingmachine.domain.model.Cliente;
 import br.com.milenio.vendingmachine.domain.model.Contrato;
 import br.com.milenio.vendingmachine.domain.model.Maquina;
 import br.com.milenio.vendingmachine.domain.model.MaquinaStatus;
+import br.com.milenio.vendingmachine.domain.model.Reserva;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
 import br.com.milenio.vendingmachine.repository.AlocacaoRepository;
@@ -21,6 +22,7 @@ import br.com.milenio.vendingmachine.repository.ClienteRepository;
 import br.com.milenio.vendingmachine.repository.ContratoRepository;
 import br.com.milenio.vendingmachine.repository.MaquinaRepository;
 import br.com.milenio.vendingmachine.repository.MaquinaStatusRepository;
+import br.com.milenio.vendingmachine.repository.ReservaRepository;
 
 @Stateless
 public class AlocacaoServiceBean implements AlocacaoService {
@@ -38,6 +40,9 @@ public class AlocacaoServiceBean implements AlocacaoService {
 	ClienteRepository clienteRepository;
 	
 	@EJB
+	ReservaRepository reservaRepository;
+	
+	@EJB
 	MaquinaStatusRepository maquinaStatusRepository;
 	
 	private static final Logger LOGGER = LogManager.getLogger(UsuarioServiceBean.class);
@@ -48,22 +53,6 @@ public class AlocacaoServiceBean implements AlocacaoService {
 		Maquina maquina = null;
 		Contrato contrato = null;
 		Cliente cliente = null;
-		
-		// Validação da máquina
-		String codigoMaquina = alocacao.getMaquina().getCodigo();
-		if(codigoMaquina == null || codigoMaquina.isEmpty()) {
-			throw new InconsistenciaException("O código da máquina não é válido");
-		} else {
-			maquina = maquinaRepository.findByCodigo(codigoMaquina);
-			
-			if(maquina == null) {
-				throw new InconsistenciaException("O código da máquina não é válido");
-			}
-			
-			if(!"EM ESTOQUE".equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
-				throw new InconsistenciaException("Apenas máquinas que estejam em estoque podem ter uma solicitação de alocação cadastrada.");
-			}
-		}
 		
 		// Validação do contrato
 		String codigoContrato = alocacao.getContrato().getCodigo();
@@ -94,6 +83,41 @@ public class AlocacaoServiceBean implements AlocacaoService {
 			
 			if(!cliente.getIndAtivo()) {
 				throw new InconsistenciaException("Apenas clientes ativos podem ser utilizados para uma solicitação de alocação.");
+			}
+		}
+		
+		// Validação da máquina
+		String codigoMaquina = alocacao.getMaquina().getCodigo();
+		if(codigoMaquina == null || codigoMaquina.isEmpty()) {
+			throw new InconsistenciaException("O código da máquina não é válido");
+		} else {
+			maquina = maquinaRepository.findByCodigo(codigoMaquina);
+			
+			if(maquina == null) {
+				throw new InconsistenciaException("O código da máquina não é válido");
+			}
+			
+			String descricao = maquina.getMaquinaStatus().getDescricao();
+			
+			if(!"EM ESTOQUE".equalsIgnoreCase(descricao) && !"RESERVADA".equalsIgnoreCase(descricao)) {
+				throw new InconsistenciaException("Apenas máquinas que estejam em estoque ou reservadas podem ter uma solicitação de alocação cadastrada.");
+			}
+			
+			// Se a máquina selecionada tiver uma reserva cadastrada, então tem que ser para o cliente especifico
+			if("RESERVADA".equalsIgnoreCase(descricao)) {
+				Reserva reserva = new Reserva();
+				reserva.setMaquina(maquina);
+				Reserva resultado = reservaRepository.buscarComFiltro(reserva);
+				
+				if(resultado != null) {
+					if(!alocacao.getCliente().getCodigo().equalsIgnoreCase(resultado.getCliente().getCodigo())) {
+						throw new InconsistenciaException("A máquina " + maquina.getCodigo() + " está reservada para o cliente " + resultado.getCliente().getNomeFantasia() + 
+								" e por isso não pode ser alocada para outros clientes.");
+					}
+					
+					// Se o cliente informado é o mesmo da reserva, então pode deletar a reserva
+					reservaRepository.remove(resultado);
+				}
 			}
 		}
 		
