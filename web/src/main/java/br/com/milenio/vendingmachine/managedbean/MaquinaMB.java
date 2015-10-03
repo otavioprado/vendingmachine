@@ -150,8 +150,8 @@ public class MaquinaMB implements Serializable {
 
 		try {
 			maquinaService.editar(maquina);
-		} catch (ConteudoJaExistenteNoBancoDeDadosException e) {
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
+		} catch (ConteudoJaExistenteNoBancoDeDadosException | InconsistenciaException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
 			return;
 		}
 		

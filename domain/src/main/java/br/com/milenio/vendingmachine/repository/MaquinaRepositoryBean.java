@@ -69,4 +69,34 @@ public class MaquinaRepositoryBean extends AbstractVendingMachineRepositoryBean<
 		
 		return maquinas;
 	}
+
+	@Override
+	public List<Maquina> buscarComFiltroComVariosStatus(Maquina maquina, List<String> listMaquinaStatus) {
+		UaiCriteria<Maquina> uaiCriteria = UaiCriteriaFactory.createQueryCriteria(getEntityManager(), Maquina.class);
+		
+		String codigo = maquina.getCodigo();
+		String modelo = maquina.getModelo();
+		Date data = maquina.getDataAquisicao();
+		
+		if(codigo != null && !codigo.isEmpty()) {
+			uaiCriteria.andEquals("codigo", codigo);
+		}
+		
+		if(modelo != null && !modelo.isEmpty()) {
+			uaiCriteria.andEquals("modelo", modelo);
+		}
+		
+		if(listMaquinaStatus != null && !listMaquinaStatus.isEmpty()) {
+			uaiCriteria.innerJoin("maquinaStatus");
+			uaiCriteria.andAttributeIn("maquinaStatus.descricao", listMaquinaStatus);
+		}
+		
+		if(data != null) {
+			uaiCriteria.andEquals("dataAquisicao", data);
+		}
+		
+		List<Maquina> maquinas = (List<Maquina>) uaiCriteria.getResultList();
+		
+		return maquinas;
+	}
 }

@@ -8,14 +8,12 @@ import javax.ejb.Stateless;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import br.com.milenio.vendingmachine.domain.model.Fornecedor;
 import br.com.milenio.vendingmachine.domain.model.Maquina;
 import br.com.milenio.vendingmachine.domain.model.MaquinaStatus;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.exceptions.ConteudoJaExistenteNoBancoDeDadosException;
 import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
 import br.com.milenio.vendingmachine.repository.AuditoriaRepository;
-import br.com.milenio.vendingmachine.repository.FornecedorRepository;
 import br.com.milenio.vendingmachine.repository.MaquinaRepository;
 import br.com.milenio.vendingmachine.repository.MaquinaStatusRepository;
 import br.com.milenio.vendingmachine.repository.PerfilRepository;
@@ -27,7 +25,7 @@ public class MaquinaServiceBean implements MaquinaService {
 	private AuditoriaRepository auditoriaRepository;
 	
 	@EJB
-	private FornecedorRepository fornecedorRepository;
+	private FornecedorService fornecedorService;
 	
 	@EJB
 	private MaquinaStatusRepository maquinaStatusRepository;
@@ -42,16 +40,7 @@ public class MaquinaServiceBean implements MaquinaService {
 
 	@Override
 	public void cadastrar(Maquina maquina) throws ConteudoJaExistenteNoBancoDeDadosException, InconsistenciaException {
-		String codigoFornecedor = maquina.getFornecedor().getCodigo();
-		if(codigoFornecedor == null || codigoFornecedor.isEmpty()) {
-			throw new InconsistenciaException("O código do fornecedor não é inválido");
-		} else {
-			Fornecedor fornecedor = fornecedorRepository.findByCodigo(codigoFornecedor);
-			
-			if(fornecedor == null) {
-				throw new InconsistenciaException("O código do fornecedor não é inválido");
-			}
-		}
+		fornecedorService.validarCodigoFornecedor(maquina.getFornecedor().getCodigo());
 		
 		// Verifica se já existe uma máquina com o mesmo código cadastrado no banco de dados do sistema
 		Maquina maquinaAtual = maquinaRepository.findByCodigo(maquina.getCodigo());
@@ -112,9 +101,11 @@ public class MaquinaServiceBean implements MaquinaService {
 	}
 
 	@Override
-	public void editar(Maquina maquina) throws ConteudoJaExistenteNoBancoDeDadosException {
+	public void editar(Maquina maquina) throws ConteudoJaExistenteNoBancoDeDadosException, InconsistenciaException {
 		// Carrega um objeto com os dados atuais da máquina sendo editada
 		Maquina maquinaAtual = maquinaRepository.findById(maquina.getId());
+		
+		fornecedorService.validarCodigoFornecedor(maquina.getFornecedor().getCodigo());
 		
 		Maquina resultado = null;
 		// Se houve mudança no codigo, é necessário validar se o novo código já não existe no sistema
@@ -135,5 +126,32 @@ public class MaquinaServiceBean implements MaquinaService {
 	@Override
 	public Maquina findByCodigo(String codigo) {
 		return maquinaRepository.findByCodigo(codigo);
+	}
+
+	@Override
+	public List<Maquina> buscarComFiltroComVariosStatus(Maquina maquina, List<String> listMaquinaStatus)
+			throws CadastroInexistenteException {
+		List<Maquina> maquinas;
+		
+		// Se não houver filtros informados (INCLUSIVE A LISTA DE STATUS), então fará a busca de todos os registros
+		if((maquina.getCodigo() == null || maquina.getCodigo().isEmpty()) && (maquina.getModelo() == null || maquina.getModelo().isEmpty()) &&
+				(maquina.getMaquinaStatus().getDescricao() == null || maquina.getMaquinaStatus().getDescricao().isEmpty()) && maquina.getDataAquisicao() == null
+				&& listMaquinaStatus.isEmpty()) {
+			maquinas = maquinaRepository.getAll();
+			
+			if(maquinas.isEmpty()) {
+				throw new CadastroInexistenteException("Não existem máquinas cadastrados no sistema");
+			}
+			
+			return maquinas;
+		} else {
+			maquinas = maquinaRepository.buscarComFiltroComVariosStatus(maquina, listMaquinaStatus);
+			
+			if(maquinas.isEmpty()) {
+				throw new CadastroInexistenteException("Não existe nenhum cadastro de máquina para o filtro informado.");
+			}
+			
+			return maquinas;
+		}
 	}
 }

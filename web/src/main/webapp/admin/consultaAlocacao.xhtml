@@ -31,24 +31,27 @@
 				
 					<div class="col-lg-4">
 						<div class="form-group">
-							<label for="codigo">Código do cliente</label>
-							<input id="codigo" name="codigoCliente" type="text" class="form-control" placeholder="Código do cliente" jsf:value="#{alocacaoMB.alocacaoConsParam.cliente.codigo}" />
+							<label for="codigoCliente">Código do cliente</label>
+							<input id="codigoCliente" name="codigoCliente" type="text" class="form-control" placeholder="Código do cliente" 
+								jsf:value="#{alocacaoMB.alocacaoConsParam.cliente.codigo}" maxlength="20"/>
 							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigoCliente"/>
 						</div>
 					</div>
 					
 					<div class="col-lg-4">
 						<div class="form-group">
-							<label for="codigo">Código da máquina</label>
-							<input id="codigo" name="codigoMaquina" type="text" class="form-control" placeholder="Código da máquina" jsf:value="#{alocacaoMB.alocacaoConsParam.maquina.codigo}" />
+							<label for="codigoMaquina">Código da máquina</label>
+							<input id="codigoMaquina" name="codigoMaquina" type="text" class="form-control" placeholder="Código da máquina" 
+								jsf:value="#{alocacaoMB.alocacaoConsParam.maquina.codigo}" maxlength="20"/>
 							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigoMaquina"/>
 						</div>
 					</div>
 					
 					<div class="col-lg-4">
 						<div class="form-group">
-							<label for="codigo">Código do contrato</label>
-							<input id="codigo" name="codigoContrato" type="text" class="form-control" placeholder="Código do contrato" jsf:value="#{alocacaoMB.alocacaoConsParam.contrato.codigo}" />
+							<label for="codigoContrato">Código do contrato</label>
+							<input id="codigoContrato" name="codigoContrato" type="text" class="form-control" placeholder="Código do contrato" 
+								jsf:value="#{alocacaoMB.alocacaoConsParam.contrato.codigo}" maxlength="20"/>
 							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigoContrato"/>
 						</div>
 					</div>

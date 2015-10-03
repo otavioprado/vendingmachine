@@ -8,12 +8,10 @@ import javax.ejb.Stateless;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import br.com.milenio.vendingmachine.domain.model.Fornecedor;
 import br.com.milenio.vendingmachine.domain.model.Produto;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.exceptions.ConteudoJaExistenteNoBancoDeDadosException;
 import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
-import br.com.milenio.vendingmachine.repository.FornecedorRepository;
 import br.com.milenio.vendingmachine.repository.ProdutoRepository;
 
 @Stateless
@@ -23,7 +21,7 @@ public class ProdutoServiceBean implements ProdutoService {
 	ProdutoRepository produtoRepository;
 	
 	@EJB
-	FornecedorRepository fornecedorRepository;
+	FornecedorService fornecedorService;
 	
 	private static final Logger LOGGER = LogManager.getLogger(ProdutoServiceBean.class);
 	
@@ -34,16 +32,7 @@ public class ProdutoServiceBean implements ProdutoService {
 			throw new InconsistenciaException("O preço de venda deve ser maior que o valor unitário!");
 		}
 		
-		String codigoFornecedor = novoProduto.getFornecedor().getCodigo();
-		if(codigoFornecedor == null || codigoFornecedor.isEmpty()) {
-			throw new InconsistenciaException("O código do fornecedor é inválido");
-		} else {
-			Fornecedor fornecedor = fornecedorRepository.findByCodigo(codigoFornecedor);
-			
-			if(fornecedor == null) {
-				throw new InconsistenciaException("O código do fornecedor é inválido");
-			}
-		}
+		fornecedorService.validarCodigoFornecedor(novoProduto.getFornecedor().getCodigo());
 		
 		// Verifica se já existe um produto com o mesmo código cadastrado no banco de dados do sistema
 		Produto produto = produtoRepository.findByCodigo(novoProduto.getCodigo());
@@ -114,6 +103,8 @@ public class ProdutoServiceBean implements ProdutoService {
 		if(produto.getValorUnitario() >= produto.getPrecoVenda()) {
 			throw new InconsistenciaException("O preço de venda deve ser maior que o valor unitário!");
 		}
+		
+		fornecedorService.validarCodigoFornecedor(produto.getFornecedor().getCodigo());
 		
 		produtoRepository.merge(produto);
 	}

@@ -19,7 +19,9 @@ public interface MaquinaService {
 
 	public Maquina findById(Long id);
 
-	public void editar(Maquina maquina) throws ConteudoJaExistenteNoBancoDeDadosException;
+	public void editar(Maquina maquina) throws ConteudoJaExistenteNoBancoDeDadosException, InconsistenciaException;
 
 	public Maquina findByCodigo(String codigo);
+
+	public List<Maquina> buscarComFiltroComVariosStatus(Maquina maquina, List<String> listMaquinaStatus) throws CadastroInexistenteException;
 }

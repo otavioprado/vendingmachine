@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.logging.log4j.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 
 import br.com.milenio.vendingmachine.domain.model.Alocacao;
 import br.com.milenio.vendingmachine.domain.model.Auditoria;
@@ -78,6 +80,16 @@ public class ClienteMB implements Serializable {
 		
 		if(campoEmBranco != null) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "O campo " + campoEmBranco +" não pode conter apenas espaços em branco.", null));
+			return;
+		}
+		
+		// Valida se a data informada não é menor que a data atual
+		DateTime hoje = new DateTime(new Date());
+		DateTime dataInformada = new DateTime(cliente.getClienteDesde());
+		Days daysBetween = Days.daysBetween(hoje, dataInformada);
+		
+		if(daysBetween.getDays() > 0) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Apenas datas de aquisição passadas podem ser informadas.", null));
 			return;
 		}
 		
@@ -208,6 +220,16 @@ public class ClienteMB implements Serializable {
 		
 		if(campoEmBranco != null) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "O campo " + campoEmBranco +" não pode conter apenas espaços em branco.", null));
+			return;
+		}
+		
+		// Valida se a data informada não é menor que a data atual
+		DateTime hoje = new DateTime(new Date());
+		DateTime dataInformada = new DateTime(cliente.getClienteDesde());
+		Days daysBetween = Days.daysBetween(hoje, dataInformada);
+		
+		if(daysBetween.getDays() > 0) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Apenas datas de aquisição passadas podem ser informadas.", null));
 			return;
 		}
 		

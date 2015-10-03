@@ -12,4 +12,6 @@ public interface MaquinaRepository extends Repository<Maquina, Long> {
 	public Maquina findByCodigo(String codigo);
 
 	public List<Maquina> buscarComFiltro(Maquina maquina);
+
+	public List<Maquina> buscarComFiltroComVariosStatus(Maquina maquina, List<String> listMaquinaStatus);
 }

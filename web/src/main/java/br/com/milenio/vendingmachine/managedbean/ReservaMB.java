@@ -2,6 +2,7 @@ package br.com.milenio.vendingmachine.managedbean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -142,15 +143,8 @@ public class ReservaMB implements Serializable {
 	
 	public void consultarMaquina() {
 		try {
-			listMaquinas = maquinaService.buscarComFiltro(maquina);
-			
-			// Remove da listagem as máquinas desativas
-			for(int i = 0; i < listMaquinas.size(); i++) {
-				String descricao = listMaquinas.get(i).getMaquinaStatus().getDescricao();
-				if("INATIVADA".equalsIgnoreCase(descricao) || "RESERVADA".equalsIgnoreCase(descricao)) {
-					listMaquinas.remove(i);
-				}
-			}
+			List<String> listMaquinaStatus = Arrays.asList("EM ESTOQUE");
+			listMaquinas = maquinaService.buscarComFiltroComVariosStatus(maquina, listMaquinaStatus);
 			
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("PF('dlgConsultaMaquina').show();");

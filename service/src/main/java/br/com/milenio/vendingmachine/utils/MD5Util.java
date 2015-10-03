@@ -14,14 +14,20 @@ public class MD5Util {
 	 */
 	public static String criptografar(String valor) {
 		MessageDigest m;
+		String hashText = null;
 		try {
 			m = MessageDigest.getInstance("MD5");
 			m.update(valor.getBytes());
-			return (new BigInteger(1, m.digest()).toString(16));
+			hashText = new BigInteger(1, m.digest()).toString(16);
+			
+			while(hashText.length() < 32 ) {
+				hashText = "0" + hashText;
+			}
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
-		return valor;
+		
+		return hashText;
 	}
 	
 	public static void main(String[] args) {

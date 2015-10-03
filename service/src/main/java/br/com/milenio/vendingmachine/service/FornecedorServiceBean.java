@@ -150,4 +150,16 @@ public class FornecedorServiceBean implements FornecedorService {
 	public Fornecedor findByCodigo(String codigo) {
 		return fornecedorRepository.findByCodigo(codigo);
 	}
+	
+	public void validarCodigoFornecedor(String codigo) throws InconsistenciaException {
+		if(codigo == null || codigo.isEmpty()) {
+			throw new InconsistenciaException("O código do fornecedor não é válido");
+		} else {
+			Fornecedor fornecedor = fornecedorRepository.findByCodigo(codigo);
+			
+			if(fornecedor == null) {
+				throw new InconsistenciaException("O código do fornecedor não é válido");
+			}
+		}
+	}
 }

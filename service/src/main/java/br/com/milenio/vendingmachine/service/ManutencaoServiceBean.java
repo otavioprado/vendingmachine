@@ -28,6 +28,9 @@ public class ManutencaoServiceBean implements ManutencaoService {
 	MaquinaRepository maquinaRepository;
 	
 	@EJB
+	FornecedorService fornecedorService;
+	
+	@EJB
 	private MaquinaStatusRepository maquinaStatusRepository;
 	
 	private static final Logger LOGGER = LogManager.getLogger(UsuarioServiceBean.class);
@@ -40,6 +43,8 @@ public class ManutencaoServiceBean implements ManutencaoService {
 			LOGGER.warn("Tentativa de cadastrar uma manutenção para uma máquina que não está com situação 'EM ESTOQUE'.");
 			throw new InconsistenciaException("Manutenções só podem ser cadastradas para máquinas que estejam em estoque.");
 		}
+		
+		fornecedorService.validarCodigoFornecedor(manutencao.getFornecedor().getCodigo());
 		
 		// Altera o status da máquina para EM MANUTENÇÃO
 		MaquinaStatus maquinaStatus = maquinaStatusRepository.findByDescricao("EM MANUTENÇÃO");
@@ -85,6 +90,8 @@ public class ManutencaoServiceBean implements ManutencaoService {
 	public void editar(Manutencao manutencao) throws InconsistenciaException {
 		// Carrega um objeto com os dados atuais da manutenção sendo editada
 		Manutencao manutencaoAtual = manutencaoRepository.findById(manutencao.getId());
+		
+		fornecedorService.validarCodigoFornecedor(manutencao.getFornecedor().getCodigo());
 		
 		// Verifica se houve troca de máquina
 		if(!manutencaoAtual.getMaquina().getCodigo().equalsIgnoreCase(manutencao.getMaquina().getCodigo())) {

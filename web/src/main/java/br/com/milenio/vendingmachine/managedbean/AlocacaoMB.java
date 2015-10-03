@@ -2,7 +2,9 @@ package br.com.milenio.vendingmachine.managedbean;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -333,15 +335,9 @@ public class AlocacaoMB implements Serializable {
 	
 	public void consultarMaquina() {
 		try {
-			// Busca apenas as máquinas que estejam em estoque
-			MaquinaStatus maquinaStatus = maquinaStatusRepository.findByDescricao("EM ESTOQUE");
-			maquina.setMaquinaStatus(maquinaStatus);
-			listMaquinas = maquinaService.buscarComFiltro(maquina);
+			List<String> listMaquinaStatus = Arrays.asList("EM ESTOQUE", "RESERVADA");
 			
-			// Inclue na listagem todas as máquinas reservadas
-			maquinaStatus = maquinaStatusRepository.findByDescricao("RESERVADA");
-			maquina.setMaquinaStatus(maquinaStatus);
-			listMaquinas.addAll(maquinaService.buscarComFiltro(maquina));
+			listMaquinas = maquinaService.buscarComFiltroComVariosStatus(maquina, listMaquinaStatus);
 			
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("PF('dlgConsultaMaquina').show();");

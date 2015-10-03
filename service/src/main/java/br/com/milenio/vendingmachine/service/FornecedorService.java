@@ -22,4 +22,6 @@ public interface FornecedorService {
 	public Fornecedor excluir(Long id) throws InconsistenciaException;
 
 	public Fornecedor findByCodigo(String codigo);
+
+	public void validarCodigoFornecedor(String codigo) throws InconsistenciaException;
 }
