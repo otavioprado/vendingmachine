@@ -59,6 +59,8 @@ public class ReservaMB implements Serializable {
 	private Reserva reserva = new Reserva();
 	private List<Maquina> listMaquinas = new ArrayList<Maquina>();
 	private List<Cliente> listClientes = new ArrayList<Cliente>();
+	private Reserva reservaConsParam = new Reserva();
+	private List<Reserva> listReservas = new ArrayList<Reserva>();
 
 	public void cadastrar() {
 		logger.debug("Tentando realizar o cadastro de reserva da máquina " + reserva.getMaquina().getCodigo() + " para o cliente " + reserva.getCliente().getNomeFantasia());
@@ -84,6 +86,47 @@ public class ReservaMB implements Serializable {
 		}
 		
 		reserva = new Reserva(); 
+	}
+	
+	public void consultar(boolean exibirMensagem) {
+		try {
+			listReservas = reservaService.buscarComFiltro(reservaConsParam);
+		} catch (CadastroInexistenteException e) {
+			if(listReservas != null && !listReservas.isEmpty()) {
+				listReservas.clear();
+			}
+			
+			if(exibirMensagem) {
+				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
+			}
+		}
+	}
+	
+	public void excluir() {
+		logger.debug("Tentando realizar a exclusão da reserva da máquina " + reserva.getMaquina().getCodigo() + " para o cliente " + reserva.getCliente().getNomeFantasia());
+		
+		try {
+			reserva = reservaService.excluir(reserva.getId());
+			
+			// Sucesso - Exibe mensagem de cadastro realizado com sucesso
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva da máquina " + reserva.getMaquina().getCodigo() + " para o cliente " + reserva.getCliente().getNomeFantasia() + " excluída com sucesso.", null));
+			logger.info("Reserva da máquina " + reserva.getMaquina().getCodigo() + " para o cliente " + reserva.getCliente().getNomeFantasia() + " excluída com sucesso.");
+			
+			// Processo de auditoria de cadastro de usuário
+			Auditoria auditoria = new Auditoria();
+			auditoria.setDataAcao(new Date());
+			auditoria.setTitulo("Exclusão");
+			auditoria.setDescricao("Excluiu uma reserva para a máquina " + reserva.getMaquina().getCodigo() + " para o cliente " + reserva.getCliente().getNomeFantasia());
+			auditoria.setUsuario(Seguranca.getUsuarioLogado());
+			auditoria.setIp(request.getRemoteAddr());
+			auditoriaService.cadastrarNovaAcao(auditoria);
+		} catch (InconsistenciaException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+			logger.info(e.getMessage());
+			return;
+		}
+		// Recarrega a listagem de atividades
+		consultar(false);
 	}
 	
 	public void selecionarCliente(String codigo) {
@@ -213,5 +256,21 @@ public class ReservaMB implements Serializable {
 
 	public void setListClientes(List<Cliente> listClientes) {
 		this.listClientes = listClientes;
+	}
+
+	public Reserva getReservaConsParam() {
+		return reservaConsParam;
+	}
+
+	public void setReservaConsParam(Reserva reservaConsParam) {
+		this.reservaConsParam = reservaConsParam;
+	}
+
+	public List<Reserva> getListReservas() {
+		return listReservas;
+	}
+
+	public void setListReservas(List<Reserva> listReservas) {
+		this.listReservas = listReservas;
 	}
 }

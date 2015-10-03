@@ -105,9 +105,7 @@ public class AlocacaoServiceBean implements AlocacaoService {
 			
 			// Se a máquina selecionada tiver uma reserva cadastrada, então tem que ser para o cliente especifico
 			if("RESERVADA".equalsIgnoreCase(descricao)) {
-				Reserva reserva = new Reserva();
-				reserva.setMaquina(maquina);
-				Reserva resultado = reservaRepository.buscarComFiltro(reserva);
+				Reserva resultado = reservaRepository.findByMaquina(maquina);
 				
 				if(resultado != null) {
 					if(!alocacao.getCliente().getCodigo().equalsIgnoreCase(resultado.getCliente().getCodigo())) {
@@ -138,6 +136,13 @@ public class AlocacaoServiceBean implements AlocacaoService {
 		LOGGER.info("A máquina " + alocacao.getMaquina().getCodigo() + " agora está com status " + maquina.getMaquinaStatus().getDescricao());
 	}
 
+	@Override
+	public List<Alocacao> findAlocacoesByCliente(Long clienteId) {
+		List<Alocacao> alocacoes = alocacaoRepository.findAlocacoesByCliente(clienteId);
+		
+		return alocacoes;
+	}
+	
 	@Override
 	public List<Alocacao> findAlocacoesAtivasByCliente(Long clienteId) {
 		List<Alocacao> alocacoes = alocacaoRepository.findAlocacoesAtivasByCliente(clienteId);

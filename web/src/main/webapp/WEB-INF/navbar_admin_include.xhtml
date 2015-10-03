@@ -147,17 +147,26 @@
 							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CONS_MAQUINA') eq true}">
 								<li class="#{view.viewId eq '/admin/consultaMaquina.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/consultaMaquina.xhtml">Consultar</a></li>
 							</c:if>
-							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_ALOCACAO') eq true}">
-								<li class="#{view.viewId eq '/admin/alocacao.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/alocacao.xhtml?clienteId=0">Solicitar alocação</a></li>
+							
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_ALOCACAO') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_CONS_ALOCACAO') eq true}">
+								<li role="separator" class="divider"></li>
+								<li class="dropdown-header">Alocação</li>
+								<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_ALOCACAO') eq true}">
+									<li class="#{view.viewId eq '/admin/alocacao.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/alocacao.xhtml?clienteId=0">Solicitar alocação</a></li>
+								</c:if>
+								<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CONS_ALOCACAO') eq true}">
+									<li class="#{view.viewId eq '/admin/consultaAlocacao.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/consultaAlocacao.xhtml">Consultar alocações</a></li>
+								</c:if>
 							</c:if>
-							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CONS_ALOCACAO') eq true}">
-								<li class="#{view.viewId eq '/admin/consultaAlocacao.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/consultaAlocacao.xhtml">Consultar alocações</a></li>
-							</c:if>
+								
 							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_RESERVA') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_CONS_RESERVA') eq true}">
 								<li role="separator" class="divider"></li>
 								<li class="dropdown-header">Reserva</li>
 								<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CAD_RESERVA') eq true}">
 									<li class="#{view.viewId eq '/admin/reserva.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/reserva.xhtml">Cadastrar reserva</a></li>
+								</c:if>
+								<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CONS_RESERVA') eq true}">
+									<li class="#{view.viewId eq '/admin/consultaReserva.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/consultaReserva.xhtml">Consultar reserva</a></li>
 								</c:if>
 							</c:if>
 						</ul>
@@ -200,7 +209,6 @@
 								<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CONS_NATUREZA') eq true}">
 									<li class="#{view.viewId eq '/admin/consultaNaturezaFinanceira.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/consultaNaturezaFinanceira.xhtml">Consultar</a></li>
 								</c:if>
-								<li role="separator" class="divider"></li>
 							</c:if>
 						</ul>
 					</li>

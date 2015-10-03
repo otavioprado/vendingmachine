@@ -138,12 +138,24 @@
 					</div>
 
 					<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_INATIVAR_MAQUINA') eq true}">
-			            <div class="col-lg-3">
+			            <div class="col-lg-3" jsf:rendered="#{maquinaMB.maquina.maquinaStatus.descricao eq 'EM ESTOQUE'? true : false}">
 							<div class="form-group">
 								<label>&nbsp;</label>
 								<button id="btn-bloq" onclick="PF('dlgInativar').show();" class="btn btn-warning" type="button" style="width: 100%; color:white;"
 									jsf:rendered="#{maquinaMB.maquina.maquinaStatus.descricao eq 'EM ESTOQUE'? true : false}">
-									<i class="glyphicon glyphicon-lock"/>&nbsp;Inativar&nbsp;
+									<i class="glyphicon glyphicon-minus"/>&nbsp;Inativar&nbsp;
+								</button>
+							</div>
+						</div>
+					</c:if>
+					
+					<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_INATIVAR_MAQUINA') eq true}">
+			            <div class="col-lg-3" jsf:rendered="#{maquinaMB.maquina.maquinaStatus.descricao eq 'INATIVADA'? true : false}">
+							<div class="form-group">
+								<label>&nbsp;</label>
+								<button id="btn-bloq" onclick="PF('dlgAtivar').show();" class="btn btn-warning" type="button" style="width: 100%; color:white;"
+									jsf:rendered="#{maquinaMB.maquina.maquinaStatus.descricao eq 'INATIVADA'? true : false}">
+									<i class="glyphicon glyphicon-plus"/>&nbsp;Ativar&nbsp;
 								</button>
 							</div>
 						</div>
@@ -340,37 +352,70 @@
 		</p:dialog>
 		
 		<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_INATIVAR_MAQUINA') eq true}">
-				<h:form prependId="false">
-					<p:dialog widgetVar="dlgInativar" width="450" showHeader="false" resizable="false" modal="true">
-						<div class="form-group">
-							<div class="row">
-								<div class="col-md-12">
-									<div class="form-group">
-										<label for="nome">Tem certeza que deseja inativar esta máquina? Essa operação não poderá ser desfeita!</label>
-									</div>
+			<h:form prependId="false">
+				<p:dialog widgetVar="dlgInativar" width="450" showHeader="false" resizable="false" modal="true">
+					<div class="form-group">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label for="nome">Tem certeza que deseja inativar esta máquina?</label>
 								</div>
-								
-								<div class="col-md-6">
-									<div class="form-group">
-										<h:commandLink id="btn-inativar" class="btn btn-primary" action="#{maquinaMB.inativar}" 
-											style="width: 100%; color:white;" update="table-atividades">
-											<i class="glyphicon glyphicon-minus"></i>&nbsp;Inativar&nbsp;
-										</h:commandLink>
-									</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="form-group">
+									<h:commandLink id="btn-inativar" class="btn btn-primary" action="#{maquinaMB.inativar}" 
+										style="width: 100%; color:white;" update="table-atividades">
+										<i class="glyphicon glyphicon-minus"></i>&nbsp;Inativar&nbsp;
+									</h:commandLink>
 								</div>
-								
-								<div class="col-md-6">
-									<div class="form-group">
-										<h:commandLink id="btn-inativar-cancel" class="btn btn-warning" onclick="PF('dlgInativar').hide();" style="width: 100%; color:white;" type="button" immediate="true">
-											<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
-										</h:commandLink>
-									</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="form-group">
+									<h:commandLink id="btn-inativar-cancel" class="btn btn-warning" onclick="PF('dlgInativar').hide();" style="width: 100%; color:white;" type="button" immediate="true">
+										<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+									</h:commandLink>
 								</div>
 							</div>
 						</div>
-					</p:dialog>
-				</h:form>
-			</c:if>
+					</div>
+				</p:dialog>
+			</h:form>
+		</c:if>
+		
+		<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_INATIVAR_MAQUINA') eq true}">
+			<h:form prependId="false">
+				<p:dialog widgetVar="dlgAtivar" width="450" showHeader="false" resizable="false" modal="true">
+					<div class="form-group">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label for="nome">Tem certeza que deseja ativar esta máquina?</label>
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="form-group">
+									<h:commandLink id="btn-ativar" class="btn btn-primary" action="#{maquinaMB.ativar}" 
+										style="width: 100%; color:white;" update="table-atividades">
+										<i class="glyphicon glyphicon-plus"></i>&nbsp;Ativar&nbsp;
+									</h:commandLink>
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="form-group">
+									<h:commandLink id="btn-ativar-cancel" class="btn btn-warning" onclick="PF('dlgAtivar').hide();" style="width: 100%; color:white;" type="button" immediate="true">
+										<i class="glyphicon glyphicon-remove"></i>&nbsp;Cancelar&nbsp;
+									</h:commandLink>
+								</div>
+							</div>
+						</div>
+					</div>
+				</p:dialog>
+			</h:form>
+		</c:if>
 		
 	</ui:define>
 

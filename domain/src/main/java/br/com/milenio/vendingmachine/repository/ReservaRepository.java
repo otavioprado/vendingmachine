@@ -1,5 +1,7 @@
 package br.com.milenio.vendingmachine.repository;
 
+import java.util.List;
+
 import javax.ejb.Local;
 
 import br.com.milenio.vendingmachine.domain.Repository;
@@ -11,5 +13,5 @@ public interface ReservaRepository extends Repository<Reserva, Long> {
 
 	Reserva findByMaquina(Maquina maquina);
 
-	Reserva buscarComFiltro(Reserva reserva);
+	public List<Reserva> buscarComFiltro(Reserva reserva);
 }

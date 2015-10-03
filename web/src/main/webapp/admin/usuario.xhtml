@@ -15,13 +15,13 @@
 			<p:panel id="basic" header="Cadastrar novo usuário" style="margin-bottom:20px">
 				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
 				<div class="row">
-					<div class="col-lg-6">	
+					<div class="col-lg-6">
 						<div class="form-group">
 							<label for="login">Login *</label>
 							<input id="login" name="login" type="text" class="form-control" placeholder="Login" jsf:value="#{usuarioMB.usuario.login}" jsf:required="true" maxlength="25" 
 								jsf:requiredMessage="O campo login é obrigatório"/>
 							<pe:keyFilter regEx="/[a-z0-9_]/i" for="login"/>
-							<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="nomeUsuario, senhaUsuario"/>
+							<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="nomeUsuario, senha"/>
 						</div>
 						
 						<div class="form-group">
@@ -43,8 +43,8 @@
 					</div>
 					<div class="col-lg-6">
 						<div class="form-group">
-							<label for="senhaUsuario">Senha *</label>
-							<input id="senhaUsuario" name="senhaUsuario" type="password" class="form-control" placeholder="Senha" 
+							<label for="senha">Senha *</label>
+							<input id="senha" name="senha" type="password" class="form-control" placeholder="Senha" 
 								jsf:value="#{usuarioMB.usuario.senhaAplicacao}" jsf:required="true" maxlength="25" autocomplete="off" 
 								jsf:requiredMessage="O campo senha é obrigatório">
 								<f:validateLength minimum="6" />

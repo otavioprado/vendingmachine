@@ -2,7 +2,6 @@ package br.com.milenio.vendingmachine.managedbean;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -25,7 +24,6 @@ import br.com.milenio.vendingmachine.domain.model.Auditoria;
 import br.com.milenio.vendingmachine.domain.model.Cliente;
 import br.com.milenio.vendingmachine.domain.model.Contrato;
 import br.com.milenio.vendingmachine.domain.model.Maquina;
-import br.com.milenio.vendingmachine.domain.model.MaquinaStatus;
 import br.com.milenio.vendingmachine.domain.model.Reserva;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
@@ -300,9 +298,7 @@ public class AlocacaoMB implements Serializable {
 		
 		// Se a máquina selecionada tiver uma reserva cadastrada, então tem que ser para o cliente especifico
 		if("RESERVADA".equalsIgnoreCase(descricao)) {
-			Reserva r = new Reserva();
-			r.setMaquina(maq);
-			Reserva resultado = reservaService.buscarComFiltro(r);
+			Reserva resultado = reservaService.findByMaquina(maq);
 			
 			if(resultado != null) {
 				alocacao.setCliente(resultado.getCliente());

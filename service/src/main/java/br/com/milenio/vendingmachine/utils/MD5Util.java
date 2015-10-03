@@ -36,5 +36,6 @@ public class MD5Util {
 		System.out.println("gestor = " + criptografar("gestor"));
 		System.out.println("gerente = " + criptografar("gerente"));
 		System.out.println("operador = " + criptografar("operador"));
+		System.out.println("teste1234 = " + criptografar("teste1234")); // tem que ter um zero à esquerda
 	}
 }

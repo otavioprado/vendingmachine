@@ -24,4 +24,6 @@ public interface MaquinaService {
 	public Maquina findByCodigo(String codigo);
 
 	public List<Maquina> buscarComFiltroComVariosStatus(Maquina maquina, List<String> listMaquinaStatus) throws CadastroInexistenteException;
+
+	public Maquina ativar(Long id) throws InconsistenciaException;
 }

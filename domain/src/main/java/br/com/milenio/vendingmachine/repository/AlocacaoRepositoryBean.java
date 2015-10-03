@@ -20,7 +20,7 @@ public class AlocacaoRepositoryBean extends AbstractVendingMachineRepositoryBean
 	}
 
 	@Override
-	public List<Alocacao> findAlocacoesAtivasByCliente(Long clienteId) {
+	public List<Alocacao> findAlocacoesByCliente(Long clienteId) {
 		UaiCriteria<Alocacao> uaiCriteria = UaiCriteriaFactory.createQueryCriteria(getEntityManager(), Alocacao.class);
 
 		uaiCriteria.innerJoin("cliente");
@@ -67,6 +67,24 @@ public class AlocacaoRepositoryBean extends AbstractVendingMachineRepositoryBean
 		} else if(dataAlocacao != null && dataDesalocacao != null) {
 			uaiCriteria.andBetween("dataAlocacao", dataAlocacao, dataDesalocacao);
 		}
+		
+		List<Alocacao> alocacoes = (List<Alocacao>) uaiCriteria.getResultList();
+		
+		return alocacoes;
+	}
+
+	@Override
+	public List<Alocacao> findAlocacoesAtivasByCliente(Long clienteId) {
+		UaiCriteria<Alocacao> uaiCriteria = UaiCriteriaFactory.createQueryCriteria(getEntityManager(), Alocacao.class);
+
+		uaiCriteria.innerJoin("cliente");
+		uaiCriteria.andEquals("cliente.id", clienteId);
+		
+		// Se tiver valor na data de desalocação, então a máquina não está mais alocada no cliente
+		uaiCriteria.andIsNull("dataDesalocacao");
+		
+		// Alocações efetivadas nunca terão dataAlocacao null
+		uaiCriteria.andIsNotNull("dataAlocacao");
 		
 		List<Alocacao> alocacoes = (List<Alocacao>) uaiCriteria.getResultList();
 		

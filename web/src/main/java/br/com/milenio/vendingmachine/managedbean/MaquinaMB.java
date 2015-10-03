@@ -149,6 +149,13 @@ public class MaquinaMB implements Serializable {
 		}
 
 		try {
+			// TODO: Necessário para atualizar o relacionamento @ManyToMany dos produtos
+			// Consultar uma máquina sem produtos vinculados => Adicionar produtos e salvar (OK) => Ainda na mesma tela, remover os produtos e salvar (não funcionava: os produtos continuam vinculados a máquina)
+			// Solução: precisa criar um objeto novo para que o hibernate consiga identificar que houve alterações no relacionamento @ManyToMany
+			List<Produto> novaLista = new ArrayList<Produto>();
+			novaLista.addAll(maquina.getProdutos());
+			maquina.setProdutos(novaLista);
+			
 			maquinaService.editar(maquina);
 		} catch (ConteudoJaExistenteNoBancoDeDadosException | InconsistenciaException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
@@ -190,6 +197,28 @@ public class MaquinaMB implements Serializable {
 			auditoria.setDataAcao(new Date());
 			auditoria.setTitulo("Inativação");
 			auditoria.setDescricao("Inativou a máquina " + maquina.getCodigo());
+			auditoria.setUsuario(Seguranca.getUsuarioLogado());
+			auditoria.setIp(request.getRemoteAddr());
+			auditoriaService.cadastrarNovaAcao(auditoria);
+		} catch (InconsistenciaException e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
+			return;
+		}
+	}
+	
+	public void ativar() {
+		try {
+			maquina = maquinaService.ativar(maquina.getId());
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Máquina " + maquina.getCodigo() + " ativada com sucesso. Status: EM ESTOQUE", null));
+			
+			// Após ativação, carrega a lista de máquinas para atualizar na view de consulta
+			consultar(true);
+			
+			// Processo de auditoria
+			Auditoria auditoria = new Auditoria();
+			auditoria.setDataAcao(new Date());
+			auditoria.setTitulo("Ativação");
+			auditoria.setDescricao("Ativou a máquina " + maquina.getCodigo());
 			auditoria.setUsuario(Seguranca.getUsuarioLogado());
 			auditoria.setIp(request.getRemoteAddr());
 			auditoriaService.cadastrarNovaAcao(auditoria);

@@ -37,28 +37,28 @@ public class ReservaRepositoryBean extends AbstractVendingMachineRepositoryBean<
 	}
 
 	@Override
-	public Reserva buscarComFiltro(Reserva reserva) {
+	public List<Reserva> buscarComFiltro(Reserva reserva) {
 		UaiCriteria<Reserva> uaiCriteria = UaiCriteriaFactory.createQueryCriteria(getEntityManager(), Reserva.class);
 
 		Maquina maquina = reserva.getMaquina();
 		Cliente cliente = reserva.getCliente();
 		
-		if(maquina != null && maquina.getId() != null) {
+		if(maquina != null && maquina.getCodigo() != null && !maquina.getCodigo().isEmpty()) {
 			uaiCriteria.innerJoin("maquina");
-			uaiCriteria.andEquals("maquina.id", maquina.getId());
+			uaiCriteria.andEquals("maquina.codigo", maquina.getCodigo());
 		}
 		
-		if(cliente != null && cliente.getId() != null) {
+		if(cliente != null && cliente.getCodigo() != null && !cliente.getCodigo().isEmpty()) {
 			uaiCriteria.innerJoin("cliente");
-			uaiCriteria.andEquals("cliente.id", cliente.getId());
+			uaiCriteria.andEquals("cliente.codigo", cliente.getCodigo());
+		}
+		
+		if(reserva.getData() != null) {
+			uaiCriteria.andEquals("data", reserva.getData());
 		}
 		
 		List<Reserva> reservas = (List<Reserva>) uaiCriteria.getResultList();
 		
-		if(!reservas.isEmpty()) {
-			return reservas.get(0);
-		}
-		
-		return null;
+		return reservas;
 	}
 }

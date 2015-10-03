@@ -154,4 +154,19 @@ public class MaquinaServiceBean implements MaquinaService {
 			return maquinas;
 		}
 	}
+
+	@Override
+	public Maquina ativar(Long id) throws InconsistenciaException {
+		Maquina maquina = maquinaRepository.findById(id);
+		
+		if(!"INATIVADA".equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
+			throw new InconsistenciaException("Apenas máquinas inativas podem ser ativadas!");
+		}
+		
+		MaquinaStatus status = maquinaStatusRepository.findByDescricao("EM ESTOQUE");
+		maquina.setMaquinaStatus(status);
+		maquinaRepository.merge(maquina);
+		
+		return maquina;
+	}
 }
