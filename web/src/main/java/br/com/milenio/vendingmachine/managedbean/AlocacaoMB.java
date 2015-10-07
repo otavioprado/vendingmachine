@@ -23,18 +23,20 @@ import br.com.milenio.vendingmachine.domain.model.Alocacao;
 import br.com.milenio.vendingmachine.domain.model.Auditoria;
 import br.com.milenio.vendingmachine.domain.model.Cliente;
 import br.com.milenio.vendingmachine.domain.model.Contrato;
+import br.com.milenio.vendingmachine.domain.model.HistoricoMaquina;
 import br.com.milenio.vendingmachine.domain.model.Maquina;
 import br.com.milenio.vendingmachine.domain.model.Reserva;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
-import br.com.milenio.vendingmachine.repository.MaquinaStatusRepository;
 import br.com.milenio.vendingmachine.security.Seguranca;
 import br.com.milenio.vendingmachine.service.AlocacaoService;
 import br.com.milenio.vendingmachine.service.AuditoriaService;
 import br.com.milenio.vendingmachine.service.ClienteService;
 import br.com.milenio.vendingmachine.service.ContratoService;
+import br.com.milenio.vendingmachine.service.HistoricoMaquinaService;
 import br.com.milenio.vendingmachine.service.MaquinaService;
 import br.com.milenio.vendingmachine.service.ReservaService;
+import br.com.milenio.vendingmachine.util.Constants;
 
 @Named
 @ViewScoped
@@ -63,13 +65,13 @@ public class AlocacaoMB implements Serializable {
 	private AuditoriaService auditoriaService;
 	
 	@Inject
+	private HistoricoMaquinaService historicoMaquinaService;
+	
+	@Inject
 	private ReservaService reservaService;
 	
 	@Inject
 	private HttpServletRequest request;
-	
-	@Inject
-	private MaquinaStatusRepository maquinaStatusRepository;
 	
 	@Inject
 	private ContratoService contratoService;
@@ -104,6 +106,9 @@ public class AlocacaoMB implements Serializable {
 			auditoria.setUsuario(Seguranca.getUsuarioLogado());
 			auditoria.setIp(request.getRemoteAddr());
 			auditoriaService.cadastrarNovaAcao(auditoria);
+			
+			// Cadastra no histórico da máquina
+			historicoMaquinaService.cadastrar(new HistoricoMaquina(new Date(), Constants.PENDENTE_DE_ALOCACAO, Seguranca.getUsuarioLogado(), alocacao.getMaquina(), alocacao.getCliente()));
 		} catch (InconsistenciaException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
 			logger.info(e.getMessage());
@@ -130,6 +135,9 @@ public class AlocacaoMB implements Serializable {
 			auditoria.setUsuario(Seguranca.getUsuarioLogado());
 			auditoria.setIp(request.getRemoteAddr());
 			auditoriaService.cadastrarNovaAcao(auditoria);
+			
+			// Cadastra no histórico da máquina
+			historicoMaquinaService.cadastrar(new HistoricoMaquina(new Date(), Constants.ALOCADA_PARA_CLIENTE, Seguranca.getUsuarioLogado(), alocacao.getMaquina(), alocacao.getCliente()));
 		} catch (InconsistenciaException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
 			logger.info(e.getMessage());
@@ -156,6 +164,9 @@ public class AlocacaoMB implements Serializable {
 			auditoria.setUsuario(Seguranca.getUsuarioLogado());
 			auditoria.setIp(request.getRemoteAddr());
 			auditoriaService.cadastrarNovaAcao(auditoria);
+			
+			// Cadastra no histórico da máquina
+			historicoMaquinaService.cadastrar(new HistoricoMaquina(new Date(), Constants.EM_ESTOQUE, Seguranca.getUsuarioLogado(), alocacao.getMaquina(), null));
 		} catch (InconsistenciaException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
 			logger.info(e.getMessage());
@@ -192,6 +203,9 @@ public class AlocacaoMB implements Serializable {
 			auditoria.setUsuario(Seguranca.getUsuarioLogado());
 			auditoria.setIp(request.getRemoteAddr());
 			auditoriaService.cadastrarNovaAcao(auditoria);
+			
+			// Cadastra no histórico da máquina
+			historicoMaquinaService.cadastrar(new HistoricoMaquina(new Date(), Constants.PENDENTE_DE_DESALOCACAO, Seguranca.getUsuarioLogado(), alocacao.getMaquina(), alocacao.getCliente()));
 		} catch (InconsistenciaException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
 			logger.info(e.getMessage());
@@ -240,10 +254,13 @@ public class AlocacaoMB implements Serializable {
 		Auditoria auditoria = new Auditoria();
 		auditoria.setDataAcao(new Date());
 		auditoria.setTitulo("Exclusão");
-		auditoria.setDescricao("Excluiu uma solicitação de alocação para a máquina" + aloc.getMaquina().getCodigo());
+		auditoria.setDescricao("Excluiu uma solicitação de alocação para a máquina " + aloc.getMaquina().getCodigo());
 		auditoria.setUsuario(Seguranca.getUsuarioLogado());
 		auditoria.setIp(request.getRemoteAddr());
 		auditoriaService.cadastrarNovaAcao(auditoria);
+		
+		// Cadastra no histórico da máquina
+		historicoMaquinaService.cadastrar(new HistoricoMaquina(new Date(), Constants.EM_ESTOQUE, Seguranca.getUsuarioLogado(), aloc.getMaquina(), null));
 		
 		// Recarrega a listagem de contratos
 		consultar(false);
@@ -289,7 +306,7 @@ public class AlocacaoMB implements Serializable {
 		
 		String descricao = maq.getMaquinaStatus().getDescricao();
 		
-		if(!"EM ESTOQUE".equalsIgnoreCase(descricao) && !"RESERVADA".equalsIgnoreCase(descricao)) {
+		if(!Constants.EM_ESTOQUE.equalsIgnoreCase(descricao) && !Constants.RESERVADA.equalsIgnoreCase(descricao)) {
 			ctx.addMessage("Message2", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Código inválido: O código " + codigo + " informado não corresponde a uma máquina disponível em estoque ou que esteja reservada.", null));
 			alocacao.setMaquina(new Maquina());
 			return;
@@ -297,7 +314,7 @@ public class AlocacaoMB implements Serializable {
 		alocacao.setMaquina(maq);
 		
 		// Se a máquina selecionada tiver uma reserva cadastrada, então tem que ser para o cliente especifico
-		if("RESERVADA".equalsIgnoreCase(descricao)) {
+		if(Constants.RESERVADA.equalsIgnoreCase(descricao)) {
 			Reserva resultado = reservaService.findByMaquina(maq);
 			
 			if(resultado != null) {
@@ -331,7 +348,7 @@ public class AlocacaoMB implements Serializable {
 	
 	public void consultarMaquina() {
 		try {
-			List<String> listMaquinaStatus = Arrays.asList("EM ESTOQUE", "RESERVADA");
+			List<String> listMaquinaStatus = Arrays.asList(Constants.EM_ESTOQUE, Constants.RESERVADA);
 			
 			listMaquinas = maquinaService.buscarComFiltroComVariosStatus(maquina, listMaquinaStatus);
 			

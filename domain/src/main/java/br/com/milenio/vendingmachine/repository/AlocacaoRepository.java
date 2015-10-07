@@ -15,4 +15,6 @@ public interface AlocacaoRepository extends Repository<Alocacao, Long> {
 	List<Alocacao> buscarComFiltro(Alocacao alocacao);
 
 	List<Alocacao> findAlocacoesAtivasByCliente(Long clienteId);
+
+	List<Alocacao> findAlocacoesPendentesAlocacao();
 }

@@ -41,15 +41,15 @@ public class MaquinaWebService {
 		JsonArrayBuilder produtoBuilder = Json.createArrayBuilder();
 		
 		for(Produto produto : maquina.getProdutos()) {
-			JsonObjectBuilder maquinaJsonBuilder = Json.createObjectBuilder();
-			maquinaJsonBuilder.add("id", produto.getId());
-			maquinaJsonBuilder.add("codigo", produto.getCodigo());
-			maquinaJsonBuilder.add("descricao", produto.getDescricao());
-			maquinaJsonBuilder.add("valorUnitario", produto.getValorUnitario());
-			maquinaJsonBuilder.add("precoVenda", produto.getPrecoVenda());
-			JsonObject jsonMaquina = maquinaJsonBuilder.build();
+			JsonObjectBuilder produtoJsonBuilder = Json.createObjectBuilder();
+			produtoJsonBuilder.add("id", produto.getId());
+			produtoJsonBuilder.add("codigo", produto.getCodigo());
+			produtoJsonBuilder.add("descricao", produto.getDescricao());
+			produtoJsonBuilder.add("valorUnitario", produto.getValorUnitario());
+			produtoJsonBuilder.add("precoVenda", produto.getPrecoVenda());
+			JsonObject jsonProduto = produtoJsonBuilder.build();
 			
-			produtoBuilder.add(jsonMaquina);
+			produtoBuilder.add(jsonProduto);
 		}
 		
 		JsonArray produtos = produtoBuilder.build();

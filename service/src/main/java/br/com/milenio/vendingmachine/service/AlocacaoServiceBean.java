@@ -23,6 +23,7 @@ import br.com.milenio.vendingmachine.repository.ContratoRepository;
 import br.com.milenio.vendingmachine.repository.MaquinaRepository;
 import br.com.milenio.vendingmachine.repository.MaquinaStatusRepository;
 import br.com.milenio.vendingmachine.repository.ReservaRepository;
+import br.com.milenio.vendingmachine.util.Constants;
 
 @Stateless
 public class AlocacaoServiceBean implements AlocacaoService {
@@ -99,12 +100,12 @@ public class AlocacaoServiceBean implements AlocacaoService {
 			
 			String descricao = maquina.getMaquinaStatus().getDescricao();
 			
-			if(!"EM ESTOQUE".equalsIgnoreCase(descricao) && !"RESERVADA".equalsIgnoreCase(descricao)) {
+			if(!Constants.EM_ESTOQUE.equalsIgnoreCase(descricao) && !Constants.RESERVADA.equalsIgnoreCase(descricao)) {
 				throw new InconsistenciaException("Apenas máquinas que estejam em estoque ou reservadas podem ter uma solicitação de alocação cadastrada.");
 			}
 			
 			// Se a máquina selecionada tiver uma reserva cadastrada, então tem que ser para o cliente especifico
-			if("RESERVADA".equalsIgnoreCase(descricao)) {
+			if(Constants.RESERVADA.equalsIgnoreCase(descricao)) {
 				Reserva resultado = reservaRepository.findByMaquina(maquina);
 				
 				if(resultado != null) {
@@ -120,7 +121,7 @@ public class AlocacaoServiceBean implements AlocacaoService {
 		}
 		
 		// Coloca a máquina para pendente de alocação
-		MaquinaStatus ms = maquinaStatusRepository.findByDescricao("PENDENTE DE ALOCAÇÃO");
+		MaquinaStatus ms = maquinaStatusRepository.findByDescricao(Constants.PENDENTE_DE_ALOCACAO);
 		maquina.setMaquinaStatus(ms);
 		maquinaRepository.persist(maquina);
 		
@@ -159,12 +160,12 @@ public class AlocacaoServiceBean implements AlocacaoService {
 	public void solicitarDesalocacao(Alocacao alocacao) throws InconsistenciaException {
 		Maquina maquina = maquinaRepository.findById(alocacao.getMaquina().getId());
 		
-		if(!"ALOCADA PARA CLIENTE".equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
+		if(!Constants.ALOCADA_PARA_CLIENTE.equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
 			throw new InconsistenciaException("Apenas máquinas alocadas em clientes podem ter uma solicitação de desalocação cadastrada.");
 		}
 		
 		// Coloca a máquina para pendente de desalocação
-		MaquinaStatus ms = maquinaStatusRepository.findByDescricao("PENDENTE DE DESALOCAÇÃO");
+		MaquinaStatus ms = maquinaStatusRepository.findByDescricao(Constants.PENDENTE_DE_DESALOCACAO);
 		maquina.setMaquinaStatus(ms);
 		maquinaRepository.merge(maquina);
 		
@@ -183,7 +184,7 @@ public class AlocacaoServiceBean implements AlocacaoService {
 		
 		// Volta a máquina para em estoque
 		Maquina maquina = alocacao.getMaquina();
-		MaquinaStatus ms = maquinaStatusRepository.findByDescricao("EM ESTOQUE");
+		MaquinaStatus ms = maquinaStatusRepository.findByDescricao(Constants.EM_ESTOQUE);
 		maquina.setMaquinaStatus(ms);
 		maquinaRepository.persist(maquina);
 		
@@ -238,13 +239,13 @@ public class AlocacaoServiceBean implements AlocacaoService {
 				throw new InconsistenciaException("O código da máquina não é válido");
 			}
 			
-			if(!"PENDENTE DE ALOCAÇÃO".equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
+			if(!Constants.PENDENTE_DE_ALOCACAO.equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
 				throw new InconsistenciaException("Apenas máquinas que estejam pendentes de alocação podem ter uma confirmação de alocação cadastrada.");
 			}
 		}
 		
 		// Coloca a situação da máquina em ALOCADA PARA CLIENTE
-		MaquinaStatus ms = maquinaStatusRepository.findByDescricao("ALOCADA PARA CLIENTE");
+		MaquinaStatus ms = maquinaStatusRepository.findByDescricao(Constants.ALOCADA_PARA_CLIENTE);
 		maquina.setMaquinaStatus(ms);
 		maquinaRepository.merge(maquina);
 		
@@ -272,13 +273,13 @@ public class AlocacaoServiceBean implements AlocacaoService {
 				throw new InconsistenciaException("O código da máquina não é válido");
 			}
 			
-			if(!"PENDENTE DE DESALOCAÇÃO".equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
+			if(!Constants.PENDENTE_DE_DESALOCACAO.equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
 				throw new InconsistenciaException("Apenas máquinas que estejam pendentes de desalocação podem ter uma confirmação de desalocação cadastrada.");
 			}
 		}
 		
 		// Coloca a situação da máquina para EM ESTOQUE
-		MaquinaStatus ms = maquinaStatusRepository.findByDescricao("EM ESTOQUE");
+		MaquinaStatus ms = maquinaStatusRepository.findByDescricao(Constants.EM_ESTOQUE);
 		maquina.setMaquinaStatus(ms);
 		maquinaRepository.merge(maquina);
 		
@@ -288,5 +289,10 @@ public class AlocacaoServiceBean implements AlocacaoService {
 		
 		LOGGER.info("Confirmação de desalocação da máquina " + alocacao.getMaquina().getCodigo() + " para o cliente " + alocacao.getCliente().getNomeFantasia() + " realizada com SUCESSO.");
 		LOGGER.info("A máquina " + alocacao.getMaquina().getCodigo() + " agora está com status " + maquina.getMaquinaStatus().getDescricao());
+	}
+
+	@Override
+	public List<Alocacao> findAlocacoesPendentesAlocacao() {
+		return alocacaoRepository.findAlocacoesPendentesAlocacao();
 	}
 }

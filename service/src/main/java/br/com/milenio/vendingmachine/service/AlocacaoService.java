@@ -27,4 +27,6 @@ public interface AlocacaoService {
 	public void desalocar(Alocacao alocacao) throws InconsistenciaException;
 	
 	public List<Alocacao> findAlocacoesAtivasByCliente(Long clienteId);
+
+	public List<Alocacao> findAlocacoesPendentesAlocacao();
 }

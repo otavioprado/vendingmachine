@@ -19,6 +19,7 @@ import org.primefaces.context.RequestContext;
 
 import br.com.milenio.vendingmachine.domain.model.Auditoria;
 import br.com.milenio.vendingmachine.domain.model.Fornecedor;
+import br.com.milenio.vendingmachine.domain.model.HistoricoMaquina;
 import br.com.milenio.vendingmachine.domain.model.Maquina;
 import br.com.milenio.vendingmachine.domain.model.MaquinaStatus;
 import br.com.milenio.vendingmachine.domain.model.Produto;
@@ -29,8 +30,10 @@ import br.com.milenio.vendingmachine.repository.MaquinaStatusRepository;
 import br.com.milenio.vendingmachine.security.Seguranca;
 import br.com.milenio.vendingmachine.service.AuditoriaService;
 import br.com.milenio.vendingmachine.service.FornecedorService;
+import br.com.milenio.vendingmachine.service.HistoricoMaquinaService;
 import br.com.milenio.vendingmachine.service.MaquinaService;
 import br.com.milenio.vendingmachine.service.ProdutoService;
+import br.com.milenio.vendingmachine.util.Constants;
 
 @Named
 @ViewScoped
@@ -54,6 +57,9 @@ public class MaquinaMB implements Serializable {
 	
 	@Inject
 	private MaquinaService maquinaService;
+	
+	@Inject
+	private HistoricoMaquinaService historicoMaquinaService;
 	
 	@Inject
 	private HttpServletRequest request;
@@ -108,6 +114,9 @@ public class MaquinaMB implements Serializable {
 			auditoria.setUsuario(Seguranca.getUsuarioLogado());
 			auditoria.setIp(request.getRemoteAddr());
 			auditoriaService.cadastrarNovaAcao(auditoria);
+			
+			// Cadastra no histórico da máquina
+			historicoMaquinaService.cadastrar(new HistoricoMaquina(new Date(), Constants.EM_ESTOQUE, Seguranca.getUsuarioLogado(), maquina, null));
 			
 		} catch(ConteudoJaExistenteNoBancoDeDadosException | InconsistenciaException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
@@ -200,6 +209,9 @@ public class MaquinaMB implements Serializable {
 			auditoria.setUsuario(Seguranca.getUsuarioLogado());
 			auditoria.setIp(request.getRemoteAddr());
 			auditoriaService.cadastrarNovaAcao(auditoria);
+			
+			// Cadastra no histórico da máquina
+			historicoMaquinaService.cadastrar(new HistoricoMaquina(new Date(), Constants.INATIVADA, Seguranca.getUsuarioLogado(), maquina, null));
 		} catch (InconsistenciaException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
 			return;
@@ -222,6 +234,9 @@ public class MaquinaMB implements Serializable {
 			auditoria.setUsuario(Seguranca.getUsuarioLogado());
 			auditoria.setIp(request.getRemoteAddr());
 			auditoriaService.cadastrarNovaAcao(auditoria);
+			
+			// Cadastra no histórico da máquina
+			historicoMaquinaService.cadastrar(new HistoricoMaquina(new Date(), Constants.EM_ESTOQUE, Seguranca.getUsuarioLogado(), maquina, null));
 		} catch (InconsistenciaException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
 			return;

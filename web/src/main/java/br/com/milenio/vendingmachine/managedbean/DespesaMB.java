@@ -30,6 +30,7 @@ import br.com.milenio.vendingmachine.service.AuditoriaService;
 import br.com.milenio.vendingmachine.service.DespesaService;
 import br.com.milenio.vendingmachine.service.MaquinaService;
 import br.com.milenio.vendingmachine.service.NaturezaFinanceiraService;
+import br.com.milenio.vendingmachine.util.Constants;
 
 @Named
 @ViewScoped
@@ -184,7 +185,7 @@ public class DespesaMB implements Serializable {
 			
 			// Remove da listagem as máquinas desativas
 			for(int i = 0; i < listMaquinas.size(); i++) {
-				if("INATIVADA".equalsIgnoreCase(listMaquinas.get(i).getMaquinaStatus().getDescricao())) {
+				if(Constants.INATIVADA.equalsIgnoreCase(listMaquinas.get(i).getMaquinaStatus().getDescricao())) {
 					listMaquinas.remove(i);
 				}
 			}

@@ -22,6 +22,7 @@ import org.primefaces.context.RequestContext;
 
 import br.com.milenio.vendingmachine.domain.model.Auditoria;
 import br.com.milenio.vendingmachine.domain.model.Fornecedor;
+import br.com.milenio.vendingmachine.domain.model.HistoricoMaquina;
 import br.com.milenio.vendingmachine.domain.model.Manutencao;
 import br.com.milenio.vendingmachine.domain.model.Maquina;
 import br.com.milenio.vendingmachine.domain.model.MaquinaStatus;
@@ -31,8 +32,10 @@ import br.com.milenio.vendingmachine.repository.MaquinaStatusRepository;
 import br.com.milenio.vendingmachine.security.Seguranca;
 import br.com.milenio.vendingmachine.service.AuditoriaService;
 import br.com.milenio.vendingmachine.service.FornecedorService;
+import br.com.milenio.vendingmachine.service.HistoricoMaquinaService;
 import br.com.milenio.vendingmachine.service.ManutencaoService;
 import br.com.milenio.vendingmachine.service.MaquinaService;
+import br.com.milenio.vendingmachine.util.Constants;
 
 @Named
 @ViewScoped
@@ -59,6 +62,9 @@ public class ManutencaoMB implements Serializable {
 	
 	@Inject
 	private ExternalContext external;
+	
+	@Inject
+	private HistoricoMaquinaService historicoMaquinaService;
 	
 	@Inject
 	private FacesContext ctx;
@@ -108,6 +114,9 @@ public class ManutencaoMB implements Serializable {
 			auditoria.setUsuario(Seguranca.getUsuarioLogado());
 			auditoria.setIp(request.getRemoteAddr());
 			auditoriaService.cadastrarNovaAcao(auditoria);
+			
+			// Cadastra no histórico da máquina
+			historicoMaquinaService.cadastrar(new HistoricoMaquina(new Date(), Constants.EM_MANUTENCAO, Seguranca.getUsuarioLogado(), manutencao.getMaquina(), null));
 		} catch(InconsistenciaException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
 			logger.info(e.getMessage());
@@ -171,7 +180,7 @@ public class ManutencaoMB implements Serializable {
 	public void consultarMaquina() {
 		try {
 			// Busca apenas as máquinas que estejam em estoque
-			MaquinaStatus maquinaStatus = maquinaStatusRepository.findByDescricao("EM ESTOQUE");
+			MaquinaStatus maquinaStatus = maquinaStatusRepository.findByDescricao(Constants.EM_ESTOQUE);
 			maquina.setMaquinaStatus(maquinaStatus);
 			listMaquinas = maquinaService.buscarComFiltro(maquina);
 			RequestContext context = RequestContext.getCurrentInstance();
@@ -208,6 +217,9 @@ public class ManutencaoMB implements Serializable {
 		auditoria.setIp(request.getRemoteAddr());
 		auditoriaService.cadastrarNovaAcao(auditoria);
 		
+		// Cadastra no histórico da máquina
+		historicoMaquinaService.cadastrar(new HistoricoMaquina(new Date(), Constants.EM_ESTOQUE, Seguranca.getUsuarioLogado(), man.getMaquina(), null));
+		
 		// Recarrega a listagem de atividades
 		consultar(false);
 	}
@@ -232,6 +244,9 @@ public class ManutencaoMB implements Serializable {
 		auditoria.setUsuario(Seguranca.getUsuarioLogado());
 		auditoria.setIp(request.getRemoteAddr());
 		auditoriaService.cadastrarNovaAcao(auditoria);
+		
+		// Cadastra no histórico da máquina
+		historicoMaquinaService.cadastrar(new HistoricoMaquina(new Date(), Constants.EM_ESTOQUE, Seguranca.getUsuarioLogado(), man.getMaquina(), null));
 		
 		try {
 			external.getFlash().setKeepMessages(true);
@@ -295,6 +310,9 @@ public class ManutencaoMB implements Serializable {
 		auditoria.setIp(request.getRemoteAddr());
 		auditoriaService.cadastrarNovaAcao(auditoria);
 		
+		// Cadastra no histórico da máquina
+		historicoMaquinaService.cadastrar(new HistoricoMaquina(new Date(), Constants.EM_ESTOQUE, Seguranca.getUsuarioLogado(), manutencao.getMaquina(), null));
+		
 		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, sb.toString(), null));
 	}
 	
@@ -317,7 +335,7 @@ public class ManutencaoMB implements Serializable {
 		Maquina maq = maquinaService.findByCodigo(codigo);
 		
 		if(maq != null) {
-			if(!"EM ESTOQUE".equalsIgnoreCase(maq.getMaquinaStatus().getDescricao()) && telaEdicao == false) {
+			if(!Constants.EM_ESTOQUE.equalsIgnoreCase(maq.getMaquinaStatus().getDescricao()) && telaEdicao == false) {
 				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Código inválido: O código " + codigo + " informado não corresponde a uma máquina disponível em estoque.", null));
 				manutencao.setMaquina(new Maquina());
 				return;

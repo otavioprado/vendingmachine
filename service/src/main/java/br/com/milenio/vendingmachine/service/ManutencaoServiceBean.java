@@ -17,6 +17,7 @@ import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
 import br.com.milenio.vendingmachine.repository.ManutencaoRepository;
 import br.com.milenio.vendingmachine.repository.MaquinaRepository;
 import br.com.milenio.vendingmachine.repository.MaquinaStatusRepository;
+import br.com.milenio.vendingmachine.util.Constants;
 
 @Stateless
 public class ManutencaoServiceBean implements ManutencaoService {
@@ -39,7 +40,7 @@ public class ManutencaoServiceBean implements ManutencaoService {
 	public void cadastrar(Manutencao manutencao) throws InconsistenciaException {
 		manutencao.setDataCadastro(new Date());
 		
-		if(!"EM ESTOQUE".equalsIgnoreCase(manutencao.getMaquina().getMaquinaStatus().getDescricao())) {
+		if(!Constants.EM_ESTOQUE.equalsIgnoreCase(manutencao.getMaquina().getMaquinaStatus().getDescricao())) {
 			LOGGER.warn("Tentativa de cadastrar uma manutenção para uma máquina que não está com situação 'EM ESTOQUE'.");
 			throw new InconsistenciaException("Manutenções só podem ser cadastradas para máquinas que estejam em estoque.");
 		}
@@ -47,7 +48,7 @@ public class ManutencaoServiceBean implements ManutencaoService {
 		fornecedorService.validarCodigoFornecedor(manutencao.getFornecedor().getCodigo());
 		
 		// Altera o status da máquina para EM MANUTENÇÃO
-		MaquinaStatus maquinaStatus = maquinaStatusRepository.findByDescricao("EM MANUTENÇÃO");
+		MaquinaStatus maquinaStatus = maquinaStatusRepository.findByDescricao(Constants.EM_MANUTENCAO);
 		manutencao.getMaquina().setMaquinaStatus(maquinaStatus);
 		maquinaRepository.merge(manutencao.getMaquina());
 		
@@ -97,18 +98,18 @@ public class ManutencaoServiceBean implements ManutencaoService {
 		if(!manutencaoAtual.getMaquina().getCodigo().equalsIgnoreCase(manutencao.getMaquina().getCodigo())) {
 			// Se houve troca de máquina, precisa colocar a máquina trocada para "EM MANUTENÇÃO"
 			
-			if(!"EM ESTOQUE".equalsIgnoreCase(manutencao.getMaquina().getMaquinaStatus().getDescricao())) {
+			if(!Constants.EM_ESTOQUE.equalsIgnoreCase(manutencao.getMaquina().getMaquinaStatus().getDescricao())) {
 				throw new InconsistenciaException("Manutenções só podem ser cadastradas para máquinas que estejam em estoque.");
 			}
 			
 			// Altera o status da máquina para EM MANUTENÇÃO
-			MaquinaStatus maquinaStatus = maquinaStatusRepository.findByDescricao("EM MANUTENÇÃO");
+			MaquinaStatus maquinaStatus = maquinaStatusRepository.findByDescricao(Constants.EM_MANUTENCAO);
 			manutencao.getMaquina().setMaquinaStatus(maquinaStatus);
 			maquinaRepository.merge(manutencao.getMaquina());
 			
 			// Verifica se precisa voltar a máquina antiga de "EM MANUTENÇÃO" para "EM ESTOQUE"
-			if("EM MANUTENÇÃO".equalsIgnoreCase(manutencaoAtual.getMaquina().getMaquinaStatus().getDescricao())) {
-				MaquinaStatus maquinaStatusEstoque = maquinaStatusRepository.findByDescricao("EM ESTOQUE");
+			if(Constants.EM_MANUTENCAO.equalsIgnoreCase(manutencaoAtual.getMaquina().getMaquinaStatus().getDescricao())) {
+				MaquinaStatus maquinaStatusEstoque = maquinaStatusRepository.findByDescricao(Constants.EM_ESTOQUE);
 				
 				Maquina maquina = manutencaoAtual.getMaquina();
 				maquina.setMaquinaStatus(maquinaStatusEstoque);
@@ -125,10 +126,10 @@ public class ManutencaoServiceBean implements ManutencaoService {
 		Manutencao manutencao = manutencaoRepository.findById(id);
 		Maquina maquina = manutencao.getMaquina();
 		
-		MaquinaStatus maquinaStatus = maquinaStatusRepository.findByDescricao("EM ESTOQUE");
+		MaquinaStatus maquinaStatus = maquinaStatusRepository.findByDescricao(Constants.EM_ESTOQUE);
 		manutencaoRepository.remove(manutencao);
 		
-		if("EM MANUTENÇÃO".equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
+		if(Constants.EM_MANUTENCAO.equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
 			// Salva o status da máquina para "EM ESTOQUE"
 			maquina.setMaquinaStatus(maquinaStatus);
 			maquinaRepository.persist(maquina);
@@ -142,7 +143,7 @@ public class ManutencaoServiceBean implements ManutencaoService {
 		manutencao.setIndEfetivado(true);
 		
 		// Uma vez que a máquina voltou da manutenção, coloca a máquina no status "EM ESTOQUE" novamente
-		MaquinaStatus maquinaStatus = maquinaStatusRepository.findByDescricao("EM ESTOQUE");
+		MaquinaStatus maquinaStatus = maquinaStatusRepository.findByDescricao(Constants.EM_ESTOQUE);
 		Maquina maquina = manutencao.getMaquina();
 		maquina.setMaquinaStatus(maquinaStatus);
 		maquinaRepository.merge(maquina);

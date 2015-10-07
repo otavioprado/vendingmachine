@@ -17,6 +17,7 @@ import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
 import br.com.milenio.vendingmachine.repository.MaquinaRepository;
 import br.com.milenio.vendingmachine.repository.MaquinaStatusRepository;
 import br.com.milenio.vendingmachine.repository.ReservaRepository;
+import br.com.milenio.vendingmachine.util.Constants;
 
 @Stateless
 public class ReservaServiceBean implements ReservaService {
@@ -41,7 +42,7 @@ public class ReservaServiceBean implements ReservaService {
 		}
 		
 		Maquina maquina = maquinaRepository.findById(reserva.getMaquina().getId());
-		if(!"EM ESTOQUE".equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
+		if(!Constants.EM_ESTOQUE.equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
 			throw new InconsistenciaException("Apenas máquinas que estejam em estoque podem ser reservadas para um cliente.");
 		}
 		
@@ -49,7 +50,7 @@ public class ReservaServiceBean implements ReservaService {
 		reservaRepository.persist(reserva);
 		
 		// Coloca a máquina para reservada
-		MaquinaStatus status = maquinaStatusRepository.findByDescricao("RESERVADA");
+		MaquinaStatus status = maquinaStatusRepository.findByDescricao(Constants.RESERVADA);
 		maquina.setMaquinaStatus(status);
 		maquinaRepository.merge(maquina);
 		
@@ -94,9 +95,9 @@ public class ReservaServiceBean implements ReservaService {
 		Reserva reserva = reservaRepository.findById(id);
 		Maquina maquina = reserva.getMaquina();
 		
-		if("RESERVADA".equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
+		if(Constants.RESERVADA.equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
 			// Salva o status da máquina para "EM ESTOQUE"
-			MaquinaStatus maquinaStatus = maquinaStatusRepository.findByDescricao("EM ESTOQUE");
+			MaquinaStatus maquinaStatus = maquinaStatusRepository.findByDescricao(Constants.EM_ESTOQUE);
 			maquina.setMaquinaStatus(maquinaStatus);
 			maquinaRepository.merge(maquina);
 		}

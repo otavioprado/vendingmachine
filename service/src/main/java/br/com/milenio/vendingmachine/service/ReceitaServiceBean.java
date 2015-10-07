@@ -12,6 +12,7 @@ import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
 import br.com.milenio.vendingmachine.repository.MaquinaRepository;
 import br.com.milenio.vendingmachine.repository.ReceitaRepository;
+import br.com.milenio.vendingmachine.util.Constants;
 
 @Stateless
 public class ReceitaServiceBean implements ReceitaService {
@@ -32,7 +33,7 @@ public class ReceitaServiceBean implements ReceitaService {
 			
 			if(maquina == null) {
 				throw new InconsistenciaException("O código da máquina é inválido");
-			} else if ("INATIVADA".equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
+			} else if (Constants.INATIVADA.equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
 				throw new InconsistenciaException("Máquinas inativadas não podem ter novas movimentações financeiras cadastradas.");
 			}
 		}
@@ -93,7 +94,7 @@ public class ReceitaServiceBean implements ReceitaService {
 			
 			if(maquina == null) {
 				throw new InconsistenciaException("O código da máquina é inválido");
-			} else if ("INATIVADA".equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
+			} else if (Constants.INATIVADA.equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
 				// Busca os dados atual da receita no banco de dados
 				Receita receitaAtual = receitaRepository.findById(receita.getId());
 				

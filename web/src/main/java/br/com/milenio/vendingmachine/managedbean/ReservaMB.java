@@ -18,6 +18,7 @@ import org.primefaces.context.RequestContext;
 
 import br.com.milenio.vendingmachine.domain.model.Auditoria;
 import br.com.milenio.vendingmachine.domain.model.Cliente;
+import br.com.milenio.vendingmachine.domain.model.HistoricoMaquina;
 import br.com.milenio.vendingmachine.domain.model.Maquina;
 import br.com.milenio.vendingmachine.domain.model.Reserva;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
@@ -25,8 +26,10 @@ import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
 import br.com.milenio.vendingmachine.security.Seguranca;
 import br.com.milenio.vendingmachine.service.AuditoriaService;
 import br.com.milenio.vendingmachine.service.ClienteService;
+import br.com.milenio.vendingmachine.service.HistoricoMaquinaService;
 import br.com.milenio.vendingmachine.service.MaquinaService;
 import br.com.milenio.vendingmachine.service.ReservaService;
+import br.com.milenio.vendingmachine.util.Constants;
 
 @Named
 @ViewScoped
@@ -54,6 +57,9 @@ public class ReservaMB implements Serializable {
 	@Inject
 	private ClienteService clienteService;
 	
+	@Inject
+	private HistoricoMaquinaService historicoMaquinaService;
+	
 	private Cliente cliente = new Cliente();
 	private Maquina maquina = new Maquina();
 	private Reserva reserva = new Reserva();
@@ -80,6 +86,9 @@ public class ReservaMB implements Serializable {
 			auditoria.setUsuario(Seguranca.getUsuarioLogado());
 			auditoria.setIp(request.getRemoteAddr());
 			auditoriaService.cadastrarNovaAcao(auditoria);
+			
+			// Cadastra no histórico da máquina
+			historicoMaquinaService.cadastrar(new HistoricoMaquina(new Date(), Constants.RESERVADA, Seguranca.getUsuarioLogado(), reserva.getMaquina(), reserva.getCliente()));
 		} catch (InconsistenciaException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
 			logger.info(e.getMessage());
@@ -120,6 +129,9 @@ public class ReservaMB implements Serializable {
 			auditoria.setUsuario(Seguranca.getUsuarioLogado());
 			auditoria.setIp(request.getRemoteAddr());
 			auditoriaService.cadastrarNovaAcao(auditoria);
+			
+			// Cadastra no histórico da máquina
+			historicoMaquinaService.cadastrar(new HistoricoMaquina(new Date(), Constants.EM_ESTOQUE, Seguranca.getUsuarioLogado(), reserva.getMaquina(), null));
 		} catch (InconsistenciaException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
 			logger.info(e.getMessage());
@@ -153,7 +165,7 @@ public class ReservaMB implements Serializable {
 		Maquina maq = maquinaService.findByCodigo(codigo);
 		
 		if(maq != null) {
-			if(!"EM ESTOQUE".equalsIgnoreCase(maq.getMaquinaStatus().getDescricao())) {
+			if(!Constants.EM_ESTOQUE.equalsIgnoreCase(maq.getMaquinaStatus().getDescricao())) {
 				ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Código inválido: O código " + codigo + " informado não corresponde a uma máquina disponível em estoque.", null));
 				reserva.setMaquina(new Maquina());
 				return;
@@ -186,7 +198,7 @@ public class ReservaMB implements Serializable {
 	
 	public void consultarMaquina() {
 		try {
-			List<String> listMaquinaStatus = Arrays.asList("EM ESTOQUE");
+			List<String> listMaquinaStatus = Arrays.asList(Constants.EM_ESTOQUE);
 			listMaquinas = maquinaService.buscarComFiltroComVariosStatus(maquina, listMaquinaStatus);
 			
 			RequestContext context = RequestContext.getCurrentInstance();

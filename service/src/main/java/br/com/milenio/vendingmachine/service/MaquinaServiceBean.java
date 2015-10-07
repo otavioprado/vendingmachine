@@ -17,6 +17,7 @@ import br.com.milenio.vendingmachine.repository.AuditoriaRepository;
 import br.com.milenio.vendingmachine.repository.MaquinaRepository;
 import br.com.milenio.vendingmachine.repository.MaquinaStatusRepository;
 import br.com.milenio.vendingmachine.repository.PerfilRepository;
+import br.com.milenio.vendingmachine.util.Constants;
 
 @Stateless
 public class MaquinaServiceBean implements MaquinaService {
@@ -50,7 +51,7 @@ public class MaquinaServiceBean implements MaquinaService {
 			throw new ConteudoJaExistenteNoBancoDeDadosException("Já existe uma máquina com o código " + maquina.getCodigo() + " cadastrada no banco de dados.");
 		}
 		
-		MaquinaStatus ms = maquinaStatusRepository.findByDescricao("EM ESTOQUE");
+		MaquinaStatus ms = maquinaStatusRepository.findByDescricao(Constants.EM_ESTOQUE);
 		maquina.setMaquinaStatus(ms);
 		maquinaRepository.persist(maquina);
 	}
@@ -84,11 +85,11 @@ public class MaquinaServiceBean implements MaquinaService {
 	public Maquina inativar(Long id) throws InconsistenciaException {
 		Maquina maquina = maquinaRepository.findById(id);
 		
-		if(!"EM ESTOQUE".equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
+		if(!Constants.EM_ESTOQUE.equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
 			throw new InconsistenciaException("Apenas máquinas em estoque podem ser inativadas!");
 		}
 		
-		MaquinaStatus status = maquinaStatusRepository.findByDescricao("INATIVADA");
+		MaquinaStatus status = maquinaStatusRepository.findByDescricao(Constants.INATIVADA);
 		maquina.setMaquinaStatus(status);
 		maquinaRepository.merge(maquina);
 		
@@ -159,11 +160,11 @@ public class MaquinaServiceBean implements MaquinaService {
 	public Maquina ativar(Long id) throws InconsistenciaException {
 		Maquina maquina = maquinaRepository.findById(id);
 		
-		if(!"INATIVADA".equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
+		if(!Constants.INATIVADA.equalsIgnoreCase(maquina.getMaquinaStatus().getDescricao())) {
 			throw new InconsistenciaException("Apenas máquinas inativas podem ser ativadas!");
 		}
 		
-		MaquinaStatus status = maquinaStatusRepository.findByDescricao("EM ESTOQUE");
+		MaquinaStatus status = maquinaStatusRepository.findByDescricao(Constants.EM_ESTOQUE);
 		maquina.setMaquinaStatus(status);
 		maquinaRepository.merge(maquina);
 		
