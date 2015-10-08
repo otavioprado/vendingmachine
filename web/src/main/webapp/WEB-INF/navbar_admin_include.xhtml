@@ -169,6 +169,14 @@
 									<li class="#{view.viewId eq '/admin/consultaReserva.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/consultaReserva.xhtml">Consultar reserva</a></li>
 								</c:if>
 							</c:if>
+							
+							<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CONS_HISTORICO_MAQUINA') eq true}">
+								<li role="separator" class="divider"></li>
+								<li class="dropdown-header">Histórico</li>
+								<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CONS_HISTORICO_MAQUINA') eq true}">
+									<li class="#{view.viewId eq '/admin/historicoMaquina.xhtml' ? 'active' : ''}"><a href="#{request.contextPath}/admin/historicoMaquina.xhtml">Histórico das máquinas</a></li>
+								</c:if>
+							</c:if>
 						</ul>
 					</li>
 				</ul>

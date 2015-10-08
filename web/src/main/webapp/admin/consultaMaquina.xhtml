@@ -100,7 +100,7 @@
 						</p:column>
 						
 						<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EDT_MAQUINA') eq true or seguranca.getPermissaoUsuarioLogado('ROLE_INATIVAR_MAQUINA') eq true}">
-							<p:column style="width:128px; text-align: center" headerText="Ações">
+							<p:column style="width:192px; text-align: center" headerText="Ações">
 					            <c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EDT_MAQUINA') eq true}">
 						            <p:button icon="ui-icon-pencil" title="Editar" outcome="editar_maquina.xhtml">
 										<f:param name="idMaquina" value="#{maquina.id}" />
@@ -108,14 +108,20 @@
 								</c:if>
 								
 								<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_INATIVAR_MAQUINA') eq true}">
-									<p:commandButton onclick="PF('dlgInativar').show();" icon="ui-icon-minusthick" title="Ativar" rendered="#{maquina.maquinaStatus.descricao eq 'EM ESTOQUE'}">
+									<p:commandButton onclick="PF('dlgInativar').show();" icon="ui-icon-minusthick" title="Inativar" rendered="#{maquina.maquinaStatus.descricao eq 'EM ESTOQUE'}">
 										<f:setPropertyActionListener value="#{maquina.id}" target="#{maquinaMB.maquina.id}" />
 						            </p:commandButton>
 					            </c:if>
 					            
 					            <c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_INATIVAR_MAQUINA') eq true}">
-									<p:commandButton onclick="PF('dlgAtivar').show();" icon="ui-icon-plusthick" title="Inativar" rendered="#{maquina.maquinaStatus.descricao eq 'INATIVADA'}">
+									<p:commandButton onclick="PF('dlgAtivar').show();" icon="ui-icon-plusthick" title="Ativar" rendered="#{maquina.maquinaStatus.descricao eq 'INATIVADA'}">
 										<f:setPropertyActionListener value="#{maquina.id}" target="#{maquinaMB.maquina.id}" />
+						            </p:commandButton>
+					            </c:if>
+					            
+					            <c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_CONS_HISTORICO_MAQUINA') eq true}">
+									<p:commandButton action="#{maquinaMB.consultarHistorico}" icon="ui-icon-note" title="Histórico da máquina">
+										<f:setPropertyActionListener value="#{maquina.codigo}" target="#{maquinaMB.maquina.codigo}" />
 						            </p:commandButton>
 					            </c:if>
 							</p:column>

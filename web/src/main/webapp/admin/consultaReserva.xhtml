@@ -32,7 +32,8 @@
 					<div class="col-lg-4">
 						<div class="form-group">
 							<label for="codigoCliente">Código do cliente</label>
-							<input id="codigoCliente" name="codigoCliente" type="text" class="form-control" placeholder="Código do cliente" jsf:value="#{reservaMB.reservaConsParam.cliente.codigo}" />
+							<input id="codigoCliente" name="codigoCliente" type="text" class="form-control" placeholder="Código do cliente" jsf:value="#{reservaMB.reservaConsParam.cliente.codigo}" 
+								maxlength="10"/>
 							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigoCliente"/>
 						</div>
 					</div>
@@ -40,7 +41,8 @@
 					<div class="col-lg-4">
 						<div class="form-group">
 							<label for="codigoMaquina">Código da máquina</label>
-							<input id="codigoMaquina" name="codigoMaquina" type="text" class="form-control" placeholder="Código da máquina" jsf:value="#{reservaMB.reservaConsParam.maquina.codigo}" />
+							<input id="codigoMaquina" name="codigoMaquina" type="text" class="form-control" placeholder="Código da máquina" jsf:value="#{reservaMB.reservaConsParam.maquina.codigo}" 
+								maxlength="20"/>
 							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigoMaquina"/>
 						</div>
 					</div>

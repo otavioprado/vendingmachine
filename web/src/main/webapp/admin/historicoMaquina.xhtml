@@ -1,0 +1,112 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;"> 
+]>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:jsf="http://xmlns.jcp.org/jsf"
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+    template="layoutLogado.xhtml">
+
+	<f:metadata>
+	    <f:viewParam name="maquinaCodigo" value="#{historicoMaquinaMB.historicoConsParam.maquina.codigo}" />
+	    <f:event type="preRenderView" listener="#{historicoMaquinaMB.carregarHistoricoMaquina}"/>
+	</f:metadata>
+
+	<ui:define name="script">
+		<h:outputScript name="js/datepicker-pt-BR.js" />
+
+		<script>
+			$(function() {
+				$("#dataOperacao").datepicker($.datepicker.regional["pt-BR"]);
+				$("#dataOperacao").datepicker("option", "maxDate", 0);
+			});
+		</script>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<p:panel id="basic" header="Filtro de pesquisa de histórico de máquinas" style="margin-bottom:20px">
+			<h:form prependId="false">
+				<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
+				<div class="row">
+					
+					<div class="col-lg-4">	
+						<div class="form-group">
+							<label for="codigoMaquina">Código</label>
+							<input id="codigoMaquina" name="codigoMaquina" type="text" class="form-control" placeholder="Código" jsf:value="#{historicoMaquinaMB.historicoConsParam.maquina.codigo}" maxlength="20"/>
+							<pe:keyFilter regEx="/[A-Z0-9]+/" for="codigoMaquina"/>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="status">Status</label>
+							<h:inputText id="status" name="status" type="text" class="form-control" pt:placeholder="Status" value="#{historicoMaquinaMB.historicoConsParam.status}" maxlength="25"/>
+							<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="status"/>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="login">Login do responsável</label>
+							<h:inputText id="login" name="login" type="text" class="form-control" pt:placeholder="Login do responsável" value="#{historicoMaquinaMB.historicoConsParam.usuarioSistema.login}" maxlength="25"/>
+							<pe:keyFilter regEx="/[a-z0-9_]/i" for="login"/>
+						</div>
+					</div>
+					
+					<div class="col-lg-4">
+						<div class="form-group">
+							<label for="dataOperacao">Data da operação</label>
+							<h:inputText id="dataOperacao" name="dataOperacao" value="#{historicoMaquinaMB.historicoConsParam.data}" 
+								styleClass="form-control" maxlength="10" pt:placeholder="Data da operação">
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+							</h:inputText>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<h:commandLink id="btn-signup" class="btn btn-primary" actionListener="#{historicoMaquinaMB.consultar}" update="table-maquinas" style="width: 100%; color:white;">
+								<i class="glyphicon glyphicon-search"></i>&nbsp;Pesquisar&nbsp;
+							</h:commandLink>
+						</div>
+					</div>
+				</div>
+			</h:form>
+			
+			<h:form prependId="false" rendered="${not empty historicoMaquinaMB.listHistorico}">
+				<p:dataTable tableStyleClass="table-hover" id="table-maquinas" var="historico" value="#{historicoMaquinaMB.listHistorico}" rows="10" paginator="true" paginatorPosition="bottom"
+					paginatorAlwaysVisible="false" rowsPerPageTemplate="10,15,20,25,30">
+					<h:inputHidden id="id" value="#{historico.id}" />
+					
+					<p:column headerText="Código da máquina">
+						<h:outputText id="historicoMaquinaCodigo" value="#{historico.maquina.codigo}" />
+					</p:column>
+					
+					<p:column headerText="Status">
+						<h:outputText id="historicoMaquinaStatus" value="#{historico.status}" />
+					</p:column>
+					
+					<p:column headerText="Login do responsável">
+						<h:outputText id="historicoMaquinaLoginResponsavel" value="#{historico.usuarioSistema.login}" />
+					</p:column>
+					
+					<p:column headerText="Cliente">
+						<h:outputText id="historicoCliente" value="#{historico.cliente != null ? historico.cliente.nomeFantasia : '-'}" />
+					</p:column>
+					
+					<p:column headerText="Data da operação">
+						<h:outputText id="data" value="#{historico.data}" >
+							<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+		</p:panel>
+	</ui:define>
+</ui:composition>

@@ -1,11 +1,13 @@
 package br.com.milenio.vendingmachine.managedbean;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -60,6 +62,9 @@ public class MaquinaMB implements Serializable {
 	
 	@Inject
 	private HistoricoMaquinaService historicoMaquinaService;
+	
+	@Inject
+	private ExternalContext external;
 	
 	@Inject
 	private HttpServletRequest request;
@@ -370,6 +375,16 @@ public class MaquinaMB implements Serializable {
 		
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('dlgAdicionarProduto').hide();");
+	}
+	
+	public void consultarHistorico() throws IOException {
+		try {
+			external.getFlash().setKeepMessages(true);
+			external.redirect(request.getContextPath() + "/admin/historicoMaquina.xhtml?maquinaCodigo=" + maquina.getCodigo());
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.error("Erro ao tentar redirecionar para a página " + request.getContextPath() + "/consultaMaquina.xhtml");
+		}
 	}
 
 	public Maquina getMaquina() {
