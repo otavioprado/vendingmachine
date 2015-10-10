@@ -41,7 +41,6 @@ public class NaturezaFinanceiraServiceBean implements NaturezaFinanceiraService 
 			
 			LOGGER.info(msg);
 			throw new ConteudoJaExistenteNoBancoDeDadosException(msg);
-			
 		}
 	    
 		naturezaFinanceiraRepository.persist(naturezaFinanceira);
@@ -110,6 +109,11 @@ public class NaturezaFinanceiraServiceBean implements NaturezaFinanceiraService 
 		}
 		
 		naturezaFinanceiraRepository.merge(naturezaFinanceira);
+	}
+	
+	@Override
+	public NaturezaFinanceira findByDescricao(String descricao) {
+		return naturezaFinanceiraRepository.findByDescricao(descricao);
 	}
 
 	@Override

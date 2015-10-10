@@ -30,7 +30,6 @@ public class AlocacaoRepositoryBean extends AbstractVendingMachineRepositoryBean
 		uaiCriteria.andIsNull("dataDesalocacao");
 		
 		List<Alocacao> alocacoes = (List<Alocacao>) uaiCriteria.getResultList();
-		
 		return alocacoes;
 	}
 
@@ -69,7 +68,6 @@ public class AlocacaoRepositoryBean extends AbstractVendingMachineRepositoryBean
 		}
 		
 		List<Alocacao> alocacoes = (List<Alocacao>) uaiCriteria.getResultList();
-		
 		return alocacoes;
 	}
 
@@ -87,7 +85,6 @@ public class AlocacaoRepositoryBean extends AbstractVendingMachineRepositoryBean
 		uaiCriteria.andIsNotNull("dataAlocacao");
 		
 		List<Alocacao> alocacoes = (List<Alocacao>) uaiCriteria.getResultList();
-		
 		return alocacoes;
 	}
 
@@ -100,7 +97,16 @@ public class AlocacaoRepositoryBean extends AbstractVendingMachineRepositoryBean
 		uaiCriteria.andIsNull("dataAlocacao");
 		
 		List<Alocacao> alocacoes = (List<Alocacao>) uaiCriteria.getResultList();
+		return alocacoes;
+	}
+
+	@Override
+	public List<Alocacao> findAlocacoesAtivas() {
+		UaiCriteria<Alocacao> uaiCriteria = UaiCriteriaFactory.createQueryCriteria(getEntityManager(), Alocacao.class);
+		uaiCriteria.andIsNull("dataDesalocacao");
+		uaiCriteria.andIsNotNull("dataAlocacao");
 		
+		List<Alocacao> alocacoes = (List<Alocacao>) uaiCriteria.getResultList();
 		return alocacoes;
 	}
 }

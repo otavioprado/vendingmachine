@@ -143,7 +143,7 @@
 								<label>&nbsp;</label>
 								<button id="btn-bloq" onclick="PF('dlgInativar').show();" class="btn btn-warning" type="button" style="width: 100%; color:white;"
 									jsf:rendered="#{maquinaMB.maquina.maquinaStatus.descricao eq 'EM ESTOQUE'? true : false}">
-									<i class="glyphicon glyphicon-minus"/>&nbsp;Inativar&nbsp;
+									<i class="glyphicon glyphicon-minus-sign"/>&nbsp;Inativar&nbsp;
 								</button>
 							</div>
 						</div>
@@ -155,7 +155,7 @@
 								<label>&nbsp;</label>
 								<button id="btn-bloq" onclick="PF('dlgAtivar').show();" class="btn btn-warning" type="button" style="width: 100%; color:white;"
 									jsf:rendered="#{maquinaMB.maquina.maquinaStatus.descricao eq 'INATIVADA'? true : false}">
-									<i class="glyphicon glyphicon-plus"/>&nbsp;Ativar&nbsp;
+									<i class="glyphicon glyphicon-plus-sign"/>&nbsp;Ativar&nbsp;
 								</button>
 							</div>
 						</div>
@@ -366,7 +366,7 @@
 								<div class="form-group">
 									<h:commandLink id="btn-inativar" class="btn btn-primary" action="#{maquinaMB.inativar}" 
 										style="width: 100%; color:white;" update="table-atividades">
-										<i class="glyphicon glyphicon-minus"></i>&nbsp;Inativar&nbsp;
+										<i class="glyphicon glyphicon-minus-sign"></i>&nbsp;Inativar&nbsp;
 									</h:commandLink>
 								</div>
 							</div>
@@ -399,7 +399,7 @@
 								<div class="form-group">
 									<h:commandLink id="btn-ativar" class="btn btn-primary" action="#{maquinaMB.ativar}" 
 										style="width: 100%; color:white;" update="table-atividades">
-										<i class="glyphicon glyphicon-plus"></i>&nbsp;Ativar&nbsp;
+										<i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Ativar&nbsp;
 									</h:commandLink>
 								</div>
 							</div>

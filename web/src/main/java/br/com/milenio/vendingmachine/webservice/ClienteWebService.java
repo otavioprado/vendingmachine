@@ -18,15 +18,10 @@ import javax.ws.rs.core.Response;
 import br.com.milenio.vendingmachine.domain.model.Alocacao;
 import br.com.milenio.vendingmachine.domain.model.Cliente;
 import br.com.milenio.vendingmachine.domain.model.Maquina;
-import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.service.AlocacaoService;
-import br.com.milenio.vendingmachine.service.ClienteService;
 
 @Path("/clientes")
 public class ClienteWebService {
-	
-	@Inject
-	private ClienteService clienteService;
 	
 	@Inject
 	private AlocacaoService alocacaoService;
@@ -35,21 +30,13 @@ public class ClienteWebService {
 	@Path("listar")
 	@Produces(MediaType.APPLICATION_JSON + "; charset=UTF-8") 
 	public Response listar() {
-		
-		List<Cliente> lstClientes;
-		Cliente filtro = new Cliente();
-		filtro.setIndAtivo(true);
-		
-		try {
-			lstClientes = clienteService.buscarClientesComFiltro(filtro);
-		} catch (CadastroInexistenteException e) {
-			// Não existe clientes cadastrados no sistema
-			return Response.serverError().build(); // HTTP 500 - Internal server error
-		}
+		List<Alocacao> alocacoes = alocacaoService.findAlocacoesAtivas();
 		
 		JsonArrayBuilder clientesBuilder = Json.createArrayBuilder();
 		
-		for(Cliente cliente : lstClientes) {
+		for(Alocacao alocacao : alocacoes) {
+			Cliente cliente = alocacao.getCliente();
+			
 			// Contruindo o motivo do bloqueio
 			JsonObjectBuilder clienteJsonBuilder = Json.createObjectBuilder();
 			clienteJsonBuilder.add("id", cliente.getId());

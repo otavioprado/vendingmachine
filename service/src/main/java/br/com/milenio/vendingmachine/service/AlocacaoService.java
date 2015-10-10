@@ -29,4 +29,6 @@ public interface AlocacaoService {
 	public List<Alocacao> findAlocacoesAtivasByCliente(Long clienteId);
 
 	public List<Alocacao> findAlocacoesPendentesAlocacao();
+
+	public List<Alocacao> findAlocacoesAtivas();
 }

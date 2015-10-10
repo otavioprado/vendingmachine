@@ -17,4 +17,6 @@ public interface AlocacaoRepository extends Repository<Alocacao, Long> {
 	List<Alocacao> findAlocacoesAtivasByCliente(Long clienteId);
 
 	List<Alocacao> findAlocacoesPendentesAlocacao();
+
+	List<Alocacao> findAlocacoesAtivas();
 }

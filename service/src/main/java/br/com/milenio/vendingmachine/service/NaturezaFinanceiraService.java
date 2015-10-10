@@ -20,4 +20,6 @@ public interface NaturezaFinanceiraService {
 	public void editar(NaturezaFinanceira naturezaFinanceira) throws ConteudoJaExistenteNoBancoDeDadosException;
 
 	public NaturezaFinanceira excluirNaturezaFinanceira(Long idNatureza) throws InconsistenciaException;
+	
+	public NaturezaFinanceira findByDescricao(String descricao);
 }
