@@ -38,6 +38,9 @@ public class DespesaWebService {
 	@Inject
 	private NaturezaFinanceiraService naturezaFinanceiraService;
 	
+	/**
+	 * Abrir máquina
+	 */
 	@PUT
 	@Path("cadastrar/{idMaquina}")
 	@Consumes({MediaType.APPLICATION_JSON})

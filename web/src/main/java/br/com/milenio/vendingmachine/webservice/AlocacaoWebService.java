@@ -30,7 +30,7 @@ public class AlocacaoWebService {
 	@GET
 	@Path("listarpendentes")
 	@Produces(MediaType.APPLICATION_JSON + "; charset=UTF-8")
-	public Response listarProdutosQuePodemSerAlocados() {
+	public Response listarMaquinasPendentesAlocacao() {
 		List<Alocacao> alocacoesPendenteAlocacao = alocacaoService.findAlocacoesPendentesAlocacao();
 		
 		if(alocacoesPendenteAlocacao == null || alocacoesPendenteAlocacao.isEmpty()) {

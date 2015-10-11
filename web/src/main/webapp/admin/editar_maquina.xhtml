@@ -165,13 +165,13 @@
 						<p:fieldset style="margin-bottom:20px" styleClass="">
 							<legend>Produtos que podem ser alocados à máquina</legend>
 							
-							<div class="col-lg-9">
+							<div class="col-lg-9" jsf:rendered="#{maquinaMB.maquina.maquinaStatus.descricao eq 'EM ESTOQUE'? true : false}">
 								<div class="form-group">
 									<label>&nbsp;</label>
 								</div>
 							</div>
 							
-							<div class="col-lg-3">
+							<div class="col-lg-3" jsf:rendered="#{maquinaMB.maquina.maquinaStatus.descricao eq 'EM ESTOQUE'? true : false}">
 								<div class="form-group">
 									<h:commandLink id="btn-add-produto" class="btn btn-primary" actionListener="#{maquinaMB.abrirDialogAdicionarProduto}" style="width: 100%; color:white;" immediate="false">
 										<i class="glyphicon glyphicon-plus"></i>&nbsp;Adicionar produto&nbsp;
@@ -191,7 +191,7 @@
 											<h:outputText id="produtoDescricao" value="#{produto.descricao}" />
 						            	</p:column>
 						            	
-						            	<p:column style="width:64px;text-align: center">
+						            	<p:column style="width:64px;text-align: center" rendered="#{maquinaMB.maquina.maquinaStatus.descricao eq 'EM ESTOQUE'? true : false}">
 											<p:commandButton action="#{maquinaMB.excluirProduto}" update="table-produtos" icon="ui-icon-trash" title="Remover" >
 								                <f:setPropertyActionListener value="#{produto}" target="#{maquinaMB.produtoSelecionado}" />
 								            </p:commandButton>
@@ -290,7 +290,9 @@
 			</h:form>
 		</p:dialog>
 		
-		<p:dialog widgetVar="dlgAdicionarProduto" width="800" showHeader="false" resizable="false" modal="true">
+		<p:dialog widgetVar="dlgAdicionarProduto" width="800" showHeader="false" resizable="false" modal="true" 
+			rendered="#{maquinaMB.maquina.maquinaStatus.descricao eq 'EM ESTOQUE'? true : false}">
+			
 			<h:form prependId="false">
 				<p:messages id="dlgMessagesProduto" for="Message3" showDetail="false" autoUpdate="true" closable="true"/>
 				<div class="form-group">

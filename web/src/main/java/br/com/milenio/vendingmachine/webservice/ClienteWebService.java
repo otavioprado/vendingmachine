@@ -26,6 +26,10 @@ public class ClienteWebService {
 	@Inject
 	private AlocacaoService alocacaoService;
 	
+	/**
+	 * Retorna todos os clientes que tem máquinas alocadas (Login > Gerenciar máquinas)
+	 * @return
+	 */
 	@GET
 	@Path("listar")
 	@Produces(MediaType.APPLICATION_JSON + "; charset=UTF-8") 
@@ -50,6 +54,11 @@ public class ClienteWebService {
 		return Response.status(200).entity(clientes.toString()).build();
 	}
 	
+	/**
+	 * Retorna a lista de máquinas alocadas para o cliente requisitado (Login > Gerenciar máquinas > Cliente)
+	 * @param id do cliente
+	 * @return máquinas alocadas para o ID do cliente informado
+	 */
 	@GET
 	@Path("{id}/maquinas")
 	@Produces(MediaType.APPLICATION_JSON + "; charset=UTF-8") 

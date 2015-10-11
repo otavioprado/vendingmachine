@@ -104,6 +104,10 @@ public class AlocacaoServiceBean implements AlocacaoService {
 				throw new InconsistenciaException("Apenas máquinas que estejam em estoque ou reservadas podem ter uma solicitação de alocação cadastrada.");
 			}
 			
+			if(maquina.getProdutos() == null || maquina.getProdutos().isEmpty()) {
+				throw new InconsistenciaException("Apenas máquinas que tenham produtos vinculados podem ter uma solicitação de alocação cadastrada.");
+			}
+			
 			// Se a máquina selecionada tiver uma reserva cadastrada, então tem que ser para o cliente especifico
 			if(Constants.RESERVADA.equalsIgnoreCase(descricao)) {
 				Reserva resultado = reservaRepository.findByMaquina(maquina);
