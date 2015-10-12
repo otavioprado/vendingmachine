@@ -8,6 +8,7 @@
 	xmlns:p="http://primefaces.org/ui" xmlns:jsf="http://xmlns.jcp.org/jsf"
 	xmlns:c="http://java.sun.com/jstl/core"
 	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
 	template="layoutLogado.xhtml">
 
 	<ui:define name="script">
@@ -16,6 +17,7 @@
 		<script>
 			$(function() {
 				$("#dataAcao").datepicker($.datepicker.regional["pt-BR"]);
+				$("#dataAcao").datepicker("option", "maxDate", 0 );
 			});
 		</script>
 	</ui:define>
@@ -41,7 +43,7 @@
 						<div class="form-group">
 							<label for="dataAcao">Data da ação</label>
 							<h:inputText id="dataAcao" value="#{auditoriaMB.dataAcao}"
-								styleClass="form-control" maxlength="10">
+								styleClass="form-control" maxlength="10" pt:placeholder="Data da ação">
 								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
 							</h:inputText>
 						</div>

@@ -12,6 +12,9 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+
 import br.com.milenio.vendingmachine.domain.model.Auditoria;
 import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
@@ -40,9 +43,22 @@ public class AuditoriaMB implements Serializable {
 	
 	public void consultarAcoes() {
 		try {
+			if(dataAcao != null) {
+				// Valida se a data informada não é menor que a data atual
+				DateTime hoje = new DateTime(new Date());
+				DateTime dataInformada = new DateTime(dataAcao);
+				Days daysBetween = Days.daysBetween(hoje, dataInformada);
+				
+				if(daysBetween.getDays() > 0) {
+					ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Apenas datas passadas podem ser informadas.", null));
+					return;
+				}
+			}
+			
 			lstAuditoria = auditoriaService.buscar(usuario, dataAcao, ip, perfilId);
 		} catch (CadastroInexistenteException e) {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), null));
+			lstAuditoria = new ArrayList<Auditoria>(); 
 		}
 		
 		 usuario = new UsuarioSistema();

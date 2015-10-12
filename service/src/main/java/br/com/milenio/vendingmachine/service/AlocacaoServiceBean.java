@@ -304,4 +304,9 @@ public class AlocacaoServiceBean implements AlocacaoService {
 	public List<Alocacao> findAlocacoesAtivas() {
 		return alocacaoRepository.findAlocacoesAtivas();
 	}
+
+	@Override
+	public Alocacao findAlocacaoAtualmenteAtivaParaUmaMaquina(Maquina maquina) {
+		return alocacaoRepository.findAlocacaoAtualmenteAtivaParaUmaMaquina(maquina);
+	}
 }

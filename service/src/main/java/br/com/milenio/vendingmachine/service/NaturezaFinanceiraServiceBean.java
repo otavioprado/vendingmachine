@@ -43,6 +43,7 @@ public class NaturezaFinanceiraServiceBean implements NaturezaFinanceiraService 
 			throw new ConteudoJaExistenteNoBancoDeDadosException(msg);
 		}
 	    
+		naturezaFinanceira.setIndApagavel(true);
 		naturezaFinanceiraRepository.persist(naturezaFinanceira);
 	}
 
@@ -119,6 +120,11 @@ public class NaturezaFinanceiraServiceBean implements NaturezaFinanceiraService 
 	@Override
 	public NaturezaFinanceira excluirNaturezaFinanceira(Long idNatureza) throws InconsistenciaException{
 		NaturezaFinanceira natureza = naturezaFinanceiraRepository.findById(idNatureza);
+		
+		if(natureza.getIndApagavel() != null && !natureza.getIndApagavel()) {
+			throw new InconsistenciaException("A natureza financeira solicitada não pode ser excluída.");
+		}
+		
 		naturezaFinanceiraRepository.remove(natureza);
 		return natureza;
 	}

@@ -6,6 +6,7 @@ import javax.ejb.Local;
 
 import br.com.milenio.vendingmachine.domain.Repository;
 import br.com.milenio.vendingmachine.domain.model.Alocacao;
+import br.com.milenio.vendingmachine.domain.model.Maquina;
 
 @Local
 public interface AlocacaoRepository extends Repository<Alocacao, Long> {
@@ -19,4 +20,6 @@ public interface AlocacaoRepository extends Repository<Alocacao, Long> {
 	List<Alocacao> findAlocacoesPendentesAlocacao();
 
 	List<Alocacao> findAlocacoesAtivas();
+
+	Alocacao findAlocacaoAtualmenteAtivaParaUmaMaquina(Maquina maquina);
 }

@@ -29,6 +29,9 @@ public class NaturezaFinanceira implements Serializable{
 	@Column(name = "TIPO_NATUREZA_FINANCEIRA")
 	private String tipoNaturezaFinanceira;
 	
+	@Column(name = "IND_APAGAVEL")
+	private Boolean indApagavel;
+	
 	public Long getId() {
 		return id;
 	}
@@ -53,5 +56,10 @@ public class NaturezaFinanceira implements Serializable{
 	public void setTipoNaturezaFinanceira(String tipoNaturezaFinanceira) {
 		this.tipoNaturezaFinanceira = tipoNaturezaFinanceira;
 	}
-
+	public Boolean getIndApagavel() {
+		return indApagavel;
+	}
+	public void setIndApagavel(Boolean indApagavel) {
+		this.indApagavel = indApagavel;
+	}
 }

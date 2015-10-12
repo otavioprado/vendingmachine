@@ -45,8 +45,10 @@
 					<div class="col-lg-4">
 						<div class="form-group">
 							<label for="status">Status</label>
-							<h:inputText id="status" name="status" type="text" class="form-control" pt:placeholder="Status" value="#{historicoMaquinaMB.historicoConsParam.status}" maxlength="25"/>
-							<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="status"/>
+							<h:selectOneMenu id="status" value="#{historicoMaquinaMB.historicoConsParam.status}" styleClass="form-control">
+				                <f:selectItem itemLabel="[Selecione]" itemValue="#{null}" noSelectionOption="true" />
+				                <f:selectItems value="#{historicoMaquinaMB.listStatus}" var="status" itemValue="#{status.descricao}" itemLabel="#{status.descricao}"/>
+			            	</h:selectOneMenu>
 						</div>
 					</div>
 					

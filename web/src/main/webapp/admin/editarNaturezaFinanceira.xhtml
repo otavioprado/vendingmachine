@@ -75,7 +75,8 @@
 					
 					<div class="col-md-3">
 						<div class="form-group">
-							<h:commandLink id="btn-excluir-ativ" class="btn btn-danger" actionListener="#{naturezaFinanceiraMB.abrirDialogExcluir}" style="width: 100%; color:white;" immediate="true">
+							<h:commandLink id="btn-excluir-ativ" class="btn btn-danger" actionListener="#{naturezaFinanceiraMB.abrirDialogExcluir}" style="width: 100%; color:white;" immediate="true"
+								rendered="#{naturezaFinanceiraMB.naturezaFinanceira.indApagavel eq true}">
 								<i class="glyphicon glyphicon-remove"></i>&nbsp;Excluir&nbsp;
 							</h:commandLink>
 						</div>

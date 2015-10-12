@@ -54,7 +54,7 @@
 							<legend>Máquina</legend>
 							<div class="col-lg-4">
 								<div class="form-group">
-									<label for="codigoMaquina">Código *</label>
+									<label for="codigoMaquina">Código</label>
 									<h:inputText id="codigoMaquina" name="codigoMaquina" type="text" class="form-control" pt:placeholder="Código" value="#{alocacaoMB.alocacao.maquina.codigo}" required="true" maxlength="20"
 										requiredMessage="O campo código da máquina é obrigatório" disabled="true" readonly="true">
 										<f:ajax event="blur" listener="#{alocacaoMB.selecionarMaquina(alocacaoMB.alocacao.maquina.codigo)}" render="codigoMaquina maquinaModelo dataAquisicao" />
@@ -82,7 +82,7 @@
 							<legend>Contrato</legend>
 							<div class="col-lg-4">
 								<div class="form-group">
-									<label for="codigoContrato">Código *</label>
+									<label for="codigoContrato">Código</label>
 									<h:inputText id="codigoContrato" name="codigo" type="text" class="form-control" pt:placeholder="Código" value="#{alocacaoMB.alocacao.contrato.codigo}" required="true" maxlength="20"
 										requiredMessage="O campo código do contrato é obrigatório" disabled="true" readonly="true">
 										 <f:ajax event="blur" listener="#{alocacaoMB.selecionarContrato(alocacaoMB.alocacao.contrato.codigo)}" render="codigoContrato modalidadeContrato descricaoContrato" />
@@ -105,18 +105,12 @@
 							</div>
 						</p:fieldset>
 					</div>
-					
-        			<div class="col-lg-12">
-						<div class="form-group">
-							<div class="required">* Campos obrigatórios</div>
-						</div>
-					</div>
 				</div>
 	     		<div class="row">	
-					<div class="col-md-3">
+					<div class="col-md-4">
 						<div class="form-group">
 							<h:commandLink id="btn-signup" class="btn btn-primary" actionListener="#{alocacaoMB.solicitarDesalocacao}" style="width: 100%; color:white;">
-								<i class="glyphicon glyphicon-saved"></i>&nbsp;Confirmar desalocação&nbsp;
+								<i class="glyphicon glyphicon-saved"></i>&nbsp;Confirmar solicitação de desalocação&nbsp;
 							</h:commandLink>
 						</div>
 					</div>

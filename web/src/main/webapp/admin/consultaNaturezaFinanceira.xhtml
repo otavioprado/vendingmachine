@@ -78,7 +78,8 @@
 									</c:if>
 									
 									<c:if test="#{seguranca.getPermissaoUsuarioLogado('ROLE_EXCLUIR_NATUREZA') eq true}">
-										<p:commandButton onclick="PF('dlgExcluir').show();" icon="ui-icon-trash" title="Excluir">
+										<p:commandButton onclick="PF('dlgExcluir').show();" icon="ui-icon-trash" title="Excluir"
+											rendered="#{natureza.indApagavel eq true}">
 											<f:setPropertyActionListener value="#{natureza.id}" target="#{naturezaFinanceiraMB.idNatureza}" />
 							            </p:commandButton>
 						            </c:if>

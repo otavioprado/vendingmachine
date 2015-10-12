@@ -12,4 +12,10 @@ public class Constants {
 	
 	// Natureza financeira
 	public static final String ABASTECIMENTO = "ABASTECIMENTO";
+	public static final String RECOLHIMENTO = "RECOLHIMENTO";
+	public static final String PORCENTAGEM_SOB_AS_VENDAS = "PORCENTAGEM SOB AS VENDAS";
+	
+	// Tipos de contratos
+	public static final String PORCENTAGEM = "PORCENTAGEM";
+	public static final String ALUGUEL = "ALUGUEL";
 }

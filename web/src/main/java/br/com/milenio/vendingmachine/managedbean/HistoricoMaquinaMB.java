@@ -11,7 +11,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import br.com.milenio.vendingmachine.domain.model.HistoricoMaquina;
+import br.com.milenio.vendingmachine.domain.model.MaquinaStatus;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
+import br.com.milenio.vendingmachine.repository.MaquinaStatusRepository;
 import br.com.milenio.vendingmachine.service.HistoricoMaquinaService;
 
 @Named
@@ -21,6 +23,9 @@ public class HistoricoMaquinaMB implements Serializable {
 	
 	@Inject
 	private HistoricoMaquinaService historicoMaquinaService;
+	
+	@Inject
+	private MaquinaStatusRepository maquinaStatusRepository;
 	
 	@Inject
 	private FacesContext ctx;
@@ -71,5 +76,9 @@ public class HistoricoMaquinaMB implements Serializable {
 
 	public void setListHistorico(List<HistoricoMaquina> listHistorico) {
 		this.listHistorico = listHistorico;
+	}
+	
+	public List<MaquinaStatus> getListStatus() {
+		return maquinaStatusRepository.getAll();
 	}
 }

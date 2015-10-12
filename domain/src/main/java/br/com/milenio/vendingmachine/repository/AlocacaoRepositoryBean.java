@@ -10,6 +10,7 @@ import com.uaihebert.uaicriteria.UaiCriteriaFactory;
 
 import br.com.milenio.vendingmachine.domain.AbstractVendingMachineRepositoryBean;
 import br.com.milenio.vendingmachine.domain.model.Alocacao;
+import br.com.milenio.vendingmachine.domain.model.Maquina;
 
 @Stateless(name = "AlocacaoRepository")
 public class AlocacaoRepositoryBean extends AbstractVendingMachineRepositoryBean<Alocacao, Long> 
@@ -108,5 +109,21 @@ public class AlocacaoRepositoryBean extends AbstractVendingMachineRepositoryBean
 		
 		List<Alocacao> alocacoes = (List<Alocacao>) uaiCriteria.getResultList();
 		return alocacoes;
+	}
+
+	@Override
+	public Alocacao findAlocacaoAtualmenteAtivaParaUmaMaquina(Maquina maquina) {
+		UaiCriteria<Alocacao> uaiCriteria = UaiCriteriaFactory.createQueryCriteria(getEntityManager(), Alocacao.class);
+		
+		Long idMaquina = maquina.getId();
+		
+		if(idMaquina != null) {
+			uaiCriteria.innerJoin("maquina");
+			uaiCriteria.andEquals("maquina.id", idMaquina);
+		}
+		
+		uaiCriteria.andIsNull("dataDesalocacao");
+
+		return uaiCriteria.getSingleResult();
 	}
 }
