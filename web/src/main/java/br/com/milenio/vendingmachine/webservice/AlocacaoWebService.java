@@ -1,5 +1,6 @@
 package br.com.milenio.vendingmachine.webservice;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -9,7 +10,9 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -57,10 +60,15 @@ public class AlocacaoWebService {
 				JsonObjectBuilder clienteJsonBuilder = Json.createObjectBuilder();
 				clienteJsonBuilder.add("id", cliente.getId());
 				clienteJsonBuilder.add("nomeFantasia", cliente.getNomeFantasia());
-				JsonObject jsonCliente = clienteJsonBuilder.build();
+				clienteJsonBuilder.add("telefone", cliente.getTelefoneFixo());
+				clienteJsonBuilder.add("logradouro", cliente.getEndereco().getLogradouro());
+				clienteJsonBuilder.add("numero", cliente.getEndereco().getNumero());
+				JsonObject jsonCliente = clienteJsonBuilder.build(); 
 				
 				// Cria o objeto JSON de alocação e vincula os objetos máquina e cliente
 				JsonObjectBuilder alocacaoJsonBuilder = Json.createObjectBuilder();
+				alocacaoJsonBuilder.add("alocacaoId", alocacao.getId());
+				alocacaoJsonBuilder.add("dataSolicitacao", new SimpleDateFormat("dd/MM/yyyy").format(alocacao.getDataCadastroAlocacao()));
 				alocacaoJsonBuilder.add("maquina", jsonMaquina);
 				alocacaoJsonBuilder.add("cliente", jsonCliente);
 				JsonObject jsonAlocacao = alocacaoJsonBuilder.build();
@@ -71,6 +79,22 @@ public class AlocacaoWebService {
 			
 			JsonArray alocacoes = alocacoesBuilder.build();
 			return Response.status(200).entity(alocacoes.toString()).build();
+		} catch (Exception e) {
+			return Response.serverError().build(); // HTTP 500 - Internal server error
+		}
+	}
+	
+	/**
+	 * Confirma a alocação da máquina
+	 */
+	@POST
+	@Path("{id}/alocar")
+	@Produces(MediaType.APPLICATION_JSON + "; charset=UTF-8")
+	public Response realizarAlocacaoMaquina(@PathParam("id") Long id) {
+		try{
+			Alocacao alocacao = alocacaoService.findById(id);
+			alocacaoService.alocar(alocacao);
+			return Response.status(200).build();
 		} catch (Exception e) {
 			return Response.serverError().build(); // HTTP 500 - Internal server error
 		}
