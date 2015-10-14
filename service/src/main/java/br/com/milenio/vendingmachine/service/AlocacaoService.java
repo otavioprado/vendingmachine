@@ -34,4 +34,6 @@ public interface AlocacaoService {
 	public List<Alocacao> findAlocacoesAtivas();
 	
 	public Alocacao findAlocacaoAtualmenteAtivaParaUmaMaquina(Maquina maquina);
+
+	public List<Alocacao> findAlocacoesPendentesDesalocacao();
 }

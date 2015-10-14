@@ -22,4 +22,6 @@ public interface AlocacaoRepository extends Repository<Alocacao, Long> {
 	List<Alocacao> findAlocacoesAtivas();
 
 	Alocacao findAlocacaoAtualmenteAtivaParaUmaMaquina(Maquina maquina);
+
+	List<Alocacao> findAlocacoesPendentesDesalocacao();
 }

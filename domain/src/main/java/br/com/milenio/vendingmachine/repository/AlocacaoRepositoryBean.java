@@ -100,6 +100,20 @@ public class AlocacaoRepositoryBean extends AbstractVendingMachineRepositoryBean
 		List<Alocacao> alocacoes = (List<Alocacao>) uaiCriteria.getResultList();
 		return alocacoes;
 	}
+	
+	@Override
+	public List<Alocacao> findAlocacoesPendentesDesalocacao() {
+		UaiCriteria<Alocacao> uaiCriteria = UaiCriteriaFactory.createQueryCriteria(getEntityManager(), Alocacao.class);
+		
+		// Se tiver valor na data de desalocação, então a máquina não está mais alocada no cliente
+		uaiCriteria.andIsNotNull("dataCadastroAlocacao");
+		uaiCriteria.andIsNotNull("dataAlocacao");
+		uaiCriteria.andIsNotNull("dataCadastroDesalocacao");
+		uaiCriteria.andIsNull("dataDesalocacao");
+		
+		List<Alocacao> alocacoes = (List<Alocacao>) uaiCriteria.getResultList();
+		return alocacoes;
+	}
 
 	@Override
 	public List<Alocacao> findAlocacoesAtivas() {
