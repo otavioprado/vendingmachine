@@ -35,13 +35,13 @@ public class DesalocacaoWebService {
 	@GET
 	@Path("listarpendentes")
 	@Produces(MediaType.APPLICATION_JSON + "; charset=UTF-8")
-	public Response listarMaquinasPendentesAlocacao() {
+	public Response listarMaquinasPendentesDesalocacao() {
 		try{
 			List<Alocacao> alocacoesPendenteDesalocacao = alocacaoService.findAlocacoesPendentesDesalocacao();
 			
 			if(alocacoesPendenteDesalocacao == null || alocacoesPendenteDesalocacao.isEmpty()) {
-				// Não existe nenhuma alocação pendente
-				return Response.serverError().build(); // HTTP 500 - Internal server error
+				// Não existe nenhuma desalocação pendente
+				return Response.status(403).build(); // HTTP 403 Forbidden
 			}
 			
 			JsonArrayBuilder alocacoesBuilder = Json.createArrayBuilder();

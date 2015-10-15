@@ -41,7 +41,7 @@ public class AlocacaoWebService {
 			
 			if(alocacoesPendenteAlocacao == null || alocacoesPendenteAlocacao.isEmpty()) {
 				// Não existe nenhuma alocação pendente
-				return Response.serverError().build(); // HTTP 500 - Internal server error
+				return Response.status(403).build(); // HTTP 403 Forbidden
 			}
 			
 			JsonArrayBuilder alocacoesBuilder = Json.createArrayBuilder();

@@ -1,6 +1,8 @@
 package br.com.milenio.vendingmachine.webservice;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.json.Json;
@@ -34,24 +36,33 @@ public class ClienteWebService {
 	@Path("listar")
 	@Produces(MediaType.APPLICATION_JSON + "; charset=UTF-8") 
 	public Response listar() {
-		List<Alocacao> alocacoes = alocacaoService.findAlocacoesAtivas();
-		
-		JsonArrayBuilder clientesBuilder = Json.createArrayBuilder();
-		
-		for(Alocacao alocacao : alocacoes) {
-			Cliente cliente = alocacao.getCliente();
+		try {
+			List<Alocacao> alocacoes = alocacaoService.findAlocacoesAtivas();
+			Set<Cliente> clientes = new HashSet<Cliente>();
 			
-			// Contruindo o motivo do bloqueio
-			JsonObjectBuilder clienteJsonBuilder = Json.createObjectBuilder();
-			clienteJsonBuilder.add("id", cliente.getId());
-			clienteJsonBuilder.add("nomeFantasia", cliente.getNomeFantasia());
-			JsonObject jsonUsuario = clienteJsonBuilder.build();
+			JsonArrayBuilder clientesBuilder = Json.createArrayBuilder();
 			
-			clientesBuilder.add(jsonUsuario);
+			for(Alocacao alocacao : alocacoes) {
+				Cliente cliente = alocacao.getCliente();
+				
+				if(!clientes.contains(cliente)) {
+					clientes.add(cliente);
+					
+					// Contruindo o motivo do bloqueio
+					JsonObjectBuilder clienteJsonBuilder = Json.createObjectBuilder();
+					clienteJsonBuilder.add("id", cliente.getId());
+					clienteJsonBuilder.add("nomeFantasia", cliente.getNomeFantasia());
+					JsonObject jsonUsuario = clienteJsonBuilder.build();
+					
+					clientesBuilder.add(jsonUsuario);
+				}
+			}
+			
+			JsonArray clientesJson = clientesBuilder.build();
+			return Response.status(200).entity(clientesJson.toString()).build();
+		} catch(Exception e) {
+			return Response.serverError().build(); // HTTP 500 - Internal server error
 		}
-		
-		JsonArray clientes = clientesBuilder.build();
-		return Response.status(200).entity(clientes.toString()).build();
 	}
 	
 	/**
@@ -63,30 +74,33 @@ public class ClienteWebService {
 	@Path("{id}/maquinas")
 	@Produces(MediaType.APPLICATION_JSON + "; charset=UTF-8") 
 	public Response listarSolicitacoesDeAlocacaoPendentes(@PathParam("id") Long id) {
-		
-		List<Alocacao> listAlocacao;
-		
-		listAlocacao = alocacaoService.findAlocacoesAtivasByCliente(id);
-		
-		if(listAlocacao == null || listAlocacao.isEmpty()) {
-			// Não existe alocações cadastradas no sistema para o cliente solicitado
+		try {
+			List<Alocacao> listAlocacao;
+			
+			listAlocacao = alocacaoService.findAlocacoesAtivasByCliente(id);
+			
+			if(listAlocacao == null || listAlocacao.isEmpty()) {
+				// Não existe alocações cadastradas no sistema para o cliente solicitado
+				return Response.status(403).build(); // HTTP 403 Forbidden
+			}
+			
+			JsonArrayBuilder maquinasBuilder = Json.createArrayBuilder();
+			
+			for(Alocacao alocacao : listAlocacao) {
+				JsonObjectBuilder maquinaJsonBuilder = Json.createObjectBuilder();
+				Maquina maquina = alocacao.getMaquina();
+				maquinaJsonBuilder.add("id", maquina.getId());
+				maquinaJsonBuilder.add("codigo", maquina.getCodigo());
+				maquinaJsonBuilder.add("modelo", maquina.getModelo());
+				JsonObject jsonMaquina = maquinaJsonBuilder.build();
+				
+				maquinasBuilder.add(jsonMaquina);
+			}
+			
+			JsonArray maquinas = maquinasBuilder.build();
+			return Response.status(200).entity(maquinas.toString()).build();
+		} catch(Exception e) {
 			return Response.serverError().build(); // HTTP 500 - Internal server error
 		}
-		
-		JsonArrayBuilder maquinasBuilder = Json.createArrayBuilder();
-		
-		for(Alocacao alocacao : listAlocacao) {
-			JsonObjectBuilder maquinaJsonBuilder = Json.createObjectBuilder();
-			Maquina maquina = alocacao.getMaquina();
-			maquinaJsonBuilder.add("id", maquina.getId());
-			maquinaJsonBuilder.add("codigo", maquina.getCodigo());
-			maquinaJsonBuilder.add("modelo", maquina.getModelo());
-			JsonObject jsonMaquina = maquinaJsonBuilder.build();
-			
-			maquinasBuilder.add(jsonMaquina);
-		}
-		
-		JsonArray maquinas = maquinasBuilder.build();
-		return Response.status(200).entity(maquinas.toString()).build();
 	}
 }

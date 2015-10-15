@@ -63,7 +63,7 @@ public class ReceitaWebService {
 			
 			if(jsonRequest == null || jsonRequest.isEmpty()) {
 				// Não existe nenhum parâmetro informado
-				return Response.serverError().build(); // HTTP 500 - Internal server error
+				return Response.status(403).build(); // HTTP 403 Forbidden
 			}
 			
 			Reader reader = new StringReader(jsonRequest);

@@ -35,7 +35,7 @@ public class MaquinaWebService {
 		
 		if(maquina == null) {
 			// Não existe uma máquina com o ID informado
-			return Response.serverError().build(); // HTTP 500 - Internal server error
+			return Response.status(403).build(); // HTTP 403 Forbidden
 		}
 		
 		JsonArrayBuilder produtoBuilder = Json.createArrayBuilder();
