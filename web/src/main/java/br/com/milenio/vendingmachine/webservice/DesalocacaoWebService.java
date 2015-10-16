@@ -68,7 +68,7 @@ public class DesalocacaoWebService {
 				// Cria o objeto JSON de alocação e vincula os objetos máquina e cliente
 				JsonObjectBuilder alocacaoJsonBuilder = Json.createObjectBuilder();
 				alocacaoJsonBuilder.add("alocacaoId", alocacao.getId());
-				alocacaoJsonBuilder.add("dataSolicitacao", new SimpleDateFormat("dd/MM/yyyy").format(alocacao.getDataCadastroAlocacao()));
+				alocacaoJsonBuilder.add("dataSolicitacao", new SimpleDateFormat("dd/MM/yyyy").format(alocacao.getDataCadastroDesalocacao()));
 				alocacaoJsonBuilder.add("maquina", jsonMaquina);
 				alocacaoJsonBuilder.add("cliente", jsonCliente);
 				JsonObject jsonAlocacao = alocacaoJsonBuilder.build();
@@ -93,6 +93,22 @@ public class DesalocacaoWebService {
 	public Response realizarAlocacaoMaquina(@PathParam("id") Long id) {
 		try{
 			Alocacao alocacao = alocacaoService.findById(id);
+			alocacaoService.desalocar(alocacao);
+			return Response.status(200).build();
+		} catch (Exception e) {
+			return Response.serverError().build(); // HTTP 500 - Internal server error
+		}
+	}
+	
+	/**
+	 * Realiza o recolhimento direto da máquina, sem a necessidade de uma solicitação de desalocação
+	 */
+	@POST
+	@Path("{id}/recolher")
+	public Response realizarRecolhimentoMaquina(@PathParam("id") Long id) {
+		try {
+			Alocacao alocacao = alocacaoService.findById(id);
+			alocacaoService.solicitarDesalocacao(alocacao);
 			alocacaoService.desalocar(alocacao);
 			return Response.status(200).build();
 		} catch (Exception e) {
