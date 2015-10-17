@@ -38,6 +38,10 @@ public class LoginWebService {
 			return Response.serverError().build(); // HTTP 500 - Internal server error
 		}
 		
+		if(!"OPERADOR".equalsIgnoreCase(usuario.getPerfil().getNome())) {
+			return Response.status(401).build(); // HTTP 401 - Unauthorized
+		}
+		
 		// Verifica se o usuário está bloqueado
 		if(usuario.getIndAtivo() == false) {
 			// Criando um Objeto JSON com Modelo de Objetos:
