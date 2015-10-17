@@ -10,7 +10,8 @@ INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NO
 INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME, IND_ATIVO) VALUES (5, 'administrador', '91f5167c34c400758115c2a6826ec2e3', NOW(), 'administrador@hotmail.com.com', 'Pedro da Silva', true);
 INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME, IND_ATIVO) VALUES (6, 'gestor', 'a55607442fca264cf37e935503d646c2', NOW(), 'gestor@gmail.com', 'João Cunha Júnior', true);
 INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME, IND_ATIVO) VALUES (7, 'gerente', '740d9c49b11f3ada7b9112614a54be41', NOW(), 'gerente@hotmail.com', 'Marcelo Silveira', true);
-INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME, IND_ATIVO) VALUES (8, 'operador', '6d4f07c943a4da1c8bfe591abbc3579', NOW(), 'operador@uol.com.br', 'Silvia Castello', true);
+INSERT INTO USUARIO_SISTEMA(ID, LOGIN, SENHA_APLICACAO, DATA_CADASTRO, EMAIL, NOME, IND_ATIVO) VALUES (8, 'operador', '06d4f07c943a4da1c8bfe591abbc3579', NOW(), 'operador@uol.com.br', 'Silvia Castello', true);
+
 -- Obs.: "a3d4a413a3f981422388a46cbf1292fb" é "gudiao" em MD5
 
 --------------------------------------------
