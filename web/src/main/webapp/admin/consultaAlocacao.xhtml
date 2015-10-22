@@ -61,7 +61,7 @@
 							<label for="dtAlocacao">Data início da alocação</label>
 							<h:inputText id="dtAlocacao" name="dtAlocacao" value="#{alocacaoMB.alocacaoConsParam.dataAlocacao}" 
 								styleClass="form-control" maxlength="10" pt:placeholder="Data de alocação">
-								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" />
 							</h:inputText>
 						</div>
 					</div>
@@ -71,7 +71,7 @@
 							<label for="dtDesalocacao">Data fim da alocação</label>
 							<h:inputText id="dtDesalocacao" name="dtDesalocacao" value="#{alocacaoMB.alocacaoConsParam.dataDesalocacao}" 
 								styleClass="form-control" maxlength="10" pt:placeholder="Data de desalocação">
-								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" />
 							</h:inputText>
 						</div>
 					</div>
@@ -107,25 +107,25 @@
 							
 							<p:column headerText="Data de cadastro da alocação">
 								<h:outputText id="dataCadastroAlocacao" value="#{alocacao.dataCadastroAlocacao}">
-									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" />
 								</h:outputText>
 							</p:column>
 							
 							<p:column headerText="Data da alocação">
 								<h:outputText id="dataAlocacao" value="#{alocacao.dataAlocacao}">
-									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" />
 								</h:outputText>
 							</p:column>
 							
 							<p:column headerText="Data de cadastro da desalocação">
 								<h:outputText id="dataCadastroDesalocacao" value="#{alocacao.dataCadastroDesalocacao}">
-									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" />
 								</h:outputText>
 							</p:column>
 							
 							<p:column headerText="Data da desalocação">
 								<h:outputText id="dataDesalocacao" value="#{alocacao.dataDesalocacao}">
-									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" />
 								</h:outputText>
 							</p:column>
 							

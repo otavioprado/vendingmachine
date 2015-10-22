@@ -9,6 +9,7 @@
     xmlns:jsf="http://xmlns.jcp.org/jsf"
     xmlns:c="http://java.sun.com/jstl/core"
     xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
     template="layoutLogado.xhtml">
     
    	<ui:define name="script">
@@ -52,8 +53,8 @@
 						<div class="form-group">
 							<label for="dataAgendamento">Data do agendamento</label>
 							<h:inputText id="dataAgendamento" value="#{atividadeMB.data}"
-								styleClass="form-control" maxlength="10">
-								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+								styleClass="form-control" maxlength="10" pt:placeholder="Data do agendamento">
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo"/>
 							</h:inputText>
 						</div>
 					</div>
@@ -84,7 +85,7 @@
 							
 							<p:column headerText="Data do agendamento">
 								<h:outputText id="dataDoOcorrido" value="#{atividade.dataAgendamento}" >
-									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" />
 								</h:outputText>
 							</p:column>
 							

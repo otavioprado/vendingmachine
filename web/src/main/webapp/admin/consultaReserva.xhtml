@@ -52,7 +52,7 @@
 							<label for="dataReserva">Data da reserva</label>
 							<h:inputText id="dataReserva" name="dataReserva" value="#{reservaMB.reservaConsParam.data}" 
 								styleClass="form-control" maxlength="10" pt:placeholder="Data da reserva">
-								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" />
 							</h:inputText>
 						</div>
 					</div>
@@ -83,7 +83,7 @@
 						
 						<p:column headerText="Data da reserva">
 							<h:outputText id="dtReserva" value="#{reserva.data}">
-								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" />
 							</h:outputText>
 						</p:column>
 

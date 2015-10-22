@@ -60,7 +60,7 @@
 							<label for="dataAquisicaoInicio">Data de aquisição</label>
 							<h:inputText id="dataAquisicaoInicio" name="dataAquisicaoInicio" value="#{maquinaMB.maqConsParam.dataAquisicao}" 
 								styleClass="form-control" maxlength="10" pt:placeholder="Data aquisição">
-								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" />
 							</h:inputText>
 						</div>
 					</div>
@@ -95,7 +95,7 @@
 						
 						<p:column headerText="Data de aquisição">
 							<h:outputText id="data" value="#{maquina.dataAquisicao}" >
-								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" />
 							</h:outputText>
 						</p:column>
 						

@@ -58,7 +58,7 @@
 						<div class="form-group">
 							<label for="dataManutencao">Data manutenção</label>
 							<input id="dataManutencao" name="dataManutencao" type="text" class="form-control" placeholder="Data manutenção" jsf:value="#{manutencaoMB.manuConsParam.dataCadastro}">
-								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" />
 							</input>
 						</div>
 					</div>
@@ -93,7 +93,7 @@
 							
 							<p:column headerText="Data cadastro">
 								<h:outputText id="dataCadastro" value="#{manutencao.dataCadastro}">
-									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" />
 								</h:outputText>
 							</p:column>
 							

@@ -65,7 +65,7 @@
 							<label for="dataOperacao">Data da operação</label>
 							<h:inputText id="dataOperacao" name="dataOperacao" value="#{historicoMaquinaMB.historicoConsParam.data}" 
 								styleClass="form-control" maxlength="10" pt:placeholder="Data da operação">
-								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" />
 							</h:inputText>
 						</div>
 					</div>
@@ -104,7 +104,7 @@
 					
 					<p:column headerText="Data da operação">
 						<h:outputText id="data" value="#{historico.data}" >
-							<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+							<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" />
 						</h:outputText>
 					</p:column>
 				</p:dataTable>

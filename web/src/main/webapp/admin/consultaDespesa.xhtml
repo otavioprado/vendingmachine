@@ -62,7 +62,7 @@
 							<label for="dataInicio">Data inicial</label>
 							<h:inputText id="dataInicio" name="dataInicio" value="#{despesaMB.despesaConsParam.data}" 
 								styleClass="form-control" maxlength="10" pt:placeholder="Data">
-								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" />
 							</h:inputText>
 						</div>
 					</div>
@@ -71,7 +71,7 @@
 							<label for="dataFim">Data final</label>
 							<h:inputText id="dataFim" name="dataFim" value="#{despesaMB.dataFinal}" 
 								styleClass="form-control" maxlength="10" pt:placeholder="Data">
-								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" />
 							</h:inputText>
 						</div>
 					</div>
@@ -108,7 +108,7 @@
 						
 						<p:column headerText="Data">
 							<h:outputText id="data" value="#{despesa.data}" >
-								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" />
 							</h:outputText>
 						</p:column>
 						

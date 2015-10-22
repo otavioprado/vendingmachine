@@ -44,7 +44,7 @@
 							<label for="dataAcao">Data da ação</label>
 							<h:inputText id="dataAcao" value="#{auditoriaMB.dataAcao}"
 								styleClass="form-control" maxlength="10" pt:placeholder="Data da ação">
-								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo"/>
 							</h:inputText>
 						</div>
 					</div>
@@ -105,13 +105,13 @@
 
 						<p:column headerText="Data da ação">
 							<h:outputText id="dataDoOcorrido" value="#{auditoria.dataAcao}" >
-								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-03:00" />
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" />
 							</h:outputText>
 						</p:column>
 						
 						<p:column headerText="Horário da ação">
 							<h:outputText id="horarioDoOcorrido" value="#{auditoria.horarioAcao}" >
-								<f:convertDateTime pattern="HH:mm" timeZone="GMT-03:00" />
+								<f:convertDateTime pattern="HH:mm" timeZone="America/Sao_Paulo" />
 							</h:outputText>
 						</p:column>
 						
