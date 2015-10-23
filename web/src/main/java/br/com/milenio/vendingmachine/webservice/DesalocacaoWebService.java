@@ -21,12 +21,16 @@ import br.com.milenio.vendingmachine.domain.model.Alocacao;
 import br.com.milenio.vendingmachine.domain.model.Cliente;
 import br.com.milenio.vendingmachine.domain.model.Maquina;
 import br.com.milenio.vendingmachine.service.AlocacaoService;
+import br.com.milenio.vendingmachine.service.MaquinaService;
 
 @Path("/desalocacoes")
 public class DesalocacaoWebService {
 	
 	@Inject
 	private AlocacaoService alocacaoService;
+	
+	@Inject
+	private MaquinaService maquinaService;
 	
 	/**
 	 * Consultar solicitação de desalocação pendentes
@@ -107,7 +111,8 @@ public class DesalocacaoWebService {
 	@Path("{id}/recolher")
 	public Response realizarRecolhimentoMaquina(@PathParam("id") Long id) {
 		try {
-			Alocacao alocacao = alocacaoService.findById(id);
+			Maquina maquina = maquinaService.findById(id);
+			Alocacao alocacao = alocacaoService.findAlocacaoAtualmenteAtivaParaUmaMaquina(maquina);
 			alocacaoService.solicitarDesalocacao(alocacao);
 			alocacaoService.desalocar(alocacao);
 			return Response.status(200).build();
