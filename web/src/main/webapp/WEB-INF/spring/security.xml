@@ -69,23 +69,63 @@
 
 		<access-denied-handler error-page="/denied.xhtml" />
 	
-		<!-- Define as permissões para as páginas do perfil ADMINISTRADOR -->
+		<!-- Define as permissões para acesso as páginas -->
 		<security:intercept-url pattern="/admin/usuario.xhtml" access="hasRole('ROLE_CAD_USUARIO')"/>
+		<security:intercept-url pattern="/admin/consultaUsuario.xhtml" access="hasRole('ROLE_CONS_USUARIO')"/>
+		<security:intercept-url pattern="/admin/editar_usuario.xhtml" access="hasRole('ROLE_EDT_USUARIO')"/>
 		
 		<security:intercept-url pattern="/admin/agendar_atividade.xhtml" access="hasRole('ROLE_CAD_ATIVIDADE')"/>
 		<security:intercept-url pattern="/admin/consultarAtividade.xhtml" access="hasRole('ROLE_CONS_ATIVIDADE')"/>
 		<security:intercept-url pattern="/admin/editar_atividade.xhtml" access="hasRole('ROLE_EDT_ATIVIDADE')"/>
 		
-		<security:intercept-url pattern="/admin/maquina.xhtml" access="hasRole('ROLE_CAD_MAQUINA')"/>
-		<security:intercept-url pattern="/admin/consultaMaquina.xhtml" access="hasRole('ROLE_CONS_MAQUINA')"/>
-		
 		<security:intercept-url pattern="/admin/auditoria.xhtml" access="hasRole('ROLE_CONS_AUDITORIA')"/>
+		
 		<security:intercept-url pattern="/admin/permissoes.xhtml" access="hasRole('ROLE_EDT_PERMISSOES')"/>
+		
 		<security:intercept-url pattern="/admin/cliente.xhtml" access="hasRole('ROLE_CAD_CLIENTE')"/>
 		<security:intercept-url pattern="/admin/consultaCliente.xhtml" access="hasRole('ROLE_CONS_CLIENTE')"/>
+		<security:intercept-url pattern="/admin/editar_cliente.xhtml" access="hasRole('ROLE_EDT_CLIENTE')"/>
+		
 		<security:intercept-url pattern="/admin/contrato.xhtml" access="hasRole('ROLE_CAD_CONTRATO')"/>
 		<security:intercept-url pattern="/admin/consultaContrato.xhtml" access="hasRole('ROLE_CONS_CONTRATO')"/>
+		<security:intercept-url pattern="/admin/editar_contrato.xhtml" access="hasRole('ROLE_EDT_CONTRATO')"/>
+		
+		<security:intercept-url pattern="/admin/fornecedor.xhtml" access="hasRole('ROLE_CAD_FORNECEDOR')"/>
+		<security:intercept-url pattern="/admin/consultaFornecedor.xhtml" access="hasRole('ROLE_CONS_FORNECEDOR')"/>
+		<security:intercept-url pattern="/admin/editar_fornecedor.xhtml" access="hasRole('ROLE_EDT_FORNECEDOR')"/>
+		
 		<security:intercept-url pattern="/admin/produto.xhtml" access="hasRole('ROLE_CAD_PRODUTO')"/>
+		<security:intercept-url pattern="/admin/consultaProduto.xhtml" access="hasRole('ROLE_CONS_PRODUTO')"/>
+		<security:intercept-url pattern="/admin/editar_produto.xhtml" access="hasRole('ROLE_EDT_PRODUTO')"/>
+		
+		<security:intercept-url pattern="/admin/maquina.xhtml" access="hasRole('ROLE_CAD_MAQUINA')"/>
+		<security:intercept-url pattern="/admin/consultaMaquina.xhtml" access="hasRole('ROLE_CONS_MAQUINA')"/>
+		<security:intercept-url pattern="/admin/editar_maquina.xhtml" access="hasRole('ROLE_EDT_MAQUINA')"/>
+		
+		<security:intercept-url pattern="/admin/natureza_financeira.xhtml" access="hasRole('ROLE_CAD_NATUREZA')"/>
+		<security:intercept-url pattern="/admin/consultaNaturezaFinanceira.xhtml" access="hasRole('ROLE_CONS_NATUREZA')"/>
+		<security:intercept-url pattern="/admin/editarNaturezaFinanceira.xhtml" access="hasRole('ROLE_EDT_NATUREZA')"/>
+		
+		<security:intercept-url pattern="/admin/manutencao.xhtml" access="hasRole('ROLE_CAD_MANUTENCAO')"/>
+		<security:intercept-url pattern="/admin/consultaManutencao.xhtml" access="hasRole('ROLE_CONS_MANUTENCAO')"/>
+		<security:intercept-url pattern="/admin/editar_manutencao.xhtml" access="hasRole('ROLE_EDT_MANUTENCAO')"/>
+		
+		<security:intercept-url pattern="/admin/receita.xhtml" access="hasRole('ROLE_CAD_RECEITA')"/>
+		<security:intercept-url pattern="/admin/consultaReceita.xhtml" access="hasRole('ROLE_CONS_RECEITA')"/>
+		<security:intercept-url pattern="/admin/editar_receita.xhtml" access="hasRole('ROLE_EDT_RECEITA')"/>
+		
+		<security:intercept-url pattern="/admin/despesa.xhtml" access="hasRole('ROLE_CAD_DESPESA')"/>
+		<security:intercept-url pattern="/admin/consultaDespesa.xhtml" access="hasRole('ROLE_CONS_DESPESA')"/>
+		<security:intercept-url pattern="/admin/editar_despesa.xhtml" access="hasRole('ROLE_EDT_DESPESA')"/>
+		
+		<security:intercept-url pattern="/admin/alocacao.xhtml" access="hasRole('ROLE_CAD_ALOCACAO')"/>
+		<security:intercept-url pattern="/admin/consultaAlocacao.xhtml" access="hasRole('ROLE_CONS_ALOCACAO')"/>
+		
+		<security:intercept-url pattern="/admin/desalocacao.xhtml" access="hasRole('ROLE_DESALOCACAO')"/>
+		<security:intercept-url pattern="/admin/reserva.xhtml" access="hasRole('ROLE_CAD_RESERVA')"/>
+		<security:intercept-url pattern="/admin/consultaReserva.xhtml" access="hasRole('ROLE_CONS_RESERVA')"/>
+		
+		<security:intercept-url pattern="/admin/historicoMaquina.xhtml" access="hasRole('ROLE_CONS_HISTORICO_MAQUINA')"/>
 		
 		<security:intercept-url pattern="/**" access="hasRole('ROLE_USUARIO_LOGADO_PAINEL_ADMIN')"/>
 			 

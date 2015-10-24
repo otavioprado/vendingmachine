@@ -20,7 +20,7 @@ import br.com.milenio.vendingmachine.domain.model.Permissao;
 import br.com.milenio.vendingmachine.repository.PerfilRepository;
 import br.com.milenio.vendingmachine.repository.PermissaoRepository;
 import br.com.milenio.vendingmachine.security.Seguranca;
-import br.com.milenio.vendingmachine.security.spring.Teste;
+import br.com.milenio.vendingmachine.security.spring.PermissoesUtils;
 import br.com.milenio.vendingmachine.service.AuditoriaService;
 
 @Named
@@ -92,8 +92,8 @@ public class PermissoesMB implements Serializable {
 		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Permissões do perfil " + perfilSelecionado.getNome() + " alteradas com sucesso.", null));
 		
 		
-		Teste teste = new Teste();
-		teste.atualizarPermissoesDosUsuariosLogadosComPerfil(perfilSelecionado);
+		PermissoesUtils permissoesUtils = new PermissoesUtils();
+		permissoesUtils.atualizarPermissoesDosUsuariosLogadosComPerfil(perfilSelecionado);
 		
 		// Processo de auditoria
 		Auditoria auditoria = new Auditoria();

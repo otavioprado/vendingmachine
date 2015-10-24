@@ -15,8 +15,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.logging.log4j.Logger;
-
 import br.com.milenio.vendingmachine.domain.model.Auditoria;
 import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 import br.com.milenio.vendingmachine.exceptions.UsuarioBloqueadoNoSistemaException;
@@ -37,9 +35,6 @@ public class LoginMB {
 
 	@Inject
 	private HttpServletResponse response;
-
-	@Inject
-	private Logger logger;
 	
 	@Inject
 	private UsuarioService usuarioService;
@@ -47,6 +42,7 @@ public class LoginMB {
 	@Inject
 	private AuditoriaService auditoriaService;
 	
+	@SuppressWarnings("unused")
 	private Map<String,Object> perfil = new LinkedHashMap<String,Object>();
 
 	private String usuario;

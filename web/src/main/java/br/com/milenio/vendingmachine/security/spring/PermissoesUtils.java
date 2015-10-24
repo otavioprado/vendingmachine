@@ -19,7 +19,7 @@ import br.com.milenio.vendingmachine.domain.model.UsuarioSistema;
 import br.com.milenio.vendingmachine.repository.PerfilRepository;
 import br.com.milenio.vendingmachine.security.UsuarioSistemaSpring;
 
-public class Teste {
+public class PermissoesUtils {
 	
 	private static final String JNDI_PERFIL_REPOSITORY_NAME = "global/vendingmachine-ear/vendingmachine-domain/PerfilRepository";
 	
