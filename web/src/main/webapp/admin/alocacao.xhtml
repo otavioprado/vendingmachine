@@ -237,7 +237,7 @@
 						<div class="col-md-4">
 							<div class="form-group">
 								<label for="dlgDescricaoContrato">Descrição:</label>
-								<input id="dlgDescricaoContrato" name="dlgDescricaoContrato" type="text" class="form-control" placeholder="Modelo" jsf:value="#{alocacaoMB.contrato.descricao}" maxlength="35" />
+								<input id="dlgDescricaoContrato" name="dlgDescricaoContrato" type="text" class="form-control" placeholder="Descrição" jsf:value="#{alocacaoMB.contrato.descricao}" maxlength="35" />
 								<pe:keyFilter regEx="/[a-zA-Z0-9\u00C0-\u00FF ]+/i" for="dlgDescricaoContrato"/>
 							</div>
 						</div>
@@ -261,7 +261,7 @@
 										<h:outputText id="contCodigo" value="#{contrato.codigo}" />
 									</p:column>
 									
-									<p:column headerText="Modelo">
+									<p:column headerText="Descrição">
 										<h:outputText id="contDescricao" value="#{contrato.descricao}" />
 					            	</p:column>
 								</p:dataTable>

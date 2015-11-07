@@ -13,7 +13,6 @@ import br.com.milenio.vendingmachine.domain.model.MaquinaStatus;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.exceptions.ConteudoJaExistenteNoBancoDeDadosException;
 import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
-import br.com.milenio.vendingmachine.repository.AuditoriaRepository;
 import br.com.milenio.vendingmachine.repository.MaquinaRepository;
 import br.com.milenio.vendingmachine.repository.MaquinaStatusRepository;
 import br.com.milenio.vendingmachine.repository.PerfilRepository;
@@ -21,9 +20,6 @@ import br.com.milenio.vendingmachine.util.Constants;
 
 @Stateless
 public class MaquinaServiceBean implements MaquinaService {
-	
-	@EJB
-	private AuditoriaRepository auditoriaRepository;
 	
 	@EJB
 	private FornecedorService fornecedorService;
