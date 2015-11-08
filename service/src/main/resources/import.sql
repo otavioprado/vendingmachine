@@ -311,4 +311,5 @@ INSERT INTO CONTRATO(CODIGO, DESCRICAO, IND_DISPONIVEL, MODALIDADE, VALOR_ALUGUE
 ----------------------------------------------------------------
 INSERT INTO ATIVIDADE(DATA_AGENDAMENTO, TEXTO, TITULO, USUARIO_ID) VALUES ('2015-11-13', 'Cadastrar uma despesa no valor de R$ 700,00', 'Vencimento de aluguel', 6);
 INSERT INTO ATIVIDADE(DATA_AGENDAMENTO, TEXTO, TITULO, USUARIO_ID) VALUES ('2015-11-13', 'Verificar se chegaram as máquinas encomendadas', 'Ligar para o fornecedor Manda Bala', 6);
+INSERT INTO ATIVIDADE(DATA_AGENDAMENTO, TEXTO, TITULO, USUARIO_ID) VALUES ('2015-11-13', 'Solicitar alocação da máquina C3PO para o cliente Atacado Amoreiras (CLIENTE2)', 'Alocação de máquina', 6);
 
