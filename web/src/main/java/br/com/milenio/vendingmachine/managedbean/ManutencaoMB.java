@@ -292,28 +292,33 @@ public class ManutencaoMB implements Serializable {
 	}
 	
 	public void efetivarRetorno() {
-		manutencaoService.efetivarRetorno(manutencao);
+		try {
+			manutencaoService.efetivarRetorno(manutencao);
 		
-		StringBuilder sb = new StringBuilder();
-		sb.append("Retorno da manutenção salvo com sucesso. Máquina ");
-		sb.append(manutencao.getMaquina().getCodigo());
-		sb.append(" agora está com o status ");
-		sb.append(manutencao.getMaquina().getMaquinaStatus().getDescricao());
-		sb.append(".");
-		
-		// Processo de auditoria de exclusão de manutenção
-		Auditoria auditoria = new Auditoria();
-		auditoria.setDataAcao(new Date());
-		auditoria.setTitulo("Retorno");
-		auditoria.setDescricao("Informou o retorno da manutenção para a máquina " + manutencao.getMaquina().getCodigo());
-		auditoria.setUsuario(Seguranca.getUsuarioLogado());
-		auditoria.setIp(request.getRemoteAddr());
-		auditoriaService.cadastrarNovaAcao(auditoria);
-		
-		// Cadastra no histórico da máquina
-		historicoMaquinaService.cadastrar(new HistoricoMaquina(new Date(), Constants.EM_ESTOQUE, Seguranca.getUsuarioLogado(), manutencao.getMaquina(), null));
-		
-		ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, sb.toString(), null));
+			StringBuilder sb = new StringBuilder();
+			sb.append("Retorno da manutenção salvo com sucesso. Máquina ");
+			sb.append(manutencao.getMaquina().getCodigo());
+			sb.append(" agora está com o status ");
+			sb.append(manutencao.getMaquina().getMaquinaStatus().getDescricao());
+			sb.append(".");
+			
+			// Processo de auditoria de exclusão de manutenção
+			Auditoria auditoria = new Auditoria();
+			auditoria.setDataAcao(new Date());
+			auditoria.setTitulo("Retorno");
+			auditoria.setDescricao("Informou o retorno da manutenção para a máquina " + manutencao.getMaquina().getCodigo());
+			auditoria.setUsuario(Seguranca.getUsuarioLogado());
+			auditoria.setIp(request.getRemoteAddr());
+			auditoriaService.cadastrarNovaAcao(auditoria);
+			
+			// Cadastra no histórico da máquina
+			historicoMaquinaService.cadastrar(new HistoricoMaquina(new Date(), Constants.EM_ESTOQUE, Seguranca.getUsuarioLogado(), manutencao.getMaquina(), null));
+			
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, sb.toString(), null));
+		} catch(Exception e) {
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+			logger.info(e.getMessage());
+		}
 	}
 	
 	public void selecionarFornecedor(String codigo) {

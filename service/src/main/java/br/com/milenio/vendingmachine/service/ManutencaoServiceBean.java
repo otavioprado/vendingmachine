@@ -9,9 +9,11 @@ import javax.ejb.Stateless;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import br.com.milenio.vendingmachine.domain.model.Despesa;
 import br.com.milenio.vendingmachine.domain.model.Manutencao;
 import br.com.milenio.vendingmachine.domain.model.Maquina;
 import br.com.milenio.vendingmachine.domain.model.MaquinaStatus;
+import br.com.milenio.vendingmachine.domain.model.NaturezaFinanceira;
 import br.com.milenio.vendingmachine.exceptions.CadastroInexistenteException;
 import br.com.milenio.vendingmachine.exceptions.InconsistenciaException;
 import br.com.milenio.vendingmachine.repository.ManutencaoRepository;
@@ -30,6 +32,12 @@ public class ManutencaoServiceBean implements ManutencaoService {
 	
 	@EJB
 	FornecedorService fornecedorService;
+	
+	@EJB
+	DespesaService despesaService;
+	
+	@EJB
+	NaturezaFinanceiraService naturezaFinanceiraService;
 	
 	@EJB
 	private MaquinaStatusRepository maquinaStatusRepository;
@@ -139,7 +147,7 @@ public class ManutencaoServiceBean implements ManutencaoService {
 	}
 
 	@Override
-	public void efetivarRetorno(Manutencao manutencao) {
+	public void efetivarRetorno(Manutencao manutencao) throws InconsistenciaException {
 		manutencao.setIndEfetivado(true);
 		
 		// Uma vez que a máquina voltou da manutenção, coloca a máquina no status "EM ESTOQUE" novamente
@@ -151,5 +159,14 @@ public class ManutencaoServiceBean implements ManutencaoService {
 		manutencao.setDataRetorno(new Date());
 		
 		manutencaoRepository.merge(manutencao);
+		
+		// Cadastra a despesa relacionada à manutenção cadastrada
+		NaturezaFinanceira naturezaFinanceira = naturezaFinanceiraService.findByDescricao(Constants.MANUTENCAO);
+		Despesa despesa = new Despesa();
+		despesa.setData(new Date());
+		despesa.setMaquina(manutencao.getMaquina());
+		despesa.setNaturezaFinanceira(naturezaFinanceira);
+		despesa.setValor(manutencao.getCusto());
+		despesaService.cadastrar(despesa);
 	}
 }

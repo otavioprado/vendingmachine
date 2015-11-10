@@ -14,6 +14,7 @@ public class Constants {
 	public static final String ABASTECIMENTO = "ABASTECIMENTO";
 	public static final String RECOLHIMENTO = "RECOLHIMENTO";
 	public static final String PORCENTAGEM_SOB_AS_VENDAS = "PORCENTAGEM SOB AS VENDAS";
+	public static final String MANUTENCAO = "MANUTENÇÃO";
 	
 	// Tipos de contratos
 	public static final String PORCENTAGEM = "PORCENTAGEM";

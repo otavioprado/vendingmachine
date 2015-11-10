@@ -20,5 +20,5 @@ public interface ManutencaoService {
 
 	public Manutencao excluir(Long id) throws InconsistenciaException;
 
-	public void efetivarRetorno(Manutencao manutencao);
+	public void efetivarRetorno(Manutencao manutencao) throws InconsistenciaException;
 }
