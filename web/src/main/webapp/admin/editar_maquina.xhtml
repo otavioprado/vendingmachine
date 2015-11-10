@@ -13,7 +13,7 @@
     template="layoutLogado.xhtml">
     
 	<f:metadata>
-	    <f:viewParam name="idMaquina" value="#{maquinaMB.maquina.id}" />
+	    <f:viewParam name="idMaquina" value="#{maquinaMB.maquina.id}"/>
 	    <f:event type="preRenderView" listener="#{maquinaMB.carregarDadosParaEdicao}"/>
 	</f:metadata>
     
@@ -181,8 +181,9 @@
 							
 							<div class="col-lg-12">
 								<div class="form-group">
-									<p:dataTable tableStyleClass="table-hover" id="table-produtos" var="produto" value="#{maquinaMB.maquina.produtos}" rows="5" paginator="true"
-										 paginatorPosition="bottom" paginatorAlwaysVisible="false" rowsPerPageTemplate="5,10">
+									<p:dataTable tableStyleClass="table-hover" id="table-produtos" 
+										var="produto" value="#{maquinaMB.maquina.produtos}" paginator="false" 
+										paginatorAlwaysVisible="false">
 										<p:column headerText="Código">
 											<h:outputText id="produtoCodigo" value="#{produto.codigo}" />
 										</p:column>
@@ -257,8 +258,7 @@
 						
 						<div class="col-md-12">
 							<div class="form-group">
-								<p:dataTable tableStyleClass="table-hover" id="table-fornecedores" var="fornecedor" value="#{maquinaMB.listFornecedores}" rows="5" paginator="true" paginatorPosition="bottom"
-									paginatorAlwaysVisible="false" rowsPerPageTemplate="5,10" >
+								<p:dataTable tableStyleClass="table-hover" id="table-fornecedores" var="fornecedor" value="#{maquinaMB.listFornecedores}" paginator="false">
 									<p:column style="width:64px; text-align: center" headerText="">
 										<p:commandButton icon="ui-icon-arrowthick-1-e" title="Selecionar" actionListener="#{maquinaMB.selecionarFornecedor(fornecedor.codigo)}" update="codigoFornecedor nomeFantasia cpfCnpj" />
 									</p:column>
@@ -320,8 +320,7 @@
 						
 						<div class="col-md-12">
 							<div class="form-group">
-								<p:dataTable tableStyleClass="table-hover" id="table-dialog-produtos" var="produto" value="#{maquinaMB.listProdutos}" rows="5" paginator="true" paginatorPosition="bottom"
-									paginatorAlwaysVisible="false" rowsPerPageTemplate="5,10" >
+								<p:dataTable tableStyleClass="table-hover" id="table-dialog-produtos" var="produto" value="#{maquinaMB.listProdutos}" paginator="false">
 									<p:column style="width:64px; text-align: center" headerText="">
 										<p:commandButton icon="ui-icon-arrowthick-1-e" title="Adicionar" actionListener="#{maquinaMB.adicionarProduto(produto.id)}" update="table-produtos" />
 									</p:column>
